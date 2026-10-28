@@ -1,0 +1,290 @@
+\documentclass[11pt, a4paper]{article}
+\usepackage[a4paper, margin=2cm]{geometry}
+\usepackage{fontspec}
+\usepackage[vietnamese, bidi=basic, provide=*]{babel}
+\babelprovide[import, onchar=ids fonts]{vietnamese}
+\babelfont{rm}{Noto Sans}
+
+\usepackage{amsmath, amsfonts, amssymb}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage[many]{tcolorbox}
+\usepackage{enumitem}
+
+\definecolor{primary}{RGB}{15, 76, 129}
+\definecolor{secondary}{RGB}{235, 130, 60}
+\definecolor{accent}{RGB}{40, 167, 69}
+\definecolor{bglight}{RGB}{245, 247, 250}
+\definecolor{bordercolor}{RGB}{210, 220, 230}
+
+\tcbset{
+    enhanced,
+    colback=bglight,
+    colframe=bordercolor,
+    arc=4pt,
+    outer arc=4pt,
+    boxrule=1pt,
+    left=10pt, right=10pt, top=8pt, bottom=8pt,
+    fonttitle=\bfseries\color{primary}
+}
+
+\newtcolorbox{qbox}[1]{
+    title={#1},
+    colframe=primary,
+    colback=white,
+    coltitle=white,
+    fonttitle=\bfseries,
+    boxrule=1pt
+}
+
+\usepackage[colorlinks=true, linkcolor=primary, urlcolor=primary]{hyperref}
+
+\begin{document}
+
+\begin{center}
+    {\LARGE \bfseries \color{primary} HỆ THỐNG CÂU HỎI GAMEPLAY TOÁN 7} \\[0.5em]
+    {\large \bfseries \color{secondary} CẤU TRÚC VÀ QUY TẮC TẠO ĐỀ TỰ ĐỘNG} \\[0.3em]
+    \rule{\linewidth}{1.5pt}
+\end{center}
+
+\begin{tcolorbox}[colback=primary!5, colframe=primary, title=MÔ TẢ QUY TẮC CHUNG]
+\begin{itemize}[leftmargin=1.5em, itemsep=3pt]
+    \item Mỗi câu hỏi có \textbf{1 đáp án đúng}, và \textbf{1 hoặc 3 đáp án sai} tùy thuộc vào cấu hình Gameplay.
+    \item Tất cả các công thức toán học sử dụng chuẩn LaTeX với phân số \texttt{\textbackslash dfrac}.
+    \item Các giá trị được khởi tạo bằng hàm phát sinh ngẫu nhiên \texttt{RandomInt(min, max)}.
+\end{itemize}
+\end{tcolorbox}
+
+\vspace{1em}
+
+% ================= CHƯƠNG 1 =================
+\section*{\Large \color{primary} CHƯƠNG 1: THUNG LŨNG “SỐ THỰC”}
+\hrule width \hsize height 1pt
+\vspace{1em}
+
+\begin{qbox}{1-1: Sắp xếp các số hữu tỉ theo thứ tự từ nhỏ đến lớn}
+\textbf{Khởi tạo số liệu:} 
+$a, b, c, d, e \in \text{RandomInt}(-20, 20)$; $c, e \neq 0$; $b \not\vdots c$, $d \not\vdots e$; $m$ là số thập phân (âm hoặc dương). Các số dạng $\dfrac{a}{b}, \dfrac{c}{d}, m, \dots$ \\[0.3em]
+\textbf{Yêu cầu:} Học sinh tìm dãy sắp xếp theo thứ tự tăng dần. \\[0.3em]
+\textbf{Cấu trúc đáp án:} 1 đáp án đúng (đã sắp xếp chuẩn) + 3 (hoặc 1) đáp án sai được hoán vị vị trí.
+\end{qbox}
+
+\begin{qbox}{1-2: Tính tổng / hiệu hai số hữu tỉ}
+\textbf{Đề bài mẫu:} Tính $\dfrac{a}{b} + \dfrac{c}{d}$ hoặc $\dfrac{a}{b} - \dfrac{c}{d}$ \\[0.3em]
+\textbf{Khởi tạo số liệu:} $a, b, c, d \in \text{RandomInt}(-20, 20)$ với $b, d \neq 0$. \\[0.3em]
+\textbf{Đáp án đúng:} Kết quả rút gọn của phép tính: $\dfrac{ad \pm bc}{bd}$.
+\end{qbox}
+
+\begin{qbox}{1-3: Phép tính tổng hợp số hữu tỉ và số thập phân}
+\textbf{Đề bài mẫu:} Tính $\dfrac{a}{b} + m$ hoặc $\dfrac{a}{b} - m$ \\[0.3em]
+\textbf{Khởi tạo số liệu:} $a, b \in \text{RandomInt}(-20, 20)$; $b \neq 0$; $a \not\vdots b$; $m$ là số thập phân dương.
+\end{qbox}
+
+\begin{qbox}{1-4: Viết kết quả dưới dạng lũy thừa}
+\textbf{Đề bài mẫu:} Tính $\left(\dfrac{a}{b}\right)^m \cdot \left(\dfrac{a}{b}\right)^n$ hoặc $\left(\dfrac{a}{b}\right)^m : \left(\dfrac{a}{b}\right)^n$ \\[0.3em]
+\textbf{Khởi tạo số liệu:} $a, b \in \text{RandomInt}(-20, 20)$; $b \neq 0$; $a \not\vdots b$; $m, n \in \mathbb{N}, m > n > 1$. \\[0.3em]
+\textbf{Quy tắc đáp án đúng:}
+\begin{itemize}[leftmargin=1.5em, topsep=2pt, itemsep=2pt]
+    \item Phép nhân: $\left(\dfrac{a}{b}\right)^{m+n}$
+    \item Phép chia: $\left(\dfrac{a}{b}\right)^{m-n}$
+\end{itemize}
+\end{qbox}
+
+\begin{qbox}{1-5: Lũy thừa của lũy thừa}
+\textbf{Đề bài mẫu:} Viết kết quả phép tính dưới dạng lũy thừa: $\left(a^m\right)^n$ \\[0.3em]
+\textbf{Khởi tạo số liệu:} $a \in \mathbb{Z}$; $m, n \in \mathbb{N}, m, n > 1$. \\[0.3em]
+\textbf{Đáp án đúng:} $a^{m \cdot n}$
+\end{qbox}
+
+\begin{qbox}{1-6: So sánh giá trị tuyệt đối}
+\textbf{Đề bài mẫu:} Cho hai số $a = \dfrac{m}{n}$ và $b = \dfrac{p}{q}$. So sánh $|a|$ và $|b|$. \\[0.3em]
+\textbf{Khởi tạo số liệu:} $m, n, p, q \in \text{RandomInt}(-20, 20)$; $n, q \neq 0$; $m \not\vdots n$; $p \not\vdots q$. \\[0.3em]
+\textbf{Đáp án đúng:} Một trong 3 kết luận: $|a| > |b|$, $|a| < |b|$, hoặc $|a| = |b|$.
+\end{qbox}
+
+\begin{qbox}{1-7: Căn bậc hai số học}
+\textbf{Đề bài mẫu:} Cho $a = m$. Tính căn bậc hai số học của $a$ ($\sqrt{a}$). \\[0.3em]
+\textbf{Khởi tạo số liệu:} $m = k^2$ với $k \in \text{RandomInt}(10, 40)$. \\[0.3em]
+\textbf{Đáp án đúng:} $\sqrt{a} = k$.
+\end{qbox}
+
+\begin{qbox}{1-8: So sánh căn bậc hai và số tự nhiên}
+\textbf{Đề bài mẫu:} Cho $a = \sqrt{m}$ và $b = n$. So sánh $a$ và $b$. \\[0.3em]
+\textbf{Khởi tạo số liệu:} $m < 500$ ($m$ không là số chính phương); $n \in \mathbb{N}$. \\[0.3em]
+\textbf{Đáp án đúng:} So sánh dựa trên giá trị $m$ và $n^2$: Nếu $m > n^2 \Rightarrow a > b$; ngược lại $a < b$.
+\end{qbox}
+
+\begin{qbox}{1-9: Tìm $x$ trong đẳng thức chứa căn bậc hai}
+\textbf{Đề bài mẫu:} Tìm $x$ thỏa mãn: $\dfrac{a}{b} \cdot x + \sqrt{m} = \dfrac{c}{d} \cdot \sqrt{n}$ \\[0.3em]
+\textbf{Khởi tạo số liệu:} $a, b, c, d \in \text{RandomInt}(-50, 50)$; $b, d \neq 0$; $a \not\vdots b$; $c \not\vdots d$; $m, n$ là các số chính phương.
+\end{qbox}
+
+\begin{qbox}{1-10: Chu vi hình vuông có diện tích $S$}
+\textbf{Đề bài mẫu:} Cho hình vuông (hoặc hình chữ nhật đặc biệt) có diện tích $S$. Tính chu vi hình đó. \\[0.3em]
+\textbf{Khởi tạo số liệu:} $S = k^2$ với $S \in (1000, 10000)$. \\[0.3em]
+\textbf{Đáp án đúng:} Cạnh $a = \sqrt{S} \Rightarrow \text{Chu vi } P = 4\sqrt{S}$.
+\end{qbox}
+
+\pagebreak
+
+% ================= CHƯƠNG 2 =================
+\section*{\Large \color{primary} CHƯƠNG 2: ĐẢO “GÓC”}
+\hrule width \hsize height 1pt
+\vspace{1em}
+
+\begin{qbox}{2-1: Góc đối đỉnh}
+\textbf{Đề bài:} Cho $\widehat{xAy}$ và $\widehat{zAt}$ là 2 góc đối đỉnh. Biết $\widehat{xAy} = \alpha^\circ$. Tính $\widehat{zAt}$. \\[0.3em]
+\textbf{Đáp án đúng:} $\widehat{zAt} = \widehat{xAy} = \alpha^\circ$.
+\end{qbox}
+
+\begin{qbox}{2-2: Góc kề bù}
+\textbf{Đề bài:} Cho $\widehat{xAy}$ và $\widehat{yAz}$ là 2 góc kề bù. Biết $\widehat{xAy} = \alpha^\circ$. Tính $\widehat{yAz}$. \\[0.3em]
+\textbf{Đáp án đúng:} $\widehat{xAy} + \widehat{yAz} = 180^\circ \Rightarrow \widehat{yAz} = 180^\circ - \alpha^\circ$.
+\end{qbox}
+
+\begin{qbox}{2-3 \& 2-4: Góc so le trong và Góc đồng vị}
+\textbf{Đề bài:} Cho $a \parallel b$, góc $\widehat{A}$ và góc $\widehat{B}$ là 2 góc so le trong (hoặc đồng vị). \\[0.3em]
+\textbf{Đáp án đúng:} $\widehat{A} = \widehat{B}$.
+\end{qbox}
+
+\begin{qbox}{2-5: Tia phân giác của góc}
+\textbf{Đề bài:} Cho góc $\widehat{xAy}$ và tia $At$ là tia phân giác của $\widehat{xAy}$. Tính số đo $\widehat{xAt}$. \\[0.3em]
+\textbf{Khởi tạo số liệu:} $0^\circ < \widehat{xAy} < 180^\circ$. \\[0.3em]
+\textbf{Đáp án đúng:} $\widehat{xAt} = \dfrac{\widehat{xAy}}{2}$.
+\end{qbox}
+
+\begin{qbox}{2-6: Tổng ba góc trong tam giác}
+\textbf{Đề bài:} Cho $\triangle ABC$. Biết $\widehat{B} = \beta^\circ$ và $\widehat{C} = \gamma^\circ$. Tính $\widehat{A}$. \\[0.3em]
+\textbf{Đáp án đúng:} $\widehat{A} = 180^\circ - \beta^\circ - \gamma^\circ$.
+\end{qbox}
+
+\begin{qbox}{2-7: Góc nhọn trong tam giác vuông}
+\textbf{Đề bài:} Cho $\triangle ABC$ vuông tại $A$. Biết $\widehat{B} = \beta^\circ$. Tính $\widehat{C}$. \\[0.3em]
+\textbf{Đáp án đúng:} $\widehat{C} = 90^\circ - \beta^\circ$.
+\end{qbox}
+
+\begin{qbox}{2-8: Nhận dạng hình dạng tam giác}
+\textbf{Đề bài:} Cho $\triangle ABC$. Biết $\widehat{B}$ và $\widehat{C}$ ($0^\circ < \widehat{B} < \widehat{C} < 90^\circ$). Hỏi $\triangle ABC$ là tam giác gì? \\[0.3em]
+\textbf{Quy tắc phân loại đáp án đúng:} Tính $\widehat{A} = 180^\circ - \widehat{B} - \widehat{C}$.
+\begin{itemize}[leftmargin=1.5em, topsep=2pt, itemsep=2pt]
+    \item Nếu $\widehat{A} = 90^\circ \Rightarrow$ Tam giác vuông.
+    \item Nếu $\widehat{A} < 90^\circ \Rightarrow$ Tam giác nhọn.
+    \item Nếu $\widehat{A} > 90^\circ \Rightarrow$ Tam giác tù.
+\end{itemize}
+\end{qbox}
+
+\begin{qbox}{2-9: Góc ngoài của tam giác}
+\textbf{Đề bài:} Cho $\triangle ABC$. Biết $\widehat{B}$ và $\widehat{C}$. Tính số đo góc ngoài tại đỉnh $A$. \\[0.3em]
+\textbf{Đáp án đúng:} $\widehat{A}_{\text{ngoài}} = \widehat{B} + \widehat{C}$.
+\end{qbox}
+
+\begin{qbox}{2-10: Tim biến $x$ từ góc tam giác}
+\textbf{Đề bài:} Cho $\triangle ABC$ có $\widehat{A} = x$, $\widehat{B} = x + a$, $\widehat{C} = x + b$. Tìm $x$? \\[0.3em]
+\textbf{Khởi tạo số liệu:} $a, b$ thỏa mãn $3x + a + b = 180^\circ$. \\[0.3em]
+\textbf{Đáp án đúng:} $x = \dfrac{180^\circ - a - b}{3}$.
+\end{qbox}
+
+\pagebreak
+
+% ================= CHƯƠNG 3 =================
+\section*{\Large \color{primary} CHƯƠNG 3: ĐẦM LẦY “TỈ LỆ”}
+\hrule width \hsize height 1pt
+\vspace{1em}
+
+\begin{qbox}{3-1: Tính chất tỉ lệ thức}
+\textbf{Đề bài:} Cho đẳng thức $ab = cd$. Chọn tỉ lệ thức đúng. \\[0.3em]
+\textbf{Đáp án đúng:} Một trong các dạng: $\dfrac{a}{c} = \dfrac{d}{b}$, $\dfrac{a}{d} = \dfrac{c}{b}$, $\dfrac{b}{c} = \dfrac{d}{a}$, $\dfrac{b}{d} = \dfrac{c}{a}$.
+\end{qbox}
+
+\begin{qbox}{3-2: Tìm $x$ trong tỉ lệ thức}
+\textbf{Đề bài:} Tìm $x$ biết $\dfrac{a}{b} = \dfrac{x}{c}$ \\[0.3em]
+\textbf{Khởi tạo số liệu:} $a, b, c \in \text{RandomInt}(-50, 50)$; $a, c \neq 0$; $b \not\vdots c$. \\[0.3em]
+\textbf{Đáp án đúng:} $x = \dfrac{a \cdot c}{b}$.
+\end{qbox}
+
+\begin{qbox}{3-3: Tìm hai số biết tỉ số và tổng/hiệu}
+\textbf{Đề bài:} Cho $\dfrac{x}{a} = \dfrac{y}{b}$ và $x \pm y = k$. Tìm $x, y$. \\[0.3em]
+\textbf{Khởi tạo số liệu:} $a, b, k \in \text{RandomInt}(-20, 20)$; $a, b \neq 0$. \\[0.3em]
+\textbf{Đáp án đúng:} $x = a \cdot \dfrac{k}{a \pm b}$, $y = b \cdot \dfrac{k}{a \pm b}$.
+\end{qbox}
+
+\begin{qbox}{3-4: Dãy tỉ số bằng nhau 3 biến}
+\textbf{Đề bài:} Cho $\dfrac{x}{a} = \dfrac{y}{b} = \dfrac{z}{c}$ và $mx + ny = k$. Tìm $x, y, z$. \\[0.3em]
+\textbf{Khởi tạo số liệu:} $a, b, c, m, n, k \in \text{RandomInt}(-20, 20)$; $a, b, c \neq 0$.
+\end{qbox}
+
+\begin{qbox}{3-5 \& 3-6: Định nghĩa tỉ lệ thuận và tỉ lệ nghịch}
+\textbf{3-5 (Tỉ lệ thuận):} $x$ tỉ lệ thuận với $y$ theo hệ số $k \Rightarrow x = k \cdot y$. \\[0.3em]
+\textbf{3-6 (Tỉ lệ nghịch):} $x$ tỉ lệ nghịch với $y$ theo hệ số $a \Rightarrow x \cdot y = a$ hay $y = \dfrac{a}{x}$.
+\end{qbox}
+
+\begin{qbox}{3-7 \& 3-8: Tính giá trị theo hệ số tỉ lệ}
+\textbf{3-7 (Tỉ lệ thuận với $k = a$):} Cho $x$, tính $y = \dfrac{x}{a}$. Cho $y$, tính $x = a \cdot y$. \\[0.3em]
+\textbf{3-8 (Tỉ lệ nghịch với $a = m$):} Cho $x$, tính $y = \dfrac{m}{x}$. Cho $y$, tính $x = \dfrac{m}{y}$.
+\end{qbox}
+
+\begin{qbox}{3-9: Phân biệt các đại lượng vật lý}
+\textbf{Đề bài:} Cho công thức $s = v \cdot t$. Chọn đáp án \textbf{SAI}: \\[0.3em]
+\textbf{Đáp án SAI (Cần chọn):} $s$ và $t$ là hai đại lượng tỉ lệ nghịch. \\[0.3em]
+\textbf{Các khẳng định đúng (Bẫy):} $s$ và $t$ tỉ lệ thuận; $v$ và $t$ tỉ lệ nghịch; $s$ và $v$ tỉ lệ thuận.
+\end{qbox}
+
+\begin{qbox}{3-10: Tỉ lệ bắc cầu hợp thành}
+\textbf{Đề bài:} Cho $x$ tỉ lệ thuận với $y$ theo hệ số $k$, $y$ tỉ lệ nghịch với $z$ theo hệ số $a$. Hỏi $x$ tỉ lệ thuận hay nghịch với $z$ theo hệ số nào? \\[0.3em]
+\textbf{Đáp án đúng:} $x$ tỉ lệ nghịch với $z$ theo hệ số tỉ lệ là $k \cdot a$.
+\end{qbox}
+
+\pagebreak
+
+% ================= CHƯƠNG 4 =================
+\section*{\Large \color{primary} CHƯƠNG 4: THỊ TRẤN “ĐA THỨC MỘT BIẾN”}
+\hrule width \hsize height 1pt
+\vspace{1em}
+
+\begin{qbox}{4-1: Đơn thức một biến}
+\textbf{Đề bài:} Xác định bậc và hệ số của đơn thức $A(x) = \dfrac{a}{c} \cdot b \cdot x^m \cdot x^n$. \\[0.3em]
+\textbf{Đáp án đúng:} Hệ số là $\dfrac{a \cdot b}{c}$, bậc là $m + n$.
+\end{qbox}
+
+\begin{qbox}{4-2: Bậc của đa thức}
+\textbf{Đề bài:} Xác định bậc của đa thức $P(x) = a x^m + b x^n + c x + d$ (với $n > m > 1$). \\[0.3em]
+\textbf{Đáp án đúng:} Bậc là $n$ (chỉ số mũ lớn nhất của biến).
+\end{qbox}
+
+\begin{qbox}{4-3: Hệ số cao nhất và hệ số tự do}
+\textbf{Đề bài:} Xác định hệ số cao nhất và hệ số tự do của $P(x) = a x^n + b x^m + e$ ($n > m$). \\[0.3em]
+\textbf{Đáp án đúng:} Hệ số cao nhất là $a$, hệ số tự do là $e$.
+\end{qbox}
+
+\begin{qbox}{4-4: Phép cộng / trừ đa thức đơn giản}
+\textbf{Đề bài:} Cho $P(x) = a x^2 + b x + c$ và $Q(x) = d x^2 + e x + f$. Tính $P(x) \pm Q(x)$. \\[0.3em]
+\textbf{Đáp án đúng:} 
+\begin{itemize}[leftmargin=1.5em, topsep=2pt, itemsep=2pt]
+    \item Tổng: $(a+d)x^2 + (b+e)x + (c+f)$
+    \item Hiệu: $(a-d)x^2 + (b-e)x + (c-f)$
+\end{itemize}
+\end{qbox}
+
+\begin{qbox}{4-5: Tính giá trị đa thức}
+\textbf{Đề bài:} Tính giá trị của biểu thức $P(x) = a x^m + b x^n + c x + d$ tại $x = k$. \\[0.3em]
+\textbf{Khởi tạo số liệu:} $a, b, c, d, k \in \text{RandomInt}(-50, 50)$; $m > n > 1$. \\[0.3em]
+\textbf{Đáp án đúng:} Giá trị $P(k) = a k^m + b k^n + c k + d$.
+\end{qbox}
+
+\begin{qbox}{4-6 \& 4-7 \& 4-8: Phép nhân và chia đa thức}
+\textbf{4-6 (Nhân đơn thức với đa thức):} $A(x) = a x^m \cdot (d x^n + e x^p + f) = a\cdot d x^{m+n} + a\cdot e x^{m+p} + a\cdot f x^m$. \\[0.3em]
+\textbf{4-7 (Nhân đa thức với đa thức):} $(a x^m + b) \cdot (c x^n + d) = a c x^{m+n} + a d x^m + b c x^n + b d$. \\[0.3em]
+\textbf{4-8 (Chia đa thức cho đơn thức):} $(a x^n + b x^p + c x^m) : (d x^m) = \dfrac{a}{d} x^{n-m} + \dfrac{b}{d} x^{p-m} + \dfrac{c}{d}$ ($n > p > m$).
+\end{qbox}
+
+\begin{qbox}{4-9: Tìm nghiệm của đa thức bậc nhất}
+\textbf{Đề bài:} Tìm nghiệm của đa thức $P(x) = a x + b$ ($a \neq 0$). \\[0.3em]
+\textbf{Đáp án đúng:} $x = -\dfrac{b}{a}$.
+\end{qbox}
+
+\begin{qbox}{4-10: Biến đổi thu gọn và xác định hệ số/bậc}
+\textbf{Đề bài:} Xác định hệ số và bậc của $Q(x) = (a x^m \cdot x^n) \cdot (b x^e \cdot x^f)$. \\[0.3em]
+\textbf{Đáp án đúng:} Hệ số là $a \cdot b$, Bậc là $m + n + e + f$.
+\end{qbox}
+
+\end{document}

@@ -1,0 +1,669 @@
+ĐẶC TẢ GAMEPLAY CHÍNH THỨC
+HÀNH TRÌNH TRI THỨC — Phiên bản 1.0
+Tài liệu này tổng hợp các quyết định đã thống nhất về luật chơi, nhân vật, câu hỏi, biến thể số liệu, hệ thống tài nguyên, vật phẩm, tiến trình bản đồ, Thế giới Song Song, lưu dữ liệu và kiểm thử. Đây là tài liệu chuẩn để triển khai mã nguồn và nghiệm thu gameplay, không chỉ là bản mô tả ý tưởng.
+Nguyên tắc triển khai: ưu tiên tính đúng đắn của Toán học và logic gameplay trước; hoàn thiện giao diện, hình ảnh và hiệu ứng sau.
+Thông tin tổng quan
+Thuộc tính	Quy định
+Tên game	Hành Trình Tri Thức
+Thể loại	Nhập vai phiêu lưu kết hợp ôn tập Toán học
+Đối tượng	Học sinh THCS
+Nền tảng	HTML, CSS, JavaScript thuần
+Hình thức	Trình chiếu trên lớp hoặc tự chơi trên máy tính, điện thoại
+Lưu dữ liệu	localStorage, trên cùng trình duyệt và thiết bị
+Cấu trúc	Nhiều vùng đất, mặc định 10 ải/vùng
+Mục tiêu ban đầu	Xây dựng và kiểm thử trọn vẹn một vùng đất gồm 10 ải, sau đó mở rộng
+Phiên bản tài liệu	1.0
+PHẦN I. TỔNG QUAN GAMEPLAY
+1. Tầm nhìn và mục tiêu
+Hành Trình Tri Thức là game ôn tập Toán học theo hình thức nhập vai phiêu lưu. Người chơi tạo nhân vật, lựa chọn lớp nhân vật, vượt các ải bằng cách giải câu hỏi Toán học, tích lũy EXP và vàng, mua vật phẩm, đánh bại Trùm và xử lý những câu trả lời sai trong Thế giới Song Song.
+Gameplay cần đạt năm mục tiêu:
+1.	Tạo động lực học tập thông qua cốt truyện, bản đồ, cấp độ, danh hiệu và vật phẩm.
+2.	Khuyến khích học sinh tự suy nghĩ, không phụ thuộc vào việc game hiển thị đáp án sau khi trả lời sai.
+3.	Cho phép tạo nhân vật mới và gặp các biến thể câu hỏi khác, nhưng vẫn giữ nguyên mục tiêu kiến thức và độ khó tương đương.
+4.	Bảo đảm các quy tắc về HP, EXP, vàng, thời gian, vật phẩm và mở khóa vùng đất hoạt động nhất quán.
+5.	Lưu và khôi phục tiến trình chính xác, tránh xử lý trùng khi tải lại trang hoặc khi nhiều sự kiện xảy ra gần đồng thời.
+2. Phạm vi phiên bản 1.0
+Phiên bản đầu tiên phải có:
+•	Tạo và quản lý nhiều hồ sơ nhân vật.
+•	Ba lớp nhân vật: Hiệp sĩ, Pháp sư, Tu sĩ.
+•	Bản đồ, ải thường và Trùm.
+•	Thẻ Ánh Sáng và Bóng Tối.
+•	Câu hỏi trắc nghiệm hiển thị bằng LaTeX.
+•	Đồng hồ đếm ngược.
+•	HP, EXP, vàng, cấp độ và danh hiệu.
+•	Thương Hội Tri Thức và hệ thống vật phẩm.
+•	Thế giới Song Song để xử lý câu sai.
+•	Sinh hoặc lựa chọn biến thể câu hỏi riêng cho từng nhân vật.
+•	Lưu, khôi phục và kiểm tra dữ liệu.
+•	Bộ kiểm thử logic trước khi mở rộng nội dung.
+Chưa yêu cầu máy chủ, tài khoản trực tuyến hoặc đồng bộ tiến trình giữa các thiết bị. Khả năng chống gian lận tuyệt đối cũng không thuộc phạm vi của bản chạy cục bộ.
+3. Vòng lặp gameplay tổng thể
+Tạo hoặc chọn nhân vật
+Bản đồ → Chọn ải đã mở
+Chọn thẻ Ánh Sáng / Bóng Tối
+Trả lời câu hỏi trong thời gian quy định
+Chốt kết quả → Cập nhật HP, EXP, vàng
+Tiếp tục ải hoặc đánh Trùm
+Xử lý câu sai trong Thế giới Song Song
+Mở vùng đất tiếp theo
+Quy tắc tổng quát:
+•	Người chơi chỉ được vào ải đã mở khóa.
+•	Trước mỗi câu hỏi, người chơi chọn thẻ.
+•	Kết quả mỗi lượt chỉ được xử lý một lần.
+•	Nếu HP hiện tại về 0, hành trình của nhân vật kết thúc ngay.
+•	Ải thứ 10 của mỗi vùng đất là Trùm.
+•	Sau khi hạ Trùm, nếu còn câu sai thì phải xử lý hết các câu đó trước khi mở vùng đất tiếp theo.
+•	Nếu không có câu sai, bỏ qua Thế giới Song Song và mở vùng đất mới.
+4. Các màn hình chính
+1.	Màn hình chào mừng.
+2.	Màn hình nhập tên và lớp học.
+3.	Màn hình chọn lớp nhân vật.
+4.	Màn hình chọn hoặc tiếp tục hồ sơ.
+5.	Bản đồ hành trình.
+6.	Màn hình chọn thẻ.
+7.	Màn hình câu hỏi và đồng hồ.
+8.	Màn hình phản hồi kết quả.
+9.	Thương Hội Tri Thức.
+10.	Thế giới Song Song.
+11.	Màn hình hoàn thành Trùm/vùng đất.
+12.	Màn hình Game Over.
+Chỉ một trạng thái gameplay chính được hoạt động tại một thời điểm. Không được mở cửa hàng hoặc đổi bản đồ khi câu hỏi đang chờ trả lời hoặc đang xử lý kết quả.
+PHẦN II. HỒ SƠ VÀ LỚP NHÂN VẬT
+5. Tạo và quản lý nhân vật
+5.1. Tạo hồ sơ
+Người chơi nhập:
+•	Tên hiển thị.
+•	Lớp học.
+•	Lớp nhân vật.
+Khi xác nhận, hệ thống tạo một characterId duy nhất, khởi tạo chỉ số, tạo hoặc gán bộ biến thể câu hỏi riêng và lưu hồ sơ.
+Không dùng tên học sinh làm khóa định danh. Hai nhân vật có thể trùng tên nhưng vẫn phải có hồ sơ, tài nguyên và tiến trình độc lập.
+5.2. Ba lớp nhân vật
+Thuộc tính	Hiệp sĩ	Pháp sư	Tu sĩ
+HP ban đầu	2/2	2/2	2/2
+Thời gian cơ bản	20 giây/câu	30 giây/câu	20 giây/câu
+Tăng HP tối đa mỗi cấp	+2	+1	+1
+Số thẻ mỗi lượt	2	2	3
+Thẻ Ánh Sáng	1	1	2
+Thẻ Bóng Tối	1	1	1
+Với Tu sĩ, ba thẻ được xáo vị trí. Nếu chọn ngẫu nhiên một vị trí, xác suất gặp Ánh Sáng là \(2/3\), Bóng Tối là \(1/3\).
+5.3. Quy tắc HP
+HP hiện tại và HP tối đa là hai giá trị độc lập.
+Ví dụ: Hiệp sĩ có HP 1/2. Sau khi lên cấp, HP trở thành 1/4, không phải 4/4.
+•	HP hiện tại không được âm.
+•	HP hiện tại không được vượt HP tối đa.
+•	Lên cấp chỉ tăng HP tối đa, không tự động hồi HP hiện tại.
+•	Vật phẩm hồi máu phải tuân thủ giới hạn HP mới.
+•	Khi HP về 0, hệ thống chuyển sang Game Over ngay sau khi chốt và lưu kết quả cuối cùng.
+5.4. Tạo nhân vật mới
+Khi người chơi tạo nhân vật mới:
+•	Tạo hồ sơ độc lập, có characterId mới.
+•	Giữ nguyên các hồ sơ cũ, kể cả hồ sơ Game Over.
+•	Không tự hồi sinh hoặc ghi đè nhân vật cũ.
+•	Gán bộ biến thể câu hỏi mới theo quy tắc ở Phần IV.
+•	Không mặc định cho phép tiếp tục hành trình của nhân vật đã Game Over.
+PHẦN III. BẢN ĐỒ, ẢI VÀ THẺ
+6. Bản đồ và tiến trình vùng đất
+Cấu trúc mặc định là 10 ải trong mỗi vùng đất.
+Loại ải	Vị trí	Quy tắc
+Ải thường	Ải 1–9	Vượt qua để mở ải tiếp theo
+Trùm	Ải 10	Phải vượt qua để hoàn thành vùng đất
+Vùng đất tiếp theo	Sau Trùm	Chỉ mở sau khi đáp ứng điều kiện Thế giới Song Song
+Số vùng đất có thể mở rộng lên 50 ải hoặc hơn. Số lượng ải, câu hỏi, chủ đề và độ khó phải được cấu hình bằng dữ liệu, không hard-code trong giao diện.
+Điều kiện mở vùng đất mới:
+1.	Trùm của vùng đất hiện tại đã bị đánh bại.
+2.	Danh sách câu sai trong Thế giới Song Song đã được xử lý hết.
+Nếu danh sách câu sai rỗng ngay sau khi hạ Trùm, hệ thống bỏ qua Thế giới Song Song.
+Trùm sử dụng cùng cơ chế trả lời, đồng hồ, HP và vật phẩm như câu hỏi thông thường. Không có cơ chế miễn Game Over riêng.
+7. Thẻ Ánh Sáng và Bóng Tối
+Trước mỗi câu hỏi, hệ thống tạo bộ thẻ theo lớp nhân vật và xáo vị trí.
+•	Ánh Sáng: câu hỏi có 2 phương án trả lời.
+•	Bóng Tối: câu hỏi có 4 phương án trả lời.
+Thẻ chỉ quyết định số phương án trả lời, không được làm thay đổi mục tiêu kiến thức hoặc độ khó cốt lõi của câu hỏi một cách tùy tiện.
+7.1. Thẻ Định Mệnh
+Thẻ Định Mệnh cho phép người chơi chọn lại một lần sau khi đã chọn Bóng Tối, nhưng phải kích hoạt trước khi câu hỏi xuất hiện.
+Quy tắc:
+1.	Người chơi chọn Bóng Tối.
+2.	Nếu có Thẻ Định Mệnh và muốn dùng, kích hoạt vật phẩm.
+3.	Hệ thống tạo bộ thẻ mới theo lớp nhân vật, xáo vị trí.
+4.	Người chơi chọn lại một lần.
+5.	Lựa chọn cuối cùng quyết định câu hỏi hiển thị 2 hay 4 phương án.
+Không cho dùng Thẻ Định Mệnh sau khi đề bài đã hiển thị. Mỗi câu chỉ được kích hoạt tối đa một lần.
+PHẦN IV. NGÂN HÀNG CÂU HỎI VÀ BIẾN THỂ
+8. Nguyên tắc định danh câu hỏi
+Đây là phần quan trọng để đáp ứng yêu cầu: tạo nhân vật mới thì nội dung câu hỏi có thể thay đổi, thường là thay số, nhưng tiến trình và luật chơi vẫn chính xác.
+Hệ thống phải phân biệt ba loại ID:
+Loại ID	Ví dụ	Ý nghĩa
+questionId	W1-S01-Q001	ID cố định của câu hỏi gốc
+variantId	W1-S01-Q001-V03	ID của biến thể số liệu và đáp án cụ thể
+attemptId	Mã lượt duy nhất	ID của một lần trả lời cụ thể
+8.1. ID câu hỏi gốc
+questionId được dùng để xác định:
+•	Mục tiêu kiến thức.
+•	Dạng toán.
+•	Độ khó.
+•	Vùng đất và ải.
+•	Quy tắc sinh biến thể hoặc ngân hàng biến thể được duyệt.
+ID này không đổi giữa các nhân vật.
+8.2. ID biến thể
+variantId xác định nội dung cụ thể mà người chơi nhìn thấy, bao gồm:
+•	Dữ liệu số.
+•	Biểu thức hoặc đề bài LaTeX.
+•	Các phương án trả lời.
+•	Đáp án đúng.
+•	Các tham số phụ thuộc của câu hỏi, nếu có.
+Một câu hỏi gốc có thể có nhiều biến thể.
+8.3. ID lượt trả lời
+attemptId dùng để ngăn một lượt bị xử lý nhiều lần. Mỗi lần làm câu hỏi, kể cả khi làm lại trong Thế giới Song Song, phải có một attemptId mới.
+Không được đánh dấu một câu hỏi gốc là đã giải vĩnh viễn chỉ vì một lượt trả lời đã kết thúc, bởi câu đó có thể cần được làm lại trong Thế giới Song Song.
+9. Quy tắc sinh biến thể khi tạo nhân vật mới
+Khi tạo nhân vật, hệ thống phải gán một bộ biến thể riêng cho nhân vật đó.
+Ví dụ, câu gốc:
+\[ 3x+2x-5 \]
+Nhân vật A có thể gặp:
+\[ 3x+2x-5=5x-5 \]
+Nhân vật B có thể gặp:
+\[ 4x+3x-6=7x-6 \]
+Hai biến thể có cùng mục tiêu: thu gọn các hạng tử đồng dạng. Chúng có dữ liệu và đáp án khác nhau nhưng cùng dạng toán.
+9.1. Các quy tắc bắt buộc
+•	Không đổi số ngẫu nhiên trực tiếp mỗi lần mở câu hỏi.
+•	Biến thể đã gán phải được lưu trong hồ sơ nhân vật.
+•	Tải lại game không được tự sinh biến thể mới.
+•	Khi câu sai được đưa sang Thế giới Song Song, phải sử dụng đúng biến thể ban đầu.
+•	Các biến thể phải giữ mục tiêu kiến thức và độ khó tương đương.
+•	Mỗi biến thể phải có đáp án được kiểm tra; không dùng số liệu chưa xác minh.
+•	Nếu không sinh được biến thể hợp lệ sau số lần thử giới hạn, sử dụng biến thể dự phòng đã được duyệt.
+9.2. Hai nhóm câu hỏi
+Nhóm	Phương pháp
+A. Sinh biến thể tự động	Dùng mẫu và tham số có giới hạn, kèm bộ kiểm tra đáp án và phương án nhiễu
+B. Biên soạn biến thể sẵn	Chọn từ ngân hàng đã được kiểm tra; phù hợp với hình học, bài toán thực tế nhiều điều kiện và câu có hình vẽ
+Nhóm A có thể gồm thu gọn biểu thức, tính giá trị biểu thức, giải phương trình hoặc phân tích đa thức thành nhân tử nếu quy tắc sinh đã được xác định đầy đủ.
+Nhóm B không được thay số một cách máy móc vì có thể làm thay đổi điều kiện hình học, nghiệm hoặc ý nghĩa thực tế.
+9.3. Kiểm tra tính hợp lệ
+Trước khi cấp một biến thể cho nhân vật, hệ thống phải kiểm tra:
+1.	Có đáp án đúng và đáp án đó được xác minh.
+2.	Câu trắc nghiệm có đúng một phương án đúng.
+3.	Các phương án không bị trùng sau khi chuẩn hóa.
+4.	Không vi phạm điều kiện xác định hoặc giả thiết.
+5.	Độ khó và mục tiêu kiến thức phù hợp với câu gốc.
+6.	Nội dung LaTeX được render chính xác.
+9.4. LaTeX
+Tất cả nội dung Toán học, gồm đề bài, biểu thức, phương án và dữ liệu biến thể, phải hiển thị bằng LaTeX.
+Nếu game cần hoạt động hoàn toàn offline, thư viện render toán học phải được đóng gói cục bộ hoặc có phương án triển khai không phụ thuộc kết nối Internet.
+PHẦN V. ĐỒNG HỒ VÀ XỬ LÝ KẾT QUẢ
+10. Đồng hồ đếm ngược
+Lớp	Thời gian cơ bản
+Hiệp sĩ	20 giây/câu
+Pháp sư	30 giây/câu
+Tu sĩ	20 giây/câu
+Đồng hồ chỉ bắt đầu khi câu hỏi và các phương án đã hiển thị đầy đủ.
+Thời gian phải được quản lý bằng deadlineTimestamp, không chỉ bằng biến đếm giảm mỗi giây.
+\[ \text{remaining}=\max(0,\text{deadlineTimestamp}-\text{Date.now()}) \]
+Đây là công thức khái niệm; khi lập trình cần quy đổi đơn vị thời gian thống nhất.
+Nếu tải lại trang:
+•	Còn thời gian: tiếp tục câu hiện tại với thời gian còn lại.
+•	Đã hết thời gian: xử lý hết giờ đúng một lần.
+•	Không được tự khởi động lại toàn bộ thời gian chỉ vì tải lại trang.
+11. Bảng kết quả câu hỏi
+Tình huống	HP	EXP	Vàng	Thế giới Song Song
+Đúng lần đầu ở hành trình chính	Không đổi	+100	+100	Không thêm câu sai
+Sai thông thường	-1	0	0	Thêm câu sai
+Hết giờ	-1	0	0	Thêm câu sai
+Dùng Lệnh Bài Vượt Ải	Không đổi	0	0	Không thêm câu sai
+Dùng Hộ Tâm Phù, trả lời sai/hết giờ	Không đổi	0	0	Không thêm câu sai
+Dùng Linh Vũ Hồi Đáp, lần hai đúng	Không đổi	+100	+100	Không thêm câu sai
+Dùng Linh Vũ Hồi Đáp, lần hai sai/hết giờ	-1	0	0	Thêm câu sai
+Đúng trong Thế giới Song Song	Không đổi	0	0	Xóa câu khỏi danh sách
+Sai/hết giờ trong Thế giới Song Song	-1	0	0	Giữ câu trong danh sách
+12. Quy tắc vật phẩm ảnh hưởng kết quả
+12.1. Lệnh Bài Vượt Ải
+Bỏ qua câu hỏi hiện tại:
+•	Không mất HP.
+•	Không nhận EXP hoặc vàng.
+•	Không thêm câu vào Thế giới Song Song.
+•	Ghi nhận lượt bỏ qua để tránh xử lý lại.
+Không sử dụng vật phẩm này trong Thế giới Song Song.
+12.2. Hộ Tâm Phù
+Được kích hoạt trước khi trả lời ở hành trình chính.
+Nếu người chơi sai hoặc hết giờ khi vật phẩm đang có hiệu lực:
+•	Không mất HP.
+•	Không đưa câu vào Thế giới Song Song.
+Hộ Tâm Phù không được kích hoạt sau khi kết quả đã chốt.
+12.3. Linh Vũ Hồi Đáp
+Nếu lần trả lời đầu tiên sai, người chơi được trả lời lại đúng một lần.
+•	Lần hai đúng: nhận phần thưởng như câu đúng lần đầu ở hành trình chính.
+•	Lần hai sai hoặc hết giờ: xử lý như một kết quả sai cuối cùng.
+•	Không cộng thưởng hai lần.
+•	Không dùng trong Thế giới Song Song.
+12.4. Xung đột vật phẩm
+Trong phiên bản 1.0:
+•	Không sử dụng đồng thời Hộ Tâm Phù và Linh Vũ Hồi Đáp trên cùng một câu.
+•	Không dùng vật phẩm sau khi lượt đã chốt kết quả.
+•	Không dùng vật phẩm cứu nguy trong Thế giới Song Song.
+•	Thẻ Định Mệnh chỉ dùng trước khi đề bài xuất hiện.
+•	Sa Lậu Ngưng Thời chỉ cộng thời gian cho câu hiện tại đang hoạt động.
+12.5. Không hiện đáp án khi sai
+Khi trả lời sai hoặc hết giờ, game chỉ thông báo kết quả và hậu quả theo luật. Không tự động hiện đáp án đúng, không đánh dấu phương án đúng và không hiển thị lời giải trong luồng chơi mặc định.
+PHẦN VI. TÀI NGUYÊN VÀ TIẾN TRÌNH NHÂN VẬT
+13. EXP, vàng, cấp độ và danh hiệu
+13.1. Nguyên tắc
+•	EXP là tổng kinh nghiệm tích lũy, không bị trừ khi lên cấp.
+•	Vàng chỉ được nhận khi câu trả lời đủ điều kiện nhận thưởng.
+•	Trả lời đúng trong Thế giới Song Song không nhận EXP hoặc vàng.
+•	Mỗi lượt chỉ được nhận thưởng tối đa một lần.
+•	Khi EXP vượt qua nhiều ngưỡng, hệ thống phải tính đủ số cấp đạt được.
+13.2. Bảng cấp độ
+Cấp	Tổng EXP tối thiểu	Danh hiệu hệ thống
+1	0	Tân Binh Tri Thức
+2	300	Học Đồ Khai Trí
+3	700	Kẻ Tìm Đường
+4	1.200	Nhà Thám Hiểm
+5	1.800	Hành Giả Tinh Anh
+6	2.500	Trí Giả Toán Học
+7	3.300	Bậc Thầy Giải Đố
+8	4.200	Hiền Giả Tri Thức
+9	5.200	Đại Hiền Giả
+10	6.300	Huyền Thoại Tri Thức
+11	7.500	Chúa Tể Tri Thức
+12	8.800	Thần Trí Tuệ
+Khi lên cấp, tăng HP tối đa theo lớp nhân vật, nhưng không tự hồi HP hiện tại.
+13.3. Phần thưởng từ vật phẩm bị động
+Hai mức thưởng sau đã được chốt cụ thể:
+•	Có Cổ Thư Tinh Thông: mỗi câu đúng đủ điều kiện nhận 115 EXP thay vì 100 EXP.
+•	Có Túi Vàng May Mắn: mỗi câu đúng đủ điều kiện nhận 110 vàng thay vì 100 vàng.
+Không làm tròn phần thưởng. Trong phiên bản 1.0, mỗi loại vật phẩm bị động chỉ được mua một lần trên mỗi nhân vật, nên không có trường hợp cộng dồn nhiều vật phẩm cùng loại.
+14. Danh hiệu cá nhân
+Ấn Danh Tự Tại mở chức năng tự đặt danh hiệu cá nhân.
+Danh hiệu cá nhân:
+•	Hiển thị cùng danh hiệu hệ thống.
+•	Không thay thế danh hiệu hệ thống.
+•	Không ảnh hưởng EXP, cấp độ hoặc chỉ số.
+•	Phải giới hạn độ dài và xử lý ký tự để tránh lỗi giao diện.
+PHẦN VII. THẾ GIỚI SONG SONG
+15. Điều kiện mở Thế giới Song Song
+Thế giới Song Song là khu vực để người chơi xử lý các câu đã trả lời sai hoặc hết giờ trong hành trình chính.
+Sau khi vượt Trùm ở ải thứ 10:
+•	Nếu danh sách câu sai có dữ liệu, người chơi phải vào Thế giới Song Song.
+•	Nếu danh sách trống, hệ thống mở vùng đất tiếp theo ngay.
+16. Quy tắc xử lý câu sai
+Kết quả trong Thế giới Song Song	HP	EXP/vàng	Danh sách câu sai
+Trả lời đúng	Không đổi	Không nhận	Xóa câu đó
+Trả lời sai	-1 HP	Không nhận	Giữ nguyên
+Hết giờ	-1 HP	Không nhận	Giữ nguyên
+Các quy tắc bổ sung:
+1.	Mỗi câu sai chỉ có một bản ghi đang chờ trong hồ sơ của nhân vật.
+2.	Nếu sai cùng câu nhiều lần, không tạo thêm bản ghi trùng.
+3.	Khi vào Thế giới Song Song, dùng đúng questionId và variantId đã gặp ở hành trình chính.
+4.	Lượt trả lời mới phải có attemptId mới.
+5.	Nếu HP về 0, kết thúc hành trình ngay.
+6.	Nếu đóng game giữa Thế giới Song Song, lưu vị trí, câu đang làm và thời gian còn lại.
+Điều kiện mở vùng đất kế tiếp: Trùm đã bị đánh bại và danh sách câu sai bắt buộc đã rỗng.
+PHẦN VIII. THƯƠNG HỘI TRI THỨC
+17. Quy tắc cửa hàng
+Thương Hội Tri Thức nằm ở thanh công cụ dưới. Cửa hàng chỉ được mở tại trạng thái an toàn, chẳng hạn ở bản đồ hoặc sau khi hoàn thành một ải.
+Không thể mở cửa hàng trong khi câu hỏi đang chạy để tác động ngược vào kết quả.
+Giá dưới đây là giá khởi điểm theo phương án đã thống nhất. Có thể cân bằng lại sau kiểm thử nhưng phải cập nhật tài liệu và dữ liệu cấu hình đồng bộ.
+18. Vật phẩm chủ động
+ 
+18.1. Lệnh Bài Vượt Ải
+120 vàng
+Bỏ qua câu hỏi hiện tại, không mất HP, không nhận thưởng và không thêm câu sai. Có thể mua nhiều lần; mỗi lần sử dụng tiêu hao một đơn vị.
+ 
+18.2. Hộ Tâm Phù
+180 vàng
+Kích hoạt trước khi trả lời. Nếu sai hoặc hết giờ ở hành trình chính, người chơi không mất HP và không thêm câu sai. Có thể mua nhiều lần.
+ 
+18.3. Thẻ Định Mệnh
+100 vàng
+Sau khi chọn Bóng Tối, cho phép chọn lại một lần từ bộ thẻ mới trước khi câu hỏi xuất hiện. Mỗi câu tối đa một lần sử dụng.
+ 
+18.4. Linh Vũ Hồi Đáp
+250 vàng
+Cho phép trả lời lại một lần sau khi trả lời sai lần đầu. Lần hai là kết quả cuối cùng; không cộng thưởng hai lần.
+ 
+18.5. Tâm Thạch Sinh Mệnh
+800 vàng
+Tăng HP tối đa thêm 1 và hồi HP hiện tại thêm 1, không vượt giới hạn HP tối đa mới. Có thể mua nhiều lần.
+ 
+18.6. Sa Lậu Ngưng Thời
+150 vàng
+Cộng thêm 10 giây cho câu hỏi hiện tại. Thời gian mới phải được cập nhật vào deadline của câu.
+19. Vật phẩm bị động
+Vật phẩm	Giá	Hiệu lực	Giới hạn
+Đồng Hồ Minh Triết	350 vàng	+2 giây cho mọi câu hỏi	Mua một lần/nhân vật
+Cổ Thư Tinh Thông	500 vàng	+15 EXP so với mức cơ bản; tổng 115 EXP/câu đúng đủ điều kiện	Mua một lần/nhân vật
+Túi Vàng May Mắn	450 vàng	+10 vàng so với mức cơ bản; tổng 110 vàng/câu đúng đủ điều kiện	Mua một lần/nhân vật
+Ấn Danh Tự Tại	200 vàng	Mở chức năng đặt danh hiệu cá nhân	Mua một lần/nhân vật
+20. Quy tắc giao dịch
+•	Không đủ vàng: từ chối giao dịch, không trừ vàng và không thêm vật phẩm.
+•	Vật phẩm bị động đã sở hữu: không cho mua lần hai.
+•	Vật phẩm chủ động: có thể mua nhiều lần.
+•	Trừ vàng và thêm vật phẩm phải được xử lý như một giao dịch logic thống nhất.
+•	Nếu giao dịch thất bại, không được để người chơi mất vàng mà không nhận được vật phẩm.
+•	Cửa hàng phải hiển thị giá, hiệu lực, số lượng và điều kiện sử dụng trước khi xác nhận.
+•	Không thể dùng vật phẩm để thay đổi kết quả một lượt đã chốt.
+PHẦN IX. LƯU GAME VÀ KHÔI PHỤC
+21. Cơ chế lưu dữ liệu
+Phiên bản đầu dùng localStorage.
+Dữ liệu chỉ có trên cùng trình duyệt và thiết bị. Game không tự đồng bộ giữa máy tính và điện thoại. Nếu người chơi xóa dữ liệu trình duyệt, sử dụng chế độ riêng tư hoặc đổi thiết bị, dữ liệu có thể bị mất.
+22. Những dữ liệu bắt buộc phải lưu
+Nhóm	Dữ liệu
+Hồ sơ	characterId, tên, lớp học, lớp nhân vật, thời điểm tạo
+Chỉ số	HP, HP tối đa, EXP, vàng, cấp độ
+Danh hiệu	Danh hiệu hệ thống, danh hiệu cá nhân
+Vật phẩm	Kho vật phẩm chủ động, vật phẩm bị động, hiệu lực đang hoạt động
+Hành trình	Vùng đất, ải, ải đã hoàn thành, trạng thái Trùm, khóa/mở vùng
+Câu sai	questionId, variantId, vùng/ải nguồn, thứ tự, trạng thái
+Biến thể	Bộ biến thể đã gán cho nhân vật hoặc dữ liệu đủ để tái tạo ổn định
+Phiên chơi	Màn hình, câu hiện tại, attemptId, trạng thái trả lời, số lần thử lại
+Đồng hồ	deadlineTimestamp, thời gian còn lại có thể suy ra
+Thẻ	Bộ thẻ hiện tại và lựa chọn đang chờ
+Chống xử lý trùng	Các lượt đã xử lý và dấu vết giao dịch cần thiết
+Phiên bản dữ liệu	schemaVersion
+23. Khôi phục phiên chơi
+Khi tải lại game:
+1.	Đọc và xác thực dữ liệu đã lưu.
+2.	Xác định hồ sơ đang hoạt động.
+3.	Khôi phục đúng màn hình và câu hỏi.
+4.	Khôi phục đúng biến thể câu hỏi.
+5.	Tính thời gian còn lại từ deadline thực.
+6.	Nếu thời gian đã hết, xử lý hết giờ một lần.
+7.	Nếu lượt đã được chốt trước khi đóng game, không áp dụng lại phần thưởng hoặc hình phạt.
+Nếu dữ liệu hỏng, game phải thông báo và giữ nguyên dữ liệu có thể phục hồi. Không được âm thầm ghi đè hồ sơ bằng một nhân vật mới.
+Nên thiết kế sẵn schemaVersion để hỗ trợ nâng cấp cấu trúc dữ liệu. Chức năng xuất/nhập JSON có thể bổ sung sau, nhưng không được coi là đồng bộ trực tuyến.
+PHẦN X. KIẾN TRÚC VÀ QUY TẮC LẬP TRÌNH
+24. Máy trạng thái gameplay
+Game phải quản lý trạng thái tập trung, không để từng nút giao diện tự thay đổi luật chơi.
+Trạng thái	Chức năng	Chuyển tiếp chính
+PROFILE_SELECT	Chọn hoặc tạo hồ sơ	Tạo mới → CLASS_SELECT; tiếp tục → trạng thái đã lưu
+CLASS_SELECT	Chọn lớp nhân vật	Xác nhận → MAP
+MAP	Chọn ải hoặc mở cửa hàng	Chọn ải → CARD_SELECT
+CARD_SELECT	Chọn thẻ	Chọn xong → QUESTION
+QUESTION	Hiển thị đề, phương án, đồng hồ	Trả lời/hết giờ → RESOLVING
+RESOLVING	Chốt kết quả, cập nhật tài nguyên	Game Over hoặc tiếp tục
+SHOP	Mua vật phẩm	Đóng cửa hàng → trạng thái trước đó
+PARALLEL_WORLD	Xử lý câu sai	Hết danh sách → kiểm tra điều kiện mở vùng
+BOSS_COMPLETE	Xác nhận đã hạ Trùm	Có câu sai → Song Song; không có → mở vùng mới
+GAME_OVER	Kết thúc hành trình	Xem hồ sơ hoặc tạo nhân vật khác
+VICTORY	Hoàn thành nội dung hiện có	Tổng kết và quay về hồ sơ/bản đồ
+RESOLVING là trạng thái bắt buộc để tránh hai sự kiện cùng xử lý một lượt, ví dụ người chơi bấm đáp án đúng đúng lúc đồng hồ về 0.
+25. Kiến trúc mã nguồn đề xuất
+Trong giai đoạn phát triển, nên chia mã nguồn thành các module. Sau khi kiểm thử ổn định, có thể đóng gói thành một file HTML nếu cần.
+hanh-trinh-tri-thuc/
+├── index.html
+├── css/
+│   ├── base.css
+│   ├── layout.css
+│   ├── game.css
+│   └── responsive.css
+├── js/
+│   ├── app.js
+│   ├── state.js
+│   ├── character.js
+│   ├── progression.js
+│   ├── questions.js
+│   ├── cards.js
+│   ├── combat.js
+│   ├── items.js
+│   ├── journey.js
+│   ├── parallel-world.js
+│   ├── save.js
+│   └── ui.js
+├── data/
+│   ├── questions.js
+│   ├── stages.js
+│   ├── items.js
+│   └── titles.js
+└── tests/
+    ├── progression.test.js
+    ├── combat.test.js
+    ├── items.test.js
+    ├── journey.test.js
+    └── save.test.js
+25.1. Trách nhiệm từng module
+Module	Trách nhiệm
+app.js	Điều phối luồng gameplay
+state.js	Quản lý trạng thái và chuyển trạng thái
+character.js	Tạo hồ sơ, khởi tạo lớp nhân vật
+progression.js	EXP, cấp độ, HP tối đa, danh hiệu
+questions.js	Ngân hàng câu hỏi, biến thể, đáp án
+cards.js	Tạo bộ thẻ, xáo trộn, chọn thẻ
+combat.js	Chốt đúng/sai/hết giờ, cập nhật HP
+items.js	Cửa hàng, tồn kho, kích hoạt vật phẩm
+journey.js	Bản đồ, ải, Trùm, khóa/mở vùng đất
+parallel-world.js	Danh sách câu sai và xử lý lại
+save.js	Lưu, tải, xác thực và nâng cấp dữ liệu
+ui.js	Hiển thị giao diện và nhận thao tác
+26. Mô hình dữ liệu chuẩn
+Đây là cấu trúc tham chiếu để lập trình. Tên trường có thể được chuẩn hóa, nhưng không được bỏ các thông tin cần thiết cho gameplay.
+{
+  schemaVersion: 1,
+  activeCharacterId: "character-unique-id",
+
+  characters: {
+    "character-unique-id": {
+      profile: {
+        characterId: "character-unique-id",
+        name: "Tên hiển thị",
+        classGroup: "Lớp học",
+        heroClass: "knight",
+        createdAt: 0
+      },
+
+      stats: {
+        level: 1,
+        exp: 0,
+        gold: 0,
+        hp: 2,
+        maxHp: 2
+      },
+
+      titles: {
+        systemTitleId: "title-1",
+        customTitle: null
+      },
+
+      inventory: {
+        activeItems: {},
+        passiveItems: {},
+        activeEffects: {}
+      },
+
+      journey: {
+        worldId: 1,
+        stageId: 1,
+        status: "active",
+        completedStages: [],
+        unlockedStages: [],
+        failedQuestions: []
+      },
+
+      questionSet: {
+        variantByQuestionId: {},
+        generationSeed: "stable-seed"
+      },
+
+      session: {
+        screen: "map",
+        questionId: null,
+        variantId: null,
+        attemptId: null,
+        attemptState: null,
+        retryCount: 0,
+        selectedCard: null,
+        deadlineTimestamp: null
+      },
+
+      processedAttempts: [],
+      transactionLog: []
+    }
+  }
+}
+26.1. Bản ghi câu sai
+{
+  questionId: "W1-S01-Q001",
+  variantId: "W1-S01-Q001-V03",
+  sourceWorldId: 1,
+  sourceStageId: 1,
+  status: "pending",
+  firstFailedAt: 0,
+  order: 1
+}
+26.2. Bản ghi câu hỏi
+{
+  questionId: "W1-S01-Q001",
+  worldId: 1,
+  stageId: 1,
+  type: "normal",
+  topic: "algebra",
+  difficulty: 1,
+
+  variantId: "W1-S01-Q001-V03",
+  questionLatex: "...",
+
+  options: [
+    { optionId: "A", latex: "..." },
+    { optionId: "B", latex: "..." }
+  ],
+
+  correctOptionId: "B",
+  timeLimitOverride: null
+}
+Lưu ý kỹ thuật: không đặt thuộc tính resolved = true vĩnh viễn trên câu hỏi gốc. Trạng thái xử lý thuộc về attemptId, vì cùng một câu hỏi có thể xuất hiện lại trong Thế giới Song Song.
+PHẦN XI. QUY TẮC CHỐNG LỖI LOGIC
+27. Thứ tự xử lý một lượt trả lời
+Đây là quy trình bắt buộc trong combat.js và luồng điều phối của game.
+1.	Khóa lượt hiện tại, chuyển sang RESOLVING.
+2.	Xác định kết quả cuối cùng: đúng, sai, hết giờ hoặc bỏ qua.
+3.	Nếu có Linh Vũ Hồi Đáp, chỉ chốt kết quả sau lần trả lời cuối.
+4.	Áp dụng hiệu lực vật phẩm hợp lệ.
+5.	Cập nhật HP, EXP, vàng và danh sách câu sai.
+6.	Kiểm tra cấp độ và xử lý tất cả ngưỡng cấp đạt được.
+7.	Kiểm tra HP bằng 0 để chuyển sang Game Over.
+8.	Đánh dấu lượt đã xử lý và lưu dữ liệu.
+9.	Chuyển sang màn hình phù hợp.
+28. Các bất biến bắt buộc
+Hệ thống phải luôn bảo đảm:
+•	HP hiện tại không âm.
+•	HP hiện tại không vượt HP tối đa.
+•	Vàng không âm.
+•	Mỗi attemptId chỉ được xử lý một lần.
+•	Một câu sai chỉ có một bản ghi đang chờ trong danh sách Song Song của một nhân vật.
+•	Một lượt đúng không thể nhận thưởng hai lần.
+•	Tạo nhân vật mới không xóa hồ sơ cũ.
+•	Tải lại trang không đặt lại đồng hồ và không tái áp dụng kết quả.
+•	Biến thể câu hỏi không tự thay đổi trong cùng hành trình của nhân vật.
+•	Không mở vùng đất mới nếu Trùm chưa bị đánh bại hoặc danh sách câu sai bắt buộc chưa rỗng.
+•	Nhân vật đã Game Over không được tiếp tục trả lời câu hỏi.
+•	Dữ liệu lưu bị lỗi không được tự động ghi đè âm thầm.
+28.1. Xung đột giữa đáp án và hết giờ
+Nếu người chơi bấm đáp án gần thời điểm đồng hồ về 0:
+•	Khi trạng thái vẫn là QUESTION và deadline chưa hết, sự kiện trả lời hợp lệ có thể được chấp nhận.
+•	Nếu deadline đã hết, xử lý hết giờ.
+•	Khi đã chuyển sang RESOLVING, mọi sự kiện đáp án hoặc hết giờ còn lại phải bị bỏ qua.
+Không dựa vào việc nút bị ẩn hay vô hiệu hóa trên giao diện để chống xử lý trùng. Việc kiểm soát phải nằm trong logic gameplay.
+PHẦN XII. KIỂM THỬ VÀ NGHIỆM THU
+29. Danh sách kiểm thử bắt buộc
+Mã	Tình huống kiểm thử	Kết quả mong đợi
+T01	Tạo hai nhân vật cùng tên	Hai hồ sơ có ID khác nhau
+T02	Tạo nhân vật mới sau Game Over	Hồ sơ cũ vẫn tồn tại
+T03	Kiểm tra thẻ Hiệp sĩ/Pháp sư	Mỗi lượt có 1 Ánh Sáng, 1 Bóng Tối
+T04	Kiểm tra thẻ Tu sĩ	Có 2 Ánh Sáng, 1 Bóng Tối; vị trí được xáo
+T05	Chọn từng loại thẻ	Ánh Sáng có 2 phương án; Bóng Tối có 4
+T06	Trả lời đúng lần đầu	+100 EXP, +100 vàng
+T07	Trả lời sai ở hành trình chính	-1 HP, thêm một câu sai
+T08	Bấm đáp án cùng lúc hết giờ	Chỉ một kết quả được xử lý
+T09	Linh Vũ: lần hai đúng	Chỉ nhận thưởng một lần
+T10	Linh Vũ: lần hai sai	Chỉ xử lý kết quả cuối
+T11	Hộ Tâm Phù: trả lời sai	Không mất HP, không thêm câu sai
+T12	Dùng Lệnh Bài Vượt Ải	Không mất HP, không nhận thưởng
+T13	Đúng trong Song Song	Không thưởng; xóa câu khỏi danh sách
+T14	Sai trong Song Song	-1 HP; giữ nguyên câu
+T15	HP về 0	Game Over ngay
+T16	EXP vượt nhiều ngưỡng	Lên đủ cấp; tăng max HP đúng lớp
+T17	Mua vật phẩm khi thiếu vàng	Không trừ vàng, không thêm vật phẩm
+T18	Mua vật phẩm bị động đã sở hữu	Giao dịch bị từ chối
+T19	Tải lại khi đang làm câu	Khôi phục đúng câu và thời gian
+T20	Tải lại sau deadline	Xử lý hết giờ một lần
+T21	Tạo hai nhân vật mới	Có thể gặp biến thể khác nhau, cùng mục tiêu kiến thức
+T22	Chuyển câu sai sang Song Song	Giữ đúng questionId và variantId
+T23	Hạ Trùm khi còn câu sai	Vùng đất kế tiếp vẫn khóa
+T24	Hạ Trùm và giải hết câu sai	Mở vùng đất tiếp theo
+T25	Dữ liệu lưu bị hỏng	Báo lỗi; không tự ghi đè hồ sơ
+T26	Kiểm tra LaTeX trên nhiều màn hình	Đề và phương án hiển thị đúng
+T27	Kiểm tra biến thể	Có đúng một đáp án đúng; phương án không trùng
+T28	Tải lại sau khi đã nhận thưởng	Không cộng thưởng lần hai
+30. Kiểm thử hồi quy
+Sau mỗi lần sửa các module combat.js, items.js, save.js, questions.js hoặc journey.js, phải chạy lại các ca kiểm thử liên quan.
+Ngoài kiểm thử từng chức năng, cần thực hiện một hành trình liên tục:
+1.	Tạo nhân vật.
+2.	Vượt các ải và sử dụng vật phẩm.
+3.	Trả lời sai một số câu.
+4.	Đóng/mở lại game.
+5.	Tiếp tục hành trình và hạ Trùm.
+6.	Xử lý câu sai trong Thế giới Song Song.
+7.	Mở vùng đất mới.
+8.	Kiểm tra tổng HP, EXP, vàng, kho vật phẩm và tiến trình đã lưu.
+Mục tiêu là phát hiện lỗi chỉ xuất hiện khi nhiều hệ thống tương tác với nhau.
+31. Điều kiện nghiệm thu bản mẫu
+Bản mẫu được xem là đạt yêu cầu khi:
+•	Có đủ ba lớp nhân vật và một vùng đất gồm 10 ải.
+•	Luật thẻ, đồng hồ, kết quả, vật phẩm và tài nguyên đúng đặc tả.
+•	Trùm và Thế giới Song Song hoạt động đúng.
+•	Vùng đất mới được khóa/mở chính xác.
+•	Mỗi nhân vật có bộ biến thể riêng và dữ liệu ổn định khi tải lại.
+•	Không có lỗi cộng thưởng hoặc trừ máu trùng.
+•	Hồ sơ được lưu và khôi phục chính xác.
+•	LaTeX hiển thị đúng trên máy tính và điện thoại.
+•	Các ca kiểm thử bắt buộc đều đạt.
+PHẦN XIII. LỘ TRÌNH TRIỂN KHAI
+32. Thứ tự thực hiện
+Giai đoạn	Công việc chính	Kết quả
+1	Mô hình dữ liệu, hồ sơ, localStorage	Tạo nhiều nhân vật, lưu và khôi phục
+2	Máy trạng thái và điều phối	Các màn hình chuyển đúng luật
+3	Câu hỏi, ID và biến thể	Bộ câu hỏi riêng, ổn định theo nhân vật
+4	Thẻ và đồng hồ	Bộ thẻ đúng lớp, thời gian chính xác
+5	Combat và progression	HP, EXP, vàng, cấp và danh hiệu chính xác
+6	Vật phẩm và cửa hàng	Mua, dùng, giới hạn và xung đột đúng
+7	Bản đồ, Trùm, Song Song	Hoàn chỉnh vòng lặp một vùng đất
+8	Kiểm thử hồi quy và giao diện	Bản mẫu sẵn sàng dùng thử
+Thứ tự ưu tiên: dữ liệu và luật chơi → kiểm thử logic → hoàn thiện giao diện → mở rộng ngân hàng câu hỏi và vùng đất.
+Không nên bắt đầu bằng việc xây dựng toàn bộ hình ảnh hoặc hiệu ứng khi cơ chế xử lý câu hỏi và lưu dữ liệu chưa ổn định.
+PHẦN XIV. CÁC QUYẾT ĐỊNH CHÍNH THỨC
+33. Các quy tắc đã thống nhất
+Đây là danh sách chuẩn dùng để đối chiếu trong quá trình lập trình.
+•	 Tên game là Hành Trình Tri Thức.
+•	 Ba lớp nhân vật có HP ban đầu 2/2.
+•	 Hiệp sĩ +2 HP tối đa/cấp; Pháp sư và Tu sĩ +1 HP tối đa/cấp.
+•	 Hiệp sĩ và Tu sĩ có 20 giây/câu; Pháp sư có 30 giây/câu.
+•	 Ánh Sáng có 2 phương án; Bóng Tối có 4 phương án.
+•	 Ải thứ 10 của mỗi vùng đất là Trùm.
+•	 Câu đúng lần đầu nhận 100 EXP và 100 vàng.
+•	 Câu sai/hết giờ ở hành trình chính mất 1 HP và vào Thế giới Song Song, trừ trường hợp được vật phẩm bảo vệ.
+•	 Thế giới Song Song không thưởng EXP/vàng; đúng thì xóa câu, sai/hết giờ thì mất HP và giữ câu.
+•	 Vùng đất tiếp theo chỉ mở khi Trùm đã bị đánh bại và danh sách câu sai bắt buộc đã rỗng.
+•	 Lên cấp tăng HP tối đa, không hồi HP hiện tại.
+•	 EXP và vàng bị động lần lượt là 115 và 110 cho mỗi câu đúng đủ điều kiện.
+•	 Lưu game bằng localStorage; hồ sơ Game Over được giữ.
+•	 Tạo nhân vật mới không ghi đè hồ sơ cũ.
+•	 Mỗi câu có ID gốc cố định, ID biến thể và ID lượt trả lời.
+•	 Tạo nhân vật mới có thể tạo bộ biến thể câu hỏi khác.
+•	 Biến thể được lưu và không đổi khi tải lại hoặc chuyển sang Thế giới Song Song.
+•	 Không tự hiển thị đáp án đúng hoặc lời giải khi trả lời sai.
+•	 Không dùng Hộ Tâm Phù và Linh Vũ Hồi Đáp đồng thời trên cùng một câu.
+•	 Trong phiên bản 1.0, không dùng vật phẩm cứu nguy ở Thế giới Song Song.
+34. Những tham số được phép cân bằng sau kiểm thử
+Các nội dung sau có thể điều chỉnh nhưng phải cập nhật đồng bộ giữa đặc tả, dữ liệu và mã nguồn:
+•	Giá vật phẩm.
+•	Số lượng câu hỏi và phân bố độ khó trong mỗi ải.
+•	Miền số và tham số sinh biến thể.
+•	Cách trình bày phản hồi, hiệu ứng và thời lượng chuyển cảnh.
+•	Chức năng xuất/nhập hồ sơ, thống kê lớp và chế độ giáo viên ở các phiên bản sau.
+Không tự ý đổi các luật cốt lõi chỉ bằng cách sửa mã nguồn mà không cập nhật tài liệu và bộ kiểm thử.
+Kết luận triển khai
+Bản đặc tả này là chuẩn gameplay phiên bản 1.0 cho Hành Trình Tri Thức. Khi bắt đầu viết mã, cần lấy các bảng luật, mô hình dữ liệu, bất biến và ca kiểm thử trong tài liệu làm căn cứ triển khai.
+Ba yêu cầu kỹ thuật quan trọng nhất cần được giữ xuyên suốt dự án là:
+1.	Một câu hỏi gốc có thể có nhiều biến thể, nhưng biến thể của từng nhân vật phải ổn định và được lưu.
+2.	Một lượt trả lời chỉ được xử lý một lần, bất kể người chơi bấm nhanh, hết giờ hoặc tải lại trang.
+3.	Tiến trình bản đồ, HP và danh sách câu sai phải nhất quán, đặc biệt ở thời điểm Game Over, sau khi hạ Trùm và khi xử lý Thế giới Song Song.
+Đây là nền tảng để triển khai bản mẫu đầu tiên với một vùng đất gồm 10 ải, kiểm thử toàn bộ gameplay rồi mới mở rộng nội dung.
+

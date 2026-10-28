@@ -1,0 +1,7 @@
+{
+  "name": "Hành Trình Tri Thức - Math RPG",
+  "description": "Trò chơi giáo dục tương tác phiêu lưu ôn tập Toán học khám phá các vùng đất qua tri thức.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+

@@ -1,0 +1,830 @@
+ĐẶC TẢ UX PROTOTYPE — HÀNH TRÌNH TRI THỨC
+Phiên bản 1.1 · Hoàn thiện trước khi lập trình HTML/CSS/JavaScript
+Tôi sẽ chuẩn hóa các quyết định vừa chốt thành một đặc tả có thể dùng trực tiếp để dựng prototype, đồng thời xử lý một điểm cần làm rõ trong quy tắc lưu hồ sơ: bạn đã chọn một hồ sơ đang hoạt động, nhưng cũng muốn tạo nhân vật mới mà không làm mất hồ sơ cũ. Vì vậy, tôi đề xuất lưu một hồ sơ hoạt động và một bản hồ sơ cũ được giữ lại trong thời gian xác nhận/chuyển đổi; nếu muốn nhiều nhân vật có thể tiếp tục độc lập, đó sẽ là một hệ thống nhiều hồ sơ và cần được chốt riêng.
+Ba màn hình sẽ được thiết kế theo cùng một hệ thống nhận diện Modern RPG, nền xanh than, tím làm màu hành động chính, xanh ngọc cho tiến trình và vàng kim cho tài nguyên.
+1. Phạm vi prototype
+Prototype bao gồm ba màn hình và các trạng thái liên quan:
+Màn hình 01 — Khởi đầu
+Cảnh nền, tiêu đề, thông tin Boss, lời dẫn và nút bắt đầu.
+01
+Màn hình 02 — Quản lý nhân vật
+Tiếp tục hồ sơ, tạo nhân vật mới, cảnh báo thay thế và khôi phục dữ liệu.
+02
+Màn hình 03 — Trung tâm hành trình
+Thanh trạng thái, Bản đồ, Thương hội tri thức và Nhân vật.
+03
+Prototype cần thể hiện thao tác thực tế giữa các màn hình, không chỉ là ba ảnh tĩnh. Tuy nhiên, dữ liệu vật phẩm, cấp độ và tiến trình ban đầu có thể dùng dữ liệu mẫu; chưa tích hợp câu hỏi, chiến đấu hoặc giao diện từng ải.
+2. Quy chuẩn thiết kế chung
+Hạng mục	Đặc tả
+Tỷ lệ ưu tiên	Desktop 16:9, mục tiêu 1920 × 1080
+Hỗ trợ màn hình	Co giãn xuống laptop và điện thoại
+Nền chính	Xanh than #101827
+Bề mặt thẻ	Xanh slate #1C293B
+Màu hành động	Tím #7867F5
+Màu tiến trình	Xanh ngọc #35C5D4
+Màu vàng	Vàng kim #E8B85D
+Cảnh báo	Đỏ hồng, chỉ dùng khi cần
+Kiểu chữ	Sans-serif, hỗ trợ tiếng Việt đầy đủ
+Bo góc	10–16 px
+Chuyển tab	Khoảng 180–250 ms
+Chuyển màn hình	Khoảng 250–450 ms
+Tất cả màn hình phải sử dụng cùng hệ thống biểu tượng, màu sắc và quy tắc trạng thái. Các số liệu trong bản mẫu chỉ là dữ liệu minh họa; khi tích hợp game phải lấy từ gameplay thực tế.
+3. Màn hình 01 — Khởi đầu hành trình
+ 
+thetwilightvault.com
+3.1. Cấu trúc màn hình
+HÀNH TRÌNH TRI THỨC
+MATH RPG
+THE JOURNEY BEGINS
+HÀNH TRÌNH
+TRI THỨC
+BOSS: NGUYỄN TUẤN ANH
+0824049191
+Tri thức mở ra con đường. Bản lĩnh quyết định hành trình.
+BẮT ĐẦU HÀNH TRÌNH →
+MỘT THẾ GIỚI · MỘT HÀNH TRÌNH
+Wireframe định hướng, không phải giao diện cuối cùng.
+3.2. Đặc tả thành phần
+ID	Thành phần	Hành vi
+A01	Hình nền	Hiển thị cảnh cổng tri thức, có hiệu ứng chuyển động nhẹ
+A02	Tiêu đề	Hiển thị chính xác “HÀNH TRÌNH TRI THỨC”
+A03	Thông tin Boss	Hiển thị BOSS: NGUYỄN TUẤN ANH - 0824049191
+A04	Lời dẫn	Hiển thị thông điệp mở đầu, tối đa 2 dòng
+A05	Nút bắt đầu	Chuyển đến màn hình quản lý nhân vật
+Quy tắc tương tác: nhấn nút bắt đầu chỉ mở màn hình tiếp theo, không tự tạo nhân vật và không làm thay đổi hồ sơ đã lưu.
+4. Màn hình 02 — Quản lý nhân vật
+4.1. Bố cục
+Màn hình có tiêu đề “CHỌN HÀNH TRÌNH CỦA BẠN”, kèm hai thẻ chức năng:
+•	Tiếp tục hành trình: khôi phục hồ sơ hiện có và đi vào trung tâm game nếu nhân vật còn máu.
+•	Tạo nhân vật mới: mở biểu mẫu nhập thông tin nhân vật.
+Nếu hồ sơ hiện tại không tồn tại, nút tiếp tục bị vô hiệu hóa. Nếu hồ sơ hết máu, nút tiếp tục cũng bị vô hiệu hóa và có thông báo rõ ràng.
+4.2. Biểu mẫu tạo nhân vật
+Các trường bắt buộc:
+1.	Tên nhân vật.
+2.	Lớp của người chơi.
+3.	Lớp nhân vật theo hệ thống gameplay đã chốt.
+4.	Nút xác nhận và nút hủy.
+Khi người chơi xác nhận tạo nhân vật, game kiểm tra dữ liệu đầu vào trước khi khởi tạo. Nếu đang có hồ sơ, game phải xử lý cảnh báo thay thế trước khi ghi dữ liệu mới.
+4.3. Điểm cần chốt về lưu hồ sơ
+Có một mâu thuẫn giữa hai yêu cầu đã chọn:
+•	“Một hồ sơ duy nhất, tạo mới có cảnh báo thay thế”.
+•	“Tạo nhân vật mới giữ hồ sơ cũ và tạo hồ sơ mới riêng”.
+Hai cách này có thể được thống nhất theo một trong hai mô hình sau.
+Phương án A — Một nhân vật hoạt động, có bản lưu dự phòng
+Khuyến nghị nếu muốn đơn giản
+Game chỉ có một hồ sơ hoạt động. Trước khi thay thế, hồ sơ cũ được lưu thành bản dự phòng có thể khôi phục. Người chơi không có danh sách nhiều nhân vật độc lập.
+Phương án B — Nhiều nhân vật độc lập
+Hồ sơ cũ được giữ nguyên, nhân vật mới có hồ sơ riêng. Màn hình quản lý cần thêm danh sách hồ sơ để chọn nhân vật muốn tiếp tục.
+Để giữ đúng ý “một hồ sơ duy nhất”, tôi đề xuất Phương án A cho prototype. Khi người chơi tạo nhân vật mới, game cảnh báo rằng hồ sơ hiện tại sẽ được thay thế trong vai trò hồ sơ hoạt động, đồng thời lưu một bản dự phòng để khôi phục. Cơ chế bản dự phòng phải được thiết kế rõ ràng; không được quảng bá như thể game hỗ trợ nhiều nhân vật chơi độc lập.
+5. Màn hình 03 — Trung tâm hành trình
+5.1. Khung bố cục
+Tên nhân vật
+Cấp độ 05
+1.250 vàng
+350 / 500 EXP
+7 / 10
+BẢN ĐỒ HÀNH TRÌNH
+CHƯƠNG ĐANG CHỌN
+Tên chương
+Tiến trình và các ải trong chương.
+Đã vượt · Đã vượt · Hiện tại · Bị khóa
+Bản đồ
+Thương hội
+Nhân vật
+Khung giao diện trung tâm; thông số và tên chương chỉ dùng để minh họa.
+5.2. Thanh trạng thái
+Luôn hiển thị:
+•	Tên nhân vật và cấp độ.
+•	EXP hiện tại / EXP cần để lên cấp.
+•	Máu hiện tại / máu tối đa.
+•	Vàng hiện có.
+Thanh trạng thái không bị thay thế khi chuyển tab. Các chỉ số phải được lấy từ cùng một nguồn dữ liệu nhân vật để tránh việc thanh trên cùng và hồ sơ nhân vật hiển thị khác nhau.
+5.3. Tab Bản đồ
+Bản đồ chia theo chương, mỗi chương có một đường hành trình cuộn riêng.
+Cấu trúc:
+1.	Bộ chọn chương.
+2.	Tên chương và tiến trình tổng quan.
+3.	Đường hành trình gồm các nút ải.
+4.	Khung thông tin của nút được chọn.
+Quy tắc:
+•	Nút hoàn thành có dấu kiểm.
+•	Nút hiện tại được làm nổi bật.
+•	Nút bị khóa có biểu tượng khóa.
+•	Khi chọn chương, đường hành trình tương ứng được tải và cuộn đến vị trí phù hợp.
+•	Khi hoàn thành một ải, trạng thái bản đồ được cập nhật theo dữ liệu gameplay.
+•	Không cho truy cập ải trái với điều kiện mở khóa đã quy định.
+Nếu chương có nhiều ải, chỉ phần đường hành trình cuộn; tiêu đề chương và thanh trạng thái vẫn giữ ổn định.
+5.4. Tab Thương hội tri thức
+Giao diện gồm:
+•	Tiêu đề và số vàng.
+•	Hai bộ chọn danh mục: Vật phẩm chủ động, Vật phẩm bị động.
+•	Lưới thẻ vật phẩm.
+•	Khung chi tiết và thao tác mua/sử dụng theo luật gameplay.
+Mỗi thẻ có biểu tượng, tên, mô tả ngắn, giá và trạng thái. Khi mua, game phải kiểm tra điều kiện, cập nhật dữ liệu rồi mới thông báo thành công. Không đủ vàng hoặc không đủ điều kiện phải có thông báo riêng.
+5.5. Tab Nhân vật
+Bố cục chia thành:
+•	Hồ sơ: tên, lớp nhân vật, cấp độ và danh hiệu.
+•	Chỉ số: EXP, máu, vàng.
+•	Danh hiệu và thành tích đã đạt.
+Không thêm các thuộc tính chiến đấu hay hệ thống trang bị nếu chúng không tồn tại trong gameplay đã thống nhất.
+6. Đặc tả lưu trữ và phục hồi
+Prototype cần hỗ trợ các trường hợp sau:
+Tình huống	Kết quả bắt buộc
+Chưa có dữ liệu	Chỉ cho tạo nhân vật mới
+Có hồ sơ hợp lệ, còn máu	Cho tiếp tục
+Hồ sơ hết máu	Chặn tiếp tục, cho tạo nhân vật mới
+Tạo nhân vật mới khi đã có hồ sơ	Hiện cảnh báo trước khi thay thế
+Người chơi hủy cảnh báo	Giữ nguyên hồ sơ hiện tại
+Người chơi xác nhận	Tạo bản dự phòng rồi mới thay hồ sơ hoạt động
+Dữ liệu không hợp lệ	Báo lỗi, không âm thầm ghi đè
+Tải lại trang	Khôi phục hồ sơ và tab phù hợp
+Lưu trữ có thể sử dụng localStorage, với dữ liệu được tổ chức theo phiên bản cấu trúc để thuận tiện nâng cấp sau này. Nếu chạy bằng file://, cần kiểm thử trên trình duyệt mục tiêu vì cơ chế lưu cục bộ có thể khác với khi chạy qua máy chủ web.
+7. Luồng điều hướng
+#chatgpt-mermaid-_r_2pa_{font-family:-apple-system-body,ui-sans-serif,-apple-system,system-ui,"Segoe UI",Helvetica,"Apple Color Emoji",Arial,sans-serif,"Segoe UI Emoji","Segoe UI Symbol";font-size:16px;fill:rgb(13, 13, 13);}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#chatgpt-mermaid-_r_2pa_ .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#chatgpt-mermaid-_r_2pa_ .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#chatgpt-mermaid-_r_2pa_ .error-icon{fill:rgb(243, 243, 243);}#chatgpt-mermaid-_r_2pa_ .error-text{fill:rgb(13, 13, 13);stroke:rgb(13, 13, 13);}#chatgpt-mermaid-_r_2pa_ .edge-thickness-normal{stroke-width:1px;}#chatgpt-mermaid-_r_2pa_ .edge-thickness-thick{stroke-width:3.5px;}#chatgpt-mermaid-_r_2pa_ .edge-pattern-solid{stroke-dasharray:0;}#chatgpt-mermaid-_r_2pa_ .edge-thickness-invisible{stroke-width:0;fill:none;}#chatgpt-mermaid-_r_2pa_ .edge-pattern-dashed{stroke-dasharray:3;}#chatgpt-mermaid-_r_2pa_ .edge-pattern-dotted{stroke-dasharray:2;}#chatgpt-mermaid-_r_2pa_ .marker{fill:rgb(143, 143, 143);stroke:rgb(143, 143, 143);}#chatgpt-mermaid-_r_2pa_ .marker.cross{stroke:rgb(143, 143, 143);}#chatgpt-mermaid-_r_2pa_ svg{font-family:-apple-system-body,ui-sans-serif,-apple-system,system-ui,"Segoe UI",Helvetica,"Apple Color Emoji",Arial,sans-serif,"Segoe UI Emoji","Segoe UI Symbol";font-size:16px;}#chatgpt-mermaid-_r_2pa_ p{margin:0;}#chatgpt-mermaid-_r_2pa_ .label{font-family:-apple-system-body,ui-sans-serif,-apple-system,system-ui,"Segoe UI",Helvetica,"Apple Color Emoji",Arial,sans-serif,"Segoe UI Emoji","Segoe UI Symbol";color:rgb(13, 13, 13);}#chatgpt-mermaid-_r_2pa_ .cluster-label text{fill:rgb(13, 13, 13);}#chatgpt-mermaid-_r_2pa_ .cluster-label span{color:rgb(13, 13, 13);}#chatgpt-mermaid-_r_2pa_ .cluster-label span p{background-color:transparent;}#chatgpt-mermaid-_r_2pa_ .label text,#chatgpt-mermaid-_r_2pa_ span{fill:rgb(13, 13, 13);color:rgb(13, 13, 13);}#chatgpt-mermaid-_r_2pa_ .node rect,#chatgpt-mermaid-_r_2pa_ .node circle,#chatgpt-mermaid-_r_2pa_ .node ellipse,#chatgpt-mermaid-_r_2pa_ .node polygon,#chatgpt-mermaid-_r_2pa_ .node path{fill:rgb(222, 234, 251);stroke:rgb(83, 154, 248);stroke-width:1px;}#chatgpt-mermaid-_r_2pa_ .rough-node .label text,#chatgpt-mermaid-_r_2pa_ .node .label text,#chatgpt-mermaid-_r_2pa_ .image-shape .label,#chatgpt-mermaid-_r_2pa_ .icon-shape .label{text-anchor:middle;}#chatgpt-mermaid-_r_2pa_ .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#chatgpt-mermaid-_r_2pa_ .rough-node .label,#chatgpt-mermaid-_r_2pa_ .node .label,#chatgpt-mermaid-_r_2pa_ .image-shape .label,#chatgpt-mermaid-_r_2pa_ .icon-shape .label{text-align:center;}#chatgpt-mermaid-_r_2pa_ .node.clickable{cursor:pointer;}#chatgpt-mermaid-_r_2pa_ .root .anchor path{fill:rgb(143, 143, 143)!important;stroke-width:0;stroke:rgb(143, 143, 143);}#chatgpt-mermaid-_r_2pa_ .arrowheadPath{fill:rgb(143, 143, 143);}#chatgpt-mermaid-_r_2pa_ .edgePath .path{stroke:rgb(143, 143, 143);stroke-width:1px;}#chatgpt-mermaid-_r_2pa_ .flowchart-link{stroke:rgb(143, 143, 143);fill:none;}#chatgpt-mermaid-_r_2pa_ .edgeLabel{background-color:rgb(252, 252, 252);text-align:center;}#chatgpt-mermaid-_r_2pa_ .edgeLabel p{background-color:rgb(252, 252, 252);}#chatgpt-mermaid-_r_2pa_ .edgeLabel rect{opacity:0.5;background-color:rgb(252, 252, 252);fill:rgb(252, 252, 252);}#chatgpt-mermaid-_r_2pa_ .labelBkg{background-color:rgba(252, 252, 252, 0.5);}#chatgpt-mermaid-_r_2pa_ .cluster rect{fill:rgb(243, 243, 243);stroke:rgba(0, 0, 0, 0.1);stroke-width:1px;}#chatgpt-mermaid-_r_2pa_ .cluster text{fill:rgb(13, 13, 13);}#chatgpt-mermaid-_r_2pa_ .cluster span{color:rgb(13, 13, 13);}#chatgpt-mermaid-_r_2pa_ div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:-apple-system-body,ui-sans-serif,-apple-system,system-ui,"Segoe UI",Helvetica,"Apple Color Emoji",Arial,sans-serif,"Segoe UI Emoji","Segoe UI Symbol";font-size:12px;background:rgb(243, 243, 243);border:1px solid rgba(0, 0, 0, 0.1);border-radius:2px;pointer-events:none;z-index:100;}#chatgpt-mermaid-_r_2pa_ .flowchartTitleText{text-anchor:middle;font-size:18px;fill:rgb(13, 13, 13);}#chatgpt-mermaid-_r_2pa_ rect.text{fill:none;stroke-width:0;}#chatgpt-mermaid-_r_2pa_ .icon-shape,#chatgpt-mermaid-_r_2pa_ .image-shape{background-color:rgb(252, 252, 252);text-align:center;}#chatgpt-mermaid-_r_2pa_ .icon-shape p,#chatgpt-mermaid-_r_2pa_ .image-shape p{background-color:rgb(252, 252, 252);padding:2px;}#chatgpt-mermaid-_r_2pa_ .icon-shape .label rect,#chatgpt-mermaid-_r_2pa_ .image-shape .label rect{opacity:0.5;background-color:rgb(252, 252, 252);fill:rgb(252, 252, 252);}#chatgpt-mermaid-_r_2pa_ .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#chatgpt-mermaid-_r_2pa_ .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#chatgpt-mermaid-_r_2pa_ .node .neo-node{stroke:rgb(83, 154, 248);}#chatgpt-mermaid-_r_2pa_ [data-look="neo"].node rect,#chatgpt-mermaid-_r_2pa_ [data-look="neo"].cluster rect,#chatgpt-mermaid-_r_2pa_ [data-look="neo"].node polygon{stroke:url(#chatgpt-mermaid-_r_2pa_-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#chatgpt-mermaid-_r_2pa_ [data-look="neo"].swimlane.cluster rect{filter:none;}#chatgpt-mermaid-_r_2pa_ [data-look="neo"].node path{stroke:url(#chatgpt-mermaid-_r_2pa_-gradient);stroke-width:1px;}#chatgpt-mermaid-_r_2pa_ [data-look="neo"].node .outer-path{filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#chatgpt-mermaid-_r_2pa_ [data-look="neo"].node .neo-line path{stroke:rgb(83, 154, 248);filter:none;}#chatgpt-mermaid-_r_2pa_ [data-look="neo"].node circle{stroke:url(#chatgpt-mermaid-_r_2pa_-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#chatgpt-mermaid-_r_2pa_ [data-look="neo"].node circle .state-start{fill:#000000;}#chatgpt-mermaid-_r_2pa_ [data-look="neo"].icon-shape .icon{fill:url(#chatgpt-mermaid-_r_2pa_-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#chatgpt-mermaid-_r_2pa_ [data-look="neo"].icon-shape .icon-neo path{stroke:url(#chatgpt-mermaid-_r_2pa_-gradient);filter:drop-shadow( 1px 2px 2px rgba(185,185,185,1));}#chatgpt-mermaid-_r_2pa_ .node text{font-size:14px;font-weight:600;letter-spacing:normal;fill:rgb(0, 79, 153);}#chatgpt-mermaid-_r_2pa_ .edgeLabels text{font-size:13px;font-weight:600;letter-spacing:-0.08px;fill:rgb(0, 79, 153);}#chatgpt-mermaid-_r_2pa_ .node tspan[font-weight="normal"],#chatgpt-mermaid-_r_2pa_ .edgeLabels tspan[font-weight="normal"]{font-weight:600;}#chatgpt-mermaid-_r_2pa_ .edgeLabel .label rect{opacity:1;rx:13px;ry:13px;fill:rgb(245, 250, 255);stroke:rgb(206, 219, 229);stroke-width:1px;}#chatgpt-mermaid-_r_2pa_ .node rect,#chatgpt-mermaid-_r_2pa_ .node circle,#chatgpt-mermaid-_r_2pa_ .node ellipse,#chatgpt-mermaid-_r_2pa_ .node polygon,#chatgpt-mermaid-_r_2pa_ .node path{fill:rgb(229, 243, 255);stroke:rgba(0, 0, 0, 0.1);stroke-width:1px;}#chatgpt-mermaid-_r_2pa_ .node rect{rx:16px;ry:16px;}#chatgpt-mermaid-_r_2pa_ .node.mermaid-decision .label-container{fill:rgb(245, 250, 255);stroke:rgb(206, 219, 229);stroke-dasharray:2,2;}#chatgpt-mermaid-_r_2pa_ .edgePaths .flowchart-link{stroke:rgb(143, 143, 143);stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;}#chatgpt-mermaid-_r_2pa_ .marker{fill:rgb(143, 143, 143);stroke:rgb(143, 143, 143);}#chatgpt-mermaid-_r_2pa_ :root{--mermaid-font-family:-apple-system-body,ui-sans-serif,-apple-system,system-ui,"Segoe UI",Helvetica,"Apple Color Emoji",Arial,sans-serif,"Segoe UI Emoji","Segoe UI Symbol";}Khởi đầuKiểm tra hồ sơHồ sơ hợp lệ?Tạo nhân vậtCòn máu?Tiếp tụcThông báo hết máuKiểm tra có hồ sơ cũCần thay thế?Cảnh báo xác nhậnLưu bản dự phòngTạo hồ sơ mớiTrung tâm hành trìnhBản đồThương hộiNhân vậtKhôngCóCóKhôngCóHủyXác nhậnKhông
+8. Tiêu chí nghiệm thu prototype
+Trước khi tích hợp gameplay, cần xác nhận:
+•	Ba màn hình hoạt động và chuyển đổi đúng.
+•	Không có nút quan trọng chỉ mang tính trang trí.
+•	Dữ liệu trạng thái nhân vật nhất quán giữa các tab.
+•	Bản đồ chia chương, cuộn riêng theo chương và phân biệt đúng trạng thái ải.
+•	Cảnh báo thay thế hồ sơ có thể hủy mà không mất dữ liệu.
+•	Có cơ chế khôi phục bản dự phòng theo phương án lưu trữ đã chọn.
+•	Giao diện giữ được độ tương phản và bố cục trên màn hình 16:9.
+•	Tải lại trang không làm mất dữ liệu hợp lệ đã lưu.
+Kết luận: Đặc tả visual và UX đã đủ chi tiết để chuyển sang dựng prototype. Điểm duy nhất cần giữ rõ trong tài liệu triển khai là quy tắc hồ sơ: tôi đang diễn giải yêu cầu của bạn theo mô hình một nhân vật hoạt động, có bản dự phòng khi thay thế, chứ không phải hệ thống nhiều nhân vật độc lập.
+
+# ĐẶC TẢ VISUAL UI/UX CHI TIẾT — HÀNH TRÌNH TRI THỨC
+
+Bản đặc tả này đi sâu vào từng thành phần hiển thị của prototype: nút bấm, bản đồ hành trình, ba lớp nhân vật, hình ảnh danh hiệu, vật phẩm, biểu tượng tài nguyên và trạng thái tương tác. Mục tiêu là để khi chuyển sang HTML/CSS/JavaScript, người lập trình có thể dựa vào tài liệu để xây dựng giao diện nhất quán, thay vì tự suy đoán cách thiết kế từng thành phần.
+
+## I. Ngôn ngữ thiết kế tổng thể
+
+[Emberglyph: Product Design for Fantasy Card Battle Game by Gapsy Studio on Dribbble](https://images.openai.com/static-rsc-4/1VaEciaH8gduJBfafkIdxDYwqhqXIznl_w3sLvSNQL9WDbt3jyyz4BHw0bMIKjH1ZY-tjPIxMquOKlzy--gpq6LO4MimdPBOUV3TRPcMXYmHLAL78kVFDvJVELubNlcJQV6uulIXVHdg2Jgah_NdZEJ3_yyAVEL-t9e8ZQ0V5G0?purpose=inline)
+
+1\. Phong cách Modern RPG
+
+- Nền xanh than, các lớp giao diện có chiều sâu.
+- Tím huyền bí dành cho hành động chính và năng lượng.
+- Xanh ngọc thể hiện tiến trình, thành công.
+- Vàng kim thể hiện EXP, vàng và phần thưởng.
+- Hạn chế hoa văn rườm rà để nội dung Toán học và thông tin nhân vật luôn rõ ràng.
+
+[Game Fantasy RPG Inventory Items Midjourney Prompt | PromptBase](https://images.openai.com/static-rsc-4/g16E24Fx-WISZ1D2Y0OebXtgaRAuFchsHv8UztZnEl0J8juNQE_wF1xMJbRqwTS8wKaBB9erNUy7mXm9K4KhVHcz0_2ijqMIZwqO2y6-QFfM-_G2TqmEASOy5b9IZjkjm7OpR6kwocP3-bkRyNa1CHWyWawnwHvyKf7Ou0GkChg?purpose=inline)
+
+2\. Phong cách hình ảnh
+
+- Nhân vật: minh họa fantasy bán cách điệu, trưởng thành, dễ phân biệt lớp.
+- Vật phẩm: icon riêng, hình khối rõ, có viền theo độ hiếm nếu gameplay có phân cấp độ hiếm.
+- Danh hiệu: huy hiệu hoặc phù hiệu có biểu tượng trung tâm.
+- Bản đồ: đường hành trình phát sáng nối các nút ải.
+
+### 1. Bảng màu và quy tắc sử dụng
+
+Nền chính
+
+\#101827
+
+Nền thẻ / bảng
+
+\#1C293B
+
+Hành động chính
+
+\#7867F5
+
+Tiến trình / thành công
+
+\#35C5D4
+
+Vàng / phần thưởng
+
+\#E8B85D
+
+Cảnh báo / nguy hiểm
+
+\#F16F79
+
+### 2. Quy chuẩn kích thước
+
+- Nút chính: cao khoảng 48–56 px trên máy tính; tối thiểu 44 px trên điện thoại.
+- Nút phụ: cao 40–48 px.
+- Thẻ thông tin: bo góc 12–16 px, viền mảnh, nền tối hơn vùng nội dung.
+- Icon: 20–24 px cho nút; 32–48 px cho vật phẩm; 64–96 px cho huy hiệu lớn.
+- Chữ: tiêu đề màn hình 26–36 px; tiêu đề thẻ 16–20 px; nội dung 14–16 px.
+- Hiệu ứng: chuyển trạng thái nhanh, ánh sáng vừa phải; không dùng hiệu ứng liên tục gây rối mắt.
+
+Các kích thước trên là quy chuẩn khởi đầu cho prototype, có thể điều chỉnh sau khi kiểm thử trên máy chiếu và điện thoại.
+
+## II. Màn hình 1 — Khởi đầu hành trình
+
+[Rising Wind Sanctum Walkthrough: All 3 Chests · AniimoVerse](https://images.openai.com/static-rsc-4/3WK1j21n75vrXk9HXB0WjaKNKhp0EHoScGS07TjEzsARx2l0-8L3qqRUM5t43_lsomFtHB_BpI3G89KPJgi2zQIM0qC8K7Rb2XXiMaPNYyDqOXX-4TqRO3eMgTUYpuIUN3s8ZMO7wc4r673tvhvE-dTK-NldWAvXDPavRdHJN_k?purpose=inline)
+
+[aniimoverse.com](https://www.aniimoverse.com/guides/sanctum-rising-wind?utm_source=chatgpt.com)
+
+### 1. Các vùng hiển thị
+
+THẾ GIỚI TOÁN HỌC
+
+# HÀNH TRÌNH TRI THỨC
+
+Tri thức mở ra con đường. Bản lĩnh quyết định hành trình.
+
+BOSS: NGUYỄN TUẤN ANH - 0824049191
+
+BẮT ĐẦU HÀNH TRÌNH →
+
+Minh họa bố cục và màu sắc, không phải ảnh chụp giao diện đã lập trình.
+
+### 2. Thành phần và hành vi
+
+| Thành phần             | Hiển thị và hành vi                                                                                        |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------- |
+| Logo / biểu tượng game | Biểu tượng cổng tri thức hoặc hình khối gợi liên tưởng đến Toán học; đặt phía trên hoặc bên trái tiêu đề.  |
+| Tiêu đề game           | Luôn hiển thị rõ, là điểm nhấn lớn nhất của màn hình.                                                      |
+| Dòng BOSS              | Giữ đúng nội dung đã thống nhất; cỡ chữ nhỏ hơn tiêu đề, màu vàng kim.                                     |
+| Lời dẫn truyện         | Một hoặc hai câu ngắn, không che khuất nút bắt đầu.                                                        |
+| Bắt đầu hành trình     | Nút chính, có hiệu ứng sáng nhẹ khi rê chuột hoặc nhấn.                                                    |
+| Nền                    | Cổng tri thức, con đường phía trước, hạt sáng chuyển động nhẹ; nội dung nền không được cạnh tranh với chữ. |
+
+Quy tắc quan trọng: nhấn “Bắt đầu hành trình” chỉ chuyển sang màn hình quản lý hồ sơ nhân vật. Không tự động tạo nhân vật, không xóa tiến trình và không thay đổi dữ liệu.
+
+## III. Màn hình 2 — Quản lý hồ sơ và tạo nhân vật
+
+Màn hình này phải giúp người chơi hiểu rõ ba việc: tiếp tục hành trình hiện có, tạo nhân vật mới hoặc xử lý hồ sơ đã thất bại.
+
+### 1. Bố cục màn hình
+
+## CHỌN HÀNH TRÌNH CỦA BẠN
+
+Mỗi lựa chọn sẽ quyết định hành trình tiếp theo của bạn.
+
+[Dungeon Quest Reborn Level Guide: How Levels Work and What to Check In-Game - Learn how Dungeon Quest Reborn levels work, how to track progress, and where to check l...](https://images.openai.com/static-rsc-4/oouN5_9wprWh0EQ8HWzfvsevnoqhbOg3Mj7MU2LiE0UAs2MYVAXNYMpW1THDNwLaC7vzIMgshaFvd_eCCWPFBbYlvL0vwMERTaCPiUMdVNtnURsLO79W9FI4D0yHfzNLnWVqp2UDI6nEZUuj1tv6fcvNkkuVR1ECjwFXXJTZIag?purpose=inline)
+
+TIẾP TỤC
+
+Trở lại hành trình đang dang dở
+
+Tiếp tục chơi
+
+[Lost Sorrow — Codex](https://images.openai.com/static-rsc-4/CgeRx_74yTOzYjNYXa1ydwam5hzUt43ECp5ZGnhsqIqHC2YN91rmel0JPfOzEc8Upc-VfqJJlcyC2cneLT4o_6MSg9-3jPEiY8qM06Qg5jkUvpWlseYTqsfphYBNNn-a-H3SIeQv6vHwYC2bnqAIjXJ9ln5wtsLNavhgcVCjvAE?purpose=inline)
+
+NHÂN VẬT MỚI
+
+Bắt đầu một hành trình khác
+
+Tạo nhân vật
+
+Minh họa hai lựa chọn chính trên màn hình quản lý hồ sơ.
+
+### 2. Nút “Tiếp tục hành trình”
+
+Nút có ba trạng thái:
+
+- Có hồ sơ hợp lệ, còn HP: nút sáng, cho phép tiếp tục.
+- Chưa có hồ sơ: nút bị vô hiệu hóa hoặc ẩn; hướng người chơi sang tạo nhân vật.
+- HP bằng 0: không cho tiếp tục hành trình đã thất bại; hiển thị thông báo và hướng sang tạo nhân vật mới.
+
+Khi tiếp tục, game khôi phục dữ liệu đã lưu: cấp độ, EXP, HP, vàng, vật phẩm, chương, ải và câu hỏi đang làm dở theo đúng gameplay.
+
+### 3. Form tạo nhân vật
+
+## TẠO NHÂN VẬT
+
+Minh họa giao diện nhập liệu.
+
+Tên nhân vật
+
+Chọn lớp nhân vật
+
+Hiệp sĩ — thiên về sức bền và HP
+
+Pháp sư — có thêm thời gian trả lời
+
+Tu sĩ Ánh Sáng — cơ chế thành công đặc biệt
+
+Thông tin lớp đang chọn
+
+HP tối đa tăng thêm 2 mỗi cấp độ. HP khởi đầu: 2/2.
+
+Xác nhận
+
+Đặt lại
+
+Bản minh họa tương tác. Nút xác nhận trong prototype này chỉ gửi lựa chọn để tiếp tục đặc tả, chưa tạo hoặc lưu nhân vật thật.
+
+### 4. Cảnh báo thay thế hồ sơ
+
+Khi tạo nhân vật mới trong lúc đã có hồ sơ, không nên dùng một hộp thoại chung chung như “Bạn có chắc không?”. Nội dung cần nói rõ hậu quả.
+
+## THAY THẾ HỒ SƠ?
+
+Bạn đang có một hành trình đã lưu trên thiết bị này. Tạo nhân vật mới có thể thay thế hồ sơ đang hoạt động.
+
+Hãy xác nhận cách lưu hồ sơ cũ trước khi tiếp tục.
+
+Hủy
+
+Xác nhận tạo mới
+
+Điểm cần chốt trước khi lập trình: yêu cầu “một hồ sơ duy nhất” và “giữ hồ sơ cũ, tạo hồ sơ mới riêng” có thể dẫn đến hai mô hình lưu khác nhau. Nếu chỉ có một hồ sơ hoạt động, hồ sơ cũ nên được lưu dưới dạng bản sao lưu có thể khôi phục. Nếu muốn chuyển đổi qua lại giữa nhiều nhân vật độc lập, cần thiết kế danh sách hồ sơ. Phần này không nên để lập trình viên tự quyết định.
+
+## IV. Màn hình 3 — Trung tâm hành trình
+
+Đây là màn hình người chơi sử dụng nhiều nhất. Cần duy trì vị trí cố định của thanh trạng thái, khu vực nội dung và thanh điều hướng.
+
+Tên nhân vật
+
+Hiệp sĩ · Cấp 03
+
+1.250 vàng
+
+Tài nguyên
+
+EXP
+
+230 / 400
+
+HP
+
+3 / 4
+
+Bản đồ
+
+Thương hội
+
+Nhân vật
+
+Mockup thanh trạng thái và điều hướng. Các số liệu chỉ để minh họa bố cục, không phải giá trị gameplay cố định.
+
+### 1. Thanh trạng thái trên cùng
+
+| Thành phần   | Hình thức hiển thị                                   | Quy tắc                                                                        |
+| ------------ | ---------------------------------------------------- | ------------------------------------------------------------------------------ |
+| Ảnh đại diện | Chân dung hoặc biểu tượng lớp                        | Luôn đồng bộ với lớp nhân vật đã chọn.                                         |
+| Tên nhân vật | Chữ sáng, dễ đọc                                     | Không tự đổi khi đổi tab.                                                      |
+| Cấp độ       | Huy hiệu nhỏ kèm số cấp                              | Chỉ cập nhật khi đủ điều kiện lên cấp.                                         |
+| EXP          | Thanh tiến trình + số hiện tại / mốc cần đạt         | Cập nhật ngay khi nhận thưởng.                                                 |
+| HP           | Biểu tượng tim hoặc thanh máu + số hiện tại / tối đa | Màu cảnh báo khi HP thấp; HP bằng 0 phải thể hiện trạng thái thất bại rõ ràng. |
+| Vàng         | Icon đồng vàng + số lượng                            | Cập nhật sau giao dịch hoặc nhận thưởng.                                       |
+
+Không nên dùng màu sắc làm dấu hiệu duy nhất. HP cần có cả số liệu; EXP cần có cả số và thanh tiến trình; vàng cần có icon và số lượng.
+
+### 2. Ba nút điều hướng cố định
+
+Bản đồ
+
+Hiển thị các chương và nút ải. Đây là tab mặc định sau khi tạo nhân vật hoặc tiếp tục hành trình.
+
+Thương hội tri thức
+
+Nơi xem, mua và sử dụng vật phẩm. Có thể truy cập khi đang ở trạng thái an toàn trước hoặc sau một ải, theo gameplay đã chốt.
+
+Nhân vật
+
+Xem lớp nhân vật, chỉ số, tiến trình, danh hiệu và thành tích đã đạt được.
+
+Quy tắc tương tác: vùng bấm phải đủ lớn trên điện thoại; tab đang chọn có nền tím và nhãn sáng; chuyển tab không làm mất dữ liệu hoặc đặt lại vị trí cuộn không cần thiết.
+
+## V. Bản đồ hành trình — Thành phần quan trọng nhất
+
+Bản đồ không nên là một bảng liệt kê 50+ ải. Nó phải tạo cảm giác người chơi đang đi qua một thế giới, mở khóa từng chặng và tiến dần đến Boss.
+
+### 1. Cấu trúc bản đồ
+
+[Welcome to The Questory](https://images.openai.com/static-rsc-4/Bc-91d1GgBdNfeOF0u_aL4WjukQoevq6SIEWVwXXbPJ-_Qr5eSEwACDz146HXufbZQhWo2qZ0WNwj07kEKZHFJCtb0eYuSJ_9MHjtEfwMEjB1UNwQC8dufWu0I1tXoJKxxZzGci9TA9kbsEIUNO9er50zT_Mab2ovhmBvv_MWw8?purpose=inline)
+
+[thequestory.com](https://thequestory.com/how-it-works?utm_source=chatgpt.com)
+
+Bản đồ gồm bốn lớp:
+
+1. Thanh chọn chương: tên chương, tiến độ và trạng thái hoàn thành.
+2. Nền khu vực: cảnh quan riêng của chương, ví dụ rừng tri thức, phế tích đại số hoặc tháp hình học.
+3. Đường hành trình: đường phát sáng uốn lượn, nối các nút ải theo đúng thứ tự.
+4. Bảng thông tin ải: xuất hiện khi chọn một nút, cho biết tên ải, trạng thái và hành động khả dụng.
+
+### 2. Thiết kế nút ải
+
+Ải đã hoàn thành
+
+Có dấu kiểm, đường nối phía sau đã sáng. Có thể xem lại thông tin nhưng không tự động nhận thưởng lần nữa nếu gameplay không cho phép.
+
+Ải hiện tại
+
+Viền sáng tím, có hiệu ứng nhịp sáng nhẹ. Đây là nút nổi bật nhất trên bản đồ.
+
+Ải bị khóa
+
+Màu xám, icon khóa. Nhấn vào có thể xem điều kiện mở khóa nhưng không được bắt đầu ải.
+
+Ải Boss
+
+Nút lớn hơn nút thường, biểu tượng vương miện hoặc đầu lâu cách điệu. Màu vàng kim kết hợp tím đậm.
+
+Các hình trên minh họa ngôn ngữ thiết kế, chưa đại diện cho số lượng hoặc thứ tự ải thực tế.
+
+### 3. Quy tắc kích thước và đường đi
+
+- Nút ải thường: khoảng 52–64 px trên máy tính.
+- Nút Boss: khoảng 76–96 px.
+- Số thứ tự ải đặt trong nút hoặc ngay bên dưới.
+- Tên ải không đặt dọc theo đường đi; hiển thị khi chọn nút để tránh rối.
+- Đường đã đi qua có màu xanh ngọc; đường tới ải hiện tại có điểm sáng; đường chưa mở khóa có màu xám xanh.
+- Không dùng quá nhiều hiệu ứng chuyển động đồng thời.
+
+### 4. Bản đồ chia chương và cuộn độc lập
+
+Mỗi chương có một bản đồ riêng. Khi người chơi chọn chương, game tải đúng đường hành trình của chương đó và giữ vị trí cuộn riêng.
+
+## CHƯƠNG I — KHỞI NGUYÊN TRI THỨC
+
+Ví dụ: 2/5 ải
+
+ẢI 01
+
+ẢI 02 · HIỆN TẠI
+
+ẢI 03 · CHƯA MỞ
+
+BOSS CHƯƠNG
+
+Đường đi minh họa; số ải, vị trí Boss và tiến độ thực tế phải lấy từ dữ liệu gameplay.
+
+Hành vi bắt buộc:
+
+- Chọn chương → hiển thị đúng bản đồ chương đó.
+- Chọn nút ải → bảng chi tiết hiện tên, trạng thái và nút hành động.
+- Chọn “Vào ải” → chỉ cho phép khi đáp ứng điều kiện gameplay.
+- Hoàn thành ải → cập nhật trạng thái nút, đường đi, tiến độ chương và tài nguyên.
+- Tải lại trang → không làm mất tiến trình hoặc vị trí bản đồ đã lưu nếu cơ chế lưu được thiết kế để giữ vị trí đó.
+
+### 5. Bảng thông tin khi chọn ải
+
+## ẢI 02 — THỬ THÁCH TƯ DUY
+
+Trạng thái: Sẵn sàng
+
+Nội dung mô tả ải ngắn gọn, gắn với chủ đề Toán học của chương.
+
+Điều kiện mở khóa: đã hoàn thành ải trước
+
+Vào ải →
+
+Nội dung tên ải và điều kiện trong ví dụ chỉ mang tính minh họa.
+
+## VI. Thiết kế ba lớp nhân vật
+
+Ba lớp cần khác nhau ngay từ hình dáng, màu sắc, trang phục, biểu tượng và hiệu ứng. Người chơi phải nhận ra lớp nhân vật chỉ sau một cái nhìn.
+
+[Digital illustration - Hire a Freelance Illustrator Services | Fiverr](https://images.openai.com/static-rsc-4/7yh1OA-hR_h1c_f1DkKTVIBGQGm18NSvco47QEJv4RedyNGCbuKhza4atYf9A0zjABAEYvl0iS5gF53A_g0Az0xzIPMEo2AJdFLv_IhNfZi2lcYgO6T8_An2sMXxhLvy5-i7q_5O7cAbtLZwhYRig7suWhI34Pr-A1DZuTqH7P0?purpose=inline)
+
+## 1. Hiệp sĩ
+
+Sức bền · HP
+
+Hình dáng: giáp thép, vai rộng, khiên và kiếm; tư thế vững chãi.
+
+Màu chủ đạo: xanh thép, bạc, xanh ngọc.
+
+Biểu tượng: khiên có lõi sáng hoặc thanh kiếm dựng đứng.
+
+Hiệu ứng: ánh sáng bảo hộ quanh khiên, ít hạt phép thuật.
+
+Đặc điểm gameplay: HP khởi đầu 2/2; tăng thêm 2 HP tối đa mỗi cấp theo quy tắc đã chốt.
+
+[SpriteForge AI - Generate Game Animations with AI](https://images.openai.com/static-rsc-4/pivlNTHX8mD7un7VT0eU38zAXneYxf7VXY3IAj_0cnRNNXdjvsokkeXMo5iZ2--dzrgwenKpRQn3tDbok4FsdVDxX_aNZVAggNZHv8oLtj5C2MYCAr6DkNyOKj3--MkylY1NQrWN8Yu78s6OOpZhT2HFozPj192LAcYWyow-5g8?purpose=inline)
+
+## 2. Pháp sư
+
+Ma thuật · Thời gian
+
+Hình dáng: áo choàng dài, trượng phép, sách tri thức hoặc vòng phép hình học.
+
+Màu chủ đạo: tím huyền bí, xanh lam đậm, bạc.
+
+Biểu tượng: tinh thể hoặc vòng tròn phép thuật.
+
+Hiệu ứng: các ký hiệu hình học và quỹ đạo sáng quanh trượng.
+
+Đặc điểm gameplay: HP khởi đầu 2/2; thời gian mặc định 30 giây mỗi câu hỏi.
+
+[StableDiffusion、ファンタジーキャラジェネレーター⑥僧侶男｜およよ](https://images.openai.com/static-rsc-4/1rLSDj8Lpel7wb7P-iEzKEsnG0t909sosEqwIT-ZmdFVYcBZoSieYCxjwUnw4--GVYx2x3VHCKAM9QvJnjiu2x94bPg5DY9llprmLJfxYqYOKSU9Ot_R5LJlQf92pqdbzwdMXQc1knb1toyC25-NXW8LnG9siv12LT5klzfyq9Q?purpose=inline)
+
+## 3. Tu sĩ Ánh Sáng
+
+Ánh sáng · Điều kiện thành công
+
+Hình dáng: áo choàng sáng màu, phù hiệu ánh sáng, dáng đứng bình tĩnh.
+
+Màu chủ đạo: trắng ngà, vàng kim, xanh ngọc.
+
+Biểu tượng: quầng sáng, mặt trời hoặc tinh thể phát quang.
+
+Hiệu ứng: vòng sáng lan nhẹ khi kích hoạt cơ chế đặc biệt.
+
+Đặc điểm gameplay: HP khởi đầu 2/2; điều kiện thành công theo cơ chế 2/3 đã thống nhất.
+
+### 1. Hình đại diện trong giao diện
+
+Mỗi lớp cần có hai phiên bản hình ảnh:
+
+- Portrait: ảnh chân dung vuông dùng trong thanh trạng thái và thẻ nhân vật.
+- Character art: hình toàn thân hoặc bán thân dùng trong trang Nhân vật và màn hình tạo nhân vật.
+
+Nên dùng cùng một thiết kế nhân vật xuyên suốt toàn bộ game. Không để icon Hiệp sĩ ở thanh trạng thái nhưng hình Pháp sư trong trang nhân vật do dùng nhầm tài nguyên.
+
+### 2. Thẻ chọn lớp
+
+Mỗi thẻ chọn lớp nên gồm:
+
+1. Hình nhân vật.
+2. Tên lớp.
+3. Một câu mô tả ngắn.
+4. Điểm khác biệt gameplay.
+5. Trạng thái được chọn.
+
+Thẻ được chọn có viền sáng theo màu lớp, nền sáng hơn nhẹ và dấu kiểm. Không nên thêm các chỉ số như sức mạnh, phòng thủ, trí tuệ nếu chúng không tồn tại trong gameplay.
+
+### 3. Quy tắc cập nhật HP
+
+Cần phân biệt HP hiện tại và HP tối đa. Ví dụ, khi Hiệp sĩ tăng cấp, HP tối đa tăng theo quy tắc lớp; không được mặc định HP hiện tại hồi đầy nếu gameplay không quy định như vậy. Đây là dữ liệu gameplay, không phải quyết định mỹ thuật.
+
+## VII. Thiết kế danh hiệu và thành tích
+
+Danh hiệu nên mang cảm giác phần thưởng có ý nghĩa, không chỉ là một dòng chữ trong trang Nhân vật. Mỗi danh hiệu gồm huy hiệu hình ảnh + tên danh hiệu + mô tả điều kiện đạt được.
+
+[Book shield Images - Free Download on Magnific (formerly Freepik)](https://images.openai.com/static-rsc-4/u4OwMR3PGvNh7T_CaBG5ZyEFJX68I_FCuY4YgsnxCVyKFU1yaoW4K5JpJbg9s19bnSzn4a4sRZ7Rm0tLxdCle_eZv_ToFzIhLzpF2r04d1Qs4vHnP07gbkdXGqT1_zGVZuq_ZjgsxC9yQUfG3EP7hJiY_4GwKGTa_teDiN_PqQg?purpose=inline)
+
+Tân Binh Tri Thức
+
+Huy hiệu đồng
+
+[Rewards Programme | Indeed Flex UK](https://images.openai.com/static-rsc-4/ATfljrIz9VO3yARcah0QVgjuzvP-2MfgTUox7RPl-8vExvcwXHLCX7V3UQfIuj7dd9GT9AtSIas7IcyMoLKpxQ2oOxhy3AdKC0s7fAVfM36r66-QKn2ECME6AOzZj8tWq0PBOHHYbpuSSq27aszg7OmLgjECSpcoe3Ebko44pl8?purpose=inline)
+
+Nhà Thám Hiểm
+
+Huy hiệu bạc
+
+[The Best Text to Medal AI Generator (for Free)](https://images.openai.com/static-rsc-4/KfMtSIpeaKUr70ieAUhyFagHnqW1YYXrGi_RiN-RGnpvAdhUaYX76-bBJZolz1bVZYBsCf5CdoG6AME44-Zck7PyhrkGE-Ed9n9kt-_XXvwL5fBbw934q06Pqb8TxZsnDnFpzK7eQjEI1iOdwi_4wQFOGmpOa264x5S0GMI9PNg?purpose=inline)
+
+Bậc Thầy Tư Duy
+
+Huy hiệu vàng
+
+[Pricing - Summoners War Optimizer Plans | SWLens Hub](https://images.openai.com/static-rsc-4/DEgum6ZVXQIc8PvbM34bE1xvDPm7J368pXaGi4pmu8i75MujGMpDWkgm_xSXO3mKMvxo5keZG0NyETadDC_JcJLRwJ3vq_mjqy18i9kM-LGWPJbXexsOuwxyO4icLlwB2VOioS1e6vq-HQ8Wwjblw8zJEWyEPFOUxQXaysR4Zts?purpose=inline)
+
+Huyền Thoại Tri Thức
+
+Huy hiệu huyền thoại
+
+Các tên và hình ảnh trên là phương án thiết kế đề xuất, chưa phải danh sách danh hiệu đã được chốt trong gameplay.
+
+### 1. Cấu tạo huy hiệu
+
+- Khung ngoài: hình khiên, huy chương hoặc huy hiệu tròn.
+- Biểu tượng trung tâm: sách, ngôi sao, hình học, vương miện hoặc tinh thể.
+- Màu nền: theo cấp độ danh hiệu nếu game có phân cấp.
+- Tên danh hiệu: đặt bên dưới, không nhúng chữ vào file ảnh.
+- Mô tả: ghi điều kiện đạt được hoặc ý nghĩa của danh hiệu.
+
+Không nên tạo huy hiệu chỉ khác màu nhưng giống hoàn toàn nhau. Mỗi danh hiệu quan trọng nên có một chi tiết hình học đặc trưng.
+
+### 2. Trạng thái danh hiệu
+
+Đã đạt
+
+Huy hiệu hiển thị đầy đủ màu sắc; tên và mô tả rõ ràng.
+
+Chưa đạt
+
+Hình ảnh chuyển sang xám, có thể hiện điều kiện cần đạt nếu gameplay đã xác định điều kiện đó.
+
+### 3. Vị trí hiển thị
+
+- Trang Nhân vật: danh hiệu hiện tại đặt ngay dưới tên.
+- Khu vực thành tích: hiển thị các danh hiệu đã đạt và chưa đạt.
+- Khi đạt danh hiệu: xuất hiện thông báo ngắn, có hiệu ứng sáng và tên danh hiệu; không che nội dung quan trọng.
+
+Lưu ý: không tự đặt điều kiện nhận danh hiệu trong giai đoạn thiết kế visual. Tên, điều kiện, khả năng thay đổi danh hiệu và cách lưu phải lấy từ đặc tả gameplay.
+
+## VIII. Thiết kế vật phẩm trong Thương hội tri thức
+
+Thương hội cần giúp người chơi nhận biết nhanh: vật phẩm dùng để làm gì, giá bao nhiêu, đã sở hữu chưa và có thể sử dụng vào lúc nào.
+
+### 1. Hai nhóm vật phẩm
+
+[Game Fantasy RPG Inventory Items Midjourney Prompt | PromptBase](https://images.openai.com/static-rsc-4/zsJw2te-PUHb8-EaL51CM1aHGGMRQb84rmqSJVPQiTuIIpt0hTI19E8HKPnsAk__Vj-l_6xWkOuny4yqIC4rhawUPEfgjuA9xVuUM7D8NDeH8_UFfaT6FGPUP39tusYSPHQyO7ZB6Hj5F6cZ4XXzI0ksensCw7fPl9D4bP6Y10w?purpose=inline)
+
+## Vật phẩm chủ động
+
+Người chơi chủ động kích hoạt hoặc sử dụng vật phẩm khi đáp ứng điều kiện.
+
+- Icon lớn, dễ phân biệt.
+- Tên và công dụng ngắn.
+- Giá mua bằng vàng.
+- Nút “Mua”, “Sử dụng” hoặc trạng thái không khả dụng.
+- Nếu có số lượng, hiển thị số lượng sở hữu.
+
+[Fantasy RPG Icon Pack 8 - Game Art 2D](https://images.openai.com/static-rsc-4/y-XzfNQd4dXR558z_easKRgwZnpqZ0f68jDxG4cu29X4y8iU5eSP53ecIFiW79joRoELOwmFM1K9nzsUKDeSyewAwVw54z8PQHlp-GDtI5feiaEcahW9RYmbJ5pXQI7OW3D0aVdvIwksSecyLTlKNo0SX30kmyMzDEqZ3kgM2p0?purpose=inline)
+
+## Vật phẩm bị động
+
+Hiệu ứng được áp dụng theo điều kiện gameplay mà không cần kích hoạt thủ công mỗi lần.
+
+- Icon thể hiện vật phẩm đang hoạt động hoặc đã sở hữu.
+- Mô tả hiệu ứng phải ngắn, cụ thể.
+- Hiển thị giá và trạng thái mua.
+- Không thêm nút “Sử dụng” nếu vật phẩm tự kích hoạt theo thiết kế gameplay.
+
+### 2. Thiết kế thẻ vật phẩm
+
+[Magic Item Icons For Games Midjourney Prompt | PromptBase](https://images.openai.com/static-rsc-4/T3154C64pRNpEYwba_nwAdEDiJLK4QR_rpsr1GEgIuPJJEb2rq-xUSqEJhJOJhbBn-D34S9fStdH3OfX4V8bVOnjA2ciUMq_UFKoToPlpXSjNkYnX-0J1lLUbtozIyMxLuvjA2hLKGDUufpXTIYA6dAXNMjmIaRTLsrNqLtpgrc?purpose=inline)
+
+## Phù hộ tri thức
+
+Ví dụ
+
+Nhóm: Vật phẩm chủ động
+
+Mô tả công dụng được lấy nguyên tắc từ gameplay đã chốt, không suy diễn thêm hiệu ứng.
+
+### Giá: theo dữ liệu game
+
+Xem quy tắc trạng thái vật phẩm
+
+Tên và hình minh họa chỉ phục vụ trình bày; không khẳng định đây là vật phẩm đã có trong gameplay.
+
+### 3. Trạng thái nút vật phẩm
+
+| Trạng thái       | Cách hiển thị                    | Hành vi                                                       |
+| ---------------- | -------------------------------- | ------------------------------------------------------------- |
+| Có thể mua       | Nút sáng, màu tím hoặc xanh ngọc | Kiểm tra vàng và điều kiện trước khi giao dịch.               |
+| Không đủ vàng    | Nút mờ, thông tin giá vẫn rõ     | Không cho mua; thông báo thiếu bao nhiêu vàng nếu có dữ liệu. |
+| Đã sở hữu        | Nhãn “Đã sở hữu” hoặc số lượng   | Không hiện “Mua” nếu vật phẩm chỉ được mua một lần.           |
+| Có thể sử dụng   | Nút “Sử dụng” rõ ràng            | Chỉ kích hoạt khi đúng trạng thái gameplay.                   |
+| Chưa thể sử dụng | Nút bị vô hiệu hóa và lý do      | Không thực hiện hành động ngoài điều kiện.                    |
+
+### 4. Phong cách icon vật phẩm
+
+- Vật phẩm chủ động: hình dáng gợi hành động, ví dụ cuộn phép, bình năng lượng, phù chú.
+- Vật phẩm bị động: hình dáng gợi hiệu ứng lâu dài, ví dụ nhẫn, bùa, ấn chú.
+- Nền icon tối, vật phẩm sáng ở trung tâm.
+- Không nhúng tên vật phẩm hoặc giá tiền vào ảnh; chữ phải do HTML hiển thị để dễ chỉnh sửa và hỗ trợ điện thoại.
+- Nếu gameplay chưa quy định độ hiếm, không dùng khung “thường / hiếm / sử thi / huyền thoại” như thể đó là một cơ chế chính thức.
+
+## IX. Trang Nhân vật — Bảng hồ sơ đầy đủ
+
+[Game UI Design by İlknur Püskül on Dribbble](https://images.openai.com/static-rsc-4/A3vT4w2Ug0wRvfpZj8qecDNa2dspLGCEMGLsxbHvF1hx3MllK0kRLb_HiyX3ss20fYTnMC6pg4VHV0oUAzS5-4oaB9CJHweawsSK7cA8GCzbBN8DvFnLIwP7vb8wRZcVwoguXkfnKZr4RZ05-YK8prn8aUaIeId6a_qRWqPzsM0?purpose=inline)
+
+[dribbble.com](https://dribbble.com/shots/24006390-Game-UI-Design?utm_source=chatgpt.com)
+
+Trang này nên có bố cục hai cột trên máy tính và một cột trên điện thoại.
+
+### 1. Cột thông tin chính
+
+- Chân dung nhân vật lớn.
+- Tên nhân vật.
+- Lớp nhân vật.
+- Cấp độ hiện tại.
+- Danh hiệu hiện tại.
+- Thanh EXP.
+
+### 2. Cột chỉ số
+
+HP
+
+# Hiện tại / Tối đa
+
+EXP
+
+# Hiện tại / Mốc cấp
+
+Vàng
+
+# Số dư hiện tại
+
+Tiến trình
+
+# Chương / Ải
+
+Các ô chỉ số là khung bố cục; khi triển khai phải hiển thị giá trị thực lấy từ dữ liệu game.
+
+### 3. Khu vực danh hiệu và vật phẩm
+
+- Danh hiệu hiện tại đặt ở phần trên, cạnh tên nhân vật.
+- Danh hiệu đã đạt xếp thành lưới, mỗi huy hiệu có tooltip hoặc bảng mô tả.
+- Vật phẩm bị động đang có nên có khu vực riêng, thể hiện trạng thái kích hoạt nếu cơ chế yêu cầu.
+- Vật phẩm chủ động được hiển thị theo đúng cách lưu và sử dụng đã chốt; không tự thêm hệ thống trang bị hoặc ô kỹ năng nếu chưa có trong gameplay.
+
+### 4. Nút trên trang Nhân vật
+
+| Nút              | Hành vi                                                                                                             |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------- |
+| Xem danh hiệu    | Mở chi tiết danh hiệu được chọn.                                                                                    |
+| Xem vật phẩm     | Chuyển đến chi tiết hoặc nhóm vật phẩm tương ứng.                                                                   |
+| Quay lại bản đồ  | Chuyển tab, không reset tiến trình.                                                                                 |
+| Tạo nhân vật mới | Chỉ xuất hiện nếu quyết định thiết kế cho phép; phải đi qua xác nhận thay thế hoặc quy trình quản lý hồ sơ đã chốt. |
+
+Không cần có nút “Nâng cấp chỉ số” nếu nhân vật lên cấp tự động theo gameplay. Tránh tạo ra những nút khiến người chơi nghĩ rằng có cơ chế nâng điểm thuộc tính trong khi game không hỗ trợ.
+
+## X. Quy chuẩn cho toàn bộ nút bấm
+
+Tôi đề xuất dùng một hệ thống nút thống nhất xuyên suốt cả ba màn hình.
+
+Nút chính — Primary
+
+Dùng cho hành động quan trọng nhất của màn hình.
+
+Bắt đầu
+
+Nút phụ — Secondary
+
+Dùng cho xem chi tiết, quay lại hoặc thao tác phụ.
+
+Quay lại
+
+Nút nguy hiểm — Destructive
+
+Dùng khi có nguy cơ mất hoặc thay đổi dữ liệu.
+
+Thay thế hồ sơ
+
+Nút bị vô hiệu hóa — Disabled
+
+Dùng khi chưa đủ điều kiện; phải nêu lý do gần nút.
+
+Ải bị khóa
+
+### Quy tắc tương tác chung
+
+1. Khi rê chuột, nút thay đổi độ sáng nhẹ; không phóng to hoặc rung mạnh.
+2. Khi nhấn, có phản hồi trực quan tức thì.
+3. Nếu xử lý giao dịch hoặc lưu dữ liệu, cần có trạng thái đang xử lý và thông báo kết quả.
+4. Không cho nhấn liên tục gây mua vật phẩm hoặc nhận thưởng hai lần.
+5. Những thao tác có nguy cơ mất dữ liệu phải có bước xác nhận.
+6. Trên điện thoại, không dùng hiệu ứng chỉ xuất hiện khi rê chuột làm dấu hiệu duy nhất.
+
+## XI. Bộ tài nguyên hình ảnh cần chuẩn bị khi lập trình
+
+Để prototype không bị chắp vá, nên chuẩn bị tài nguyên theo nhóm. Tên file dưới đây là quy ước đề xuất.
+
+| Nhóm      | Tài nguyên                                                                   | Mục đích               |
+| --------- | ---------------------------------------------------------------------------- | ---------------------- |
+| Nền       | `bg_title.webp`                                                              | Nền màn hình khởi đầu  |
+| Nền       | `bg_chapter_01.webp`, `bg_chapter_02.webp`...                                | Cảnh quan từng chương  |
+| Nhân vật  | `class_knight.png`                                                           | Hiệp sĩ                |
+| Nhân vật  | `class_mage.png`                                                             | Pháp sư                |
+| Nhân vật  | `class_light_monk.png`                                                       | Tu sĩ Ánh Sáng         |
+| Chân dung | `portrait_knight.png`, `portrait_mage.png`, `portrait_light_monk.png`        | Ảnh đại diện           |
+| Danh hiệu | `badge_*.png`                                                                | Huy hiệu thành tích    |
+| Vật phẩm  | `item_*.png`                                                                 | Icon từng vật phẩm     |
+| Bản đồ    | `node_completed.svg`, `node_current.svg`, `node_locked.svg`, `node_boss.svg` | Các trạng thái nút ải  |
+| Giao diện | `icon_hp.svg`, `icon_exp.svg`, `icon_gold.svg`                               | Tài nguyên nhân vật    |
+| Hiệu ứng  | `fx_level_up`, `fx_achievement`                                              | Lên cấp, đạt danh hiệu |
+
+Đây là danh sách tài nguyên dự kiến, không phải những file đã tồn tại.
+
+Khuyến nghị kỹ thuật: icon giao diện nên ưu tiên SVG; hình nhân vật và cảnh nền dùng WebP hoặc PNG. Tên vật phẩm, danh hiệu, số vàng, EXP và nội dung Toán học phải là dữ liệu hiển thị bằng HTML, không nên ghi trực tiếp vào ảnh.
+
+## XII. Tiêu chí nghiệm thu visual trước khi viết code gameplay
+
+## Checklist nghiệm thu
+
+0/10
+
+Ba màn hình có cùng ngôn ngữ thiết kế Modern RPG.
+
+Ba lớp nhân vật phân biệt rõ bằng hình ảnh, màu sắc và biểu tượng.
+
+Bản đồ chia chương, mỗi chương có đường hành trình cuộn riêng.
+
+Bốn trạng thái nút ải hiển thị rõ: hoàn thành, hiện tại, khóa, Boss.
+
+Thanh HP, EXP, vàng và cấp độ dễ đọc trên máy tính và điện thoại.
+
+Danh hiệu có hình ảnh, tên, trạng thái đạt/chưa đạt và mô tả.
+
+Vật phẩm có icon, giá, công dụng và trạng thái giao dịch.
+
+Nút chính, nút phụ, nút nguy hiểm và nút vô hiệu hóa nhất quán.
+
+Không dùng dữ liệu minh họa như dữ liệu gameplay thật.
+
+Cảnh báo thay thế hồ sơ và quy tắc lưu dữ liệu không mâu thuẫn.
+
+## XIII. Đề xuất trình tự triển khai tiếp theo
+
+Tôi đề xuất không lập trình toàn bộ game ngay. Nên chia thành ba giai đoạn:
+
+1. Giai đoạn 1 — Chốt Visual Art Direction
+
+   Chốt thiết kế cuối cùng của Hiệp sĩ, Pháp sư, Tu sĩ Ánh Sáng; phong cách huy hiệu, vật phẩm, cảnh nền và nút ải. Đây là bộ quy chuẩn hình ảnh áp dụng xuyên suốt game.
+2. Giai đoạn 2 — Dựng prototype giao diện
+
+   Dùng HTML/CSS/JavaScript để dựng ba màn hình, điều hướng tab, cuộn bản đồ theo chương, chọn lớp nhân vật và mở bảng chi tiết. Giai đoạn này ưu tiên giao diện và tương tác, chưa cần hoàn thiện logic câu hỏi.
+3. Giai đoạn 3 — Kết nối gameplay
+
+   Kết nối dữ liệu nhân vật, lưu tiến trình, điều kiện mở ải, vật phẩm, EXP, HP, vàng và danh hiệu theo đặc tả gameplay đã chốt; sau đó kiểm thử các tình huống đóng trang, hết HP và tạo nhân vật mới.
+
+Có một việc nên giải quyết trước Giai đoạn 2: xác định mô hình hồ sơ cuối cùng — một hồ sơ hoạt động kèm bản sao lưu, hay nhiều hồ sơ nhân vật độc lập. Quyết định này ảnh hưởng trực tiếp đến màn hình quản lý nhân vật và cấu trúc lưu dữ liệu.
+
+Về mặt visual, hướng phù hợp nhất là giữ Modern RPG bán hiện thực, nền tối, nhân vật có bản sắc riêng, icon rõ và bản đồ hành trình có chiều sâu. Tránh trộn phong cách chibi, icon hoạt hình đơn giản và hình fantasy bán hiện thực trong cùng một giao diện.
