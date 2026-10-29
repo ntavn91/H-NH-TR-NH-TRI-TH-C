@@ -6,12 +6,14 @@
 class SoundEngine {
   private ctx: AudioContext | null = null;
   private isMuted: boolean = false;
-  private volume: number = 0.5;
+  private volume: number = 0.9; // Boosted base volume from 0.5 to 0.9
   private bgmOscillators: OscillatorNode[] = [];
   private bgmGain: GainNode | null = null;
   private bgmInterval: number | null = null;
   private currentChapterTheme: number = 1;
   private isBgmPlaying: boolean = false;
+  private customAudio: HTMLAudioElement | null = null;
+  private isCustomBgmPlaying: boolean = false;
 
   private initContext() {
     if (!this.ctx) {
@@ -25,11 +27,25 @@ class SoundEngine {
     }
   }
 
+  public setVolume(newVol: number) {
+    this.volume = Math.max(0, Math.min(1, newVol));
+    if (this.customAudio) {
+      this.customAudio.volume = this.volume;
+    }
+  }
+
+  public getVolume(): number {
+    return this.volume;
+  }
+
   public setMuted(muted: boolean) {
     this.isMuted = muted;
+    if (this.customAudio) {
+      this.customAudio.muted = muted;
+    }
     if (muted) {
       this.stopBGM();
-    } else if (this.isBgmPlaying) {
+    } else if (this.isBgmPlaying && !this.isCustomBgmPlaying) {
       this.startChapterBGM(this.currentChapterTheme);
     }
   }
@@ -41,6 +57,39 @@ class SoundEngine {
   public toggleMute(): boolean {
     this.setMuted(!this.isMuted);
     return this.isMuted;
+  }
+
+  // Play custom background track (e.g. generated from Lyria)
+  public playCustomBgm(audioUrl: string) {
+    this.stopBGM(false);
+    if (this.customAudio) {
+      this.customAudio.pause();
+      this.customAudio = null;
+    }
+
+    try {
+      this.customAudio = new Audio(audioUrl);
+      this.customAudio.loop = true;
+      this.customAudio.volume = this.volume;
+      this.customAudio.muted = this.isMuted;
+      this.isCustomBgmPlaying = true;
+      this.isBgmPlaying = true;
+      this.customAudio.play().catch(() => {});
+    } catch {
+      // Audio fallback
+    }
+  }
+
+  public stopCustomBgm() {
+    if (this.customAudio) {
+      this.customAudio.pause();
+      this.customAudio = null;
+    }
+    this.isCustomBgmPlaying = false;
+  }
+
+  public isUsingCustomBgm(): boolean {
+    return this.isCustomBgmPlaying;
   }
 
   // --- Sound Effects ---
@@ -57,7 +106,7 @@ class SoundEngine {
       osc.frequency.setValueAtTime(440, this.ctx.currentTime);
       osc.frequency.exponentialRampToValueAtTime(880, this.ctx.currentTime + 0.05);
 
-      gain.gain.setValueAtTime(this.volume * 0.15, this.ctx.currentTime);
+      gain.gain.setValueAtTime(this.volume * 0.35, this.ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.05);
 
       osc.connect(gain);
@@ -81,7 +130,7 @@ class SoundEngine {
       osc.frequency.setValueAtTime(300, this.ctx.currentTime);
       osc.frequency.exponentialRampToValueAtTime(600, this.ctx.currentTime + 0.12);
 
-      gain.gain.setValueAtTime(this.volume * 0.25, this.ctx.currentTime);
+      gain.gain.setValueAtTime(this.volume * 0.45, this.ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.12);
 
       osc.connect(gain);
@@ -111,7 +160,7 @@ class SoundEngine {
 
         const start = now + idx * 0.07;
         gain.gain.setValueAtTime(0, start);
-        gain.gain.linearRampToValueAtTime(this.volume * 0.3, start + 0.02);
+        gain.gain.linearRampToValueAtTime(this.volume * 0.65, start + 0.02);
         gain.gain.exponentialRampToValueAtTime(0.001, start + 0.35);
 
         osc.connect(gain);
@@ -137,7 +186,7 @@ class SoundEngine {
       osc.frequency.setValueAtTime(180, now);
       osc.frequency.exponentialRampToValueAtTime(110, now + 0.3);
 
-      gain.gain.setValueAtTime(this.volume * 0.25, now);
+      gain.gain.setValueAtTime(this.volume * 0.55, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
 
       osc.connect(gain);
@@ -168,7 +217,7 @@ class SoundEngine {
         const start = now + idx * 0.12;
         const duration = idx === 3 ? 0.7 : 0.2;
         gain.gain.setValueAtTime(0, start);
-        gain.gain.linearRampToValueAtTime(this.volume * 0.4, start + 0.03);
+        gain.gain.linearRampToValueAtTime(this.volume * 0.75, start + 0.03);
         gain.gain.exponentialRampToValueAtTime(0.001, start + duration);
 
         osc.connect(gain);
@@ -196,7 +245,7 @@ class SoundEngine {
         osc.frequency.value = freq;
 
         const start = now + idx * 0.08;
-        gain.gain.setValueAtTime(this.volume * 0.25, start);
+        gain.gain.setValueAtTime(this.volume * 0.55, start);
         gain.gain.exponentialRampToValueAtTime(0.001, start + 0.2);
 
         osc.connect(gain);
@@ -221,7 +270,7 @@ class SoundEngine {
       osc.type = 'sine';
       osc.frequency.value = 800;
 
-      gain.gain.setValueAtTime(this.volume * 0.1, now);
+      gain.gain.setValueAtTime(this.volume * 0.3, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
 
       osc.connect(gain);
@@ -249,7 +298,7 @@ class SoundEngine {
         osc.frequency.value = freq;
 
         gain.gain.setValueAtTime(0, now);
-        gain.gain.linearRampToValueAtTime(this.volume * 0.35, now + 0.1);
+        gain.gain.linearRampToValueAtTime(this.volume * 0.75, now + 0.1);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.9);
 
         osc.connect(gain);
@@ -278,7 +327,7 @@ class SoundEngine {
         osc.frequency.value = freq;
 
         const start = now + idx * 0.2;
-        gain.gain.setValueAtTime(this.volume * 0.3, start);
+        gain.gain.setValueAtTime(this.volume * 0.65, start);
         gain.gain.exponentialRampToValueAtTime(0.001, start + 0.4);
 
         osc.connect(gain);
@@ -309,7 +358,7 @@ class SoundEngine {
         const start = now + idx * 0.1;
         const duration = idx === notes.length - 1 ? 0.9 : 0.25;
         gain.gain.setValueAtTime(0, start);
-        gain.gain.linearRampToValueAtTime(this.volume * 0.35, start + 0.02);
+        gain.gain.linearRampToValueAtTime(this.volume * 0.75, start + 0.02);
         gain.gain.exponentialRampToValueAtTime(0.001, start + duration);
 
         osc.connect(gain);
@@ -325,6 +374,7 @@ class SoundEngine {
   // --- Ambient Synthesizer Background Music Per Chapter ---
 
   public startChapterBGM(chapterId: number = 1) {
+    if (this.isCustomBgmPlaying) return; // Don't interrupt custom music
     this.currentChapterTheme = chapterId;
     this.isBgmPlaying = true;
     if (this.isMuted) return;
@@ -332,11 +382,6 @@ class SoundEngine {
     this.initContext();
     if (!this.ctx) return;
 
-    // Define harmonic modal progressions for each chapter
-    // Chapter 1: Real Numbers (Mystical Lydian / C major ethereal)
-    // Chapter 2: Angles Island (Airy Dorian / D minor)
-    // Chapter 3: Ratio Swamp (Mysterious Phrygian / E minor)
-    // Chapter 4: Polynomial Town (Triumphant Aeolian / A minor)
     const chordProgressions: Record<number, number[][]> = {
       1: [
         [261.63, 329.63, 392.00, 523.25], // C major
@@ -368,7 +413,7 @@ class SoundEngine {
     let step = 0;
 
     const playChordStep = () => {
-      if (!this.ctx || this.isMuted || !this.isBgmPlaying) return;
+      if (!this.ctx || this.isMuted || !this.isBgmPlaying || this.isCustomBgmPlaying) return;
       const chord = progression[step % progression.length];
       step++;
 
@@ -385,13 +430,13 @@ class SoundEngine {
         osc.frequency.value = freq;
 
         filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(600, now);
-        filter.frequency.linearRampToValueAtTime(1000, now + stepDuration / 2);
-        filter.frequency.linearRampToValueAtTime(500, now + stepDuration);
+        filter.frequency.setValueAtTime(700, now);
+        filter.frequency.linearRampToValueAtTime(1200, now + stepDuration / 2);
+        filter.frequency.linearRampToValueAtTime(600, now + stepDuration);
 
-        // Gentle envelope
+        // Rich, audible pad envelope (boosted from 0.05 to 0.22)
         gain.gain.setValueAtTime(0, now);
-        gain.gain.linearRampToValueAtTime(this.volume * 0.05, now + 0.8);
+        gain.gain.linearRampToValueAtTime(this.volume * 0.22, now + 0.6);
         gain.gain.linearRampToValueAtTime(0.001, now + stepDuration);
 
         osc.connect(filter);

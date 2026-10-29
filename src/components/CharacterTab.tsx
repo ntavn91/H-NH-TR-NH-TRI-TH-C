@@ -42,7 +42,7 @@ export const CharacterTab: React.FC<CharacterTabProps> = ({
   };
 
   return (
-    <div className="max-w-6xl mx-auto w-full px-4 sm:px-6 py-8">
+    <div className="max-w-6xl mx-auto w-full px-4 sm:px-6 pt-6 pb-28 md:pb-12">
       {/* Top Profile Summary Card */}
       <div className="bg-slate-900/90 border border-purple-500/30 rounded-3xl p-6 sm:p-8 backdrop-blur-md shadow-2xl mb-8 grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
         {/* Left: Avatar & Hero Emblem */}

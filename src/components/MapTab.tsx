@@ -82,7 +82,7 @@ export const MapTab: React.FC<MapTabProps> = ({
   }, [selectedChapterId]);
 
   return (
-    <div className="relative w-full min-h-[calc(100vh-80px)] pb-12 flex flex-col justify-between overflow-hidden">
+    <div className="relative w-full min-h-[calc(100vh-80px)] pb-28 md:pb-12 flex flex-col justify-between overflow-hidden">
       {/* Dynamic Background Image of current Chapter */}
       <div
         className="absolute inset-0 bg-cover bg-center opacity-30 transition-all duration-700 pointer-events-none"

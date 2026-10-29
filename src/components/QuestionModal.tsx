@@ -130,8 +130,8 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
   const timerRatio = Math.min(1, Math.max(0, secondsLeft / initialTotalSecondsRef.current));
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#101827]/95 backdrop-blur-lg flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
-      <div className="max-w-4xl w-full bg-[#1C293B] border border-purple-500/30 rounded-3xl p-5 sm:p-8 shadow-2xl my-auto animate-in fade-in zoom-in-95">
+    <div className="fixed inset-0 z-50 bg-[#101827]/95 backdrop-blur-lg flex items-center justify-center p-2.5 sm:p-6 overflow-y-auto">
+      <div className="max-w-4xl w-full bg-[#1C293B] border border-purple-500/30 rounded-3xl p-4 sm:p-7 shadow-2xl my-auto animate-in fade-in zoom-in-95 max-h-[96vh] overflow-y-auto">
         
         {/* Top Header Row */}
         <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-700/60 flex-wrap gap-2">

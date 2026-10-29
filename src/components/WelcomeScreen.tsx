@@ -34,27 +34,27 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
       <div className="absolute inset-0 bg-gradient-to-t from-[#101827] via-[#101827]/70 to-[#101827]/90" />
 
       {/* Top Bar Navigation */}
-      <header className="relative z-10 flex items-center justify-between px-6 py-5 max-w-7xl mx-auto w-full border-b border-slate-800/80">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-purple-600/30 border border-purple-500/40 flex items-center justify-center text-purple-300 shadow-lg shadow-purple-900/30">
+      <header className="relative z-10 flex items-center justify-between px-4 sm:px-6 py-3 sm:py-5 max-w-7xl mx-auto w-full border-b border-slate-800/80">
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-purple-600/30 border border-purple-500/40 flex items-center justify-center text-purple-300 shadow-lg shadow-purple-900/30 shrink-0">
             <Compass className="w-5 h-5 animate-spin-slow" />
           </div>
           <div>
-            <h1 className="text-lg font-bold tracking-tight text-white font-rpg">HÀNH TRÌNH TRI THỨC</h1>
-            <p className="text-xs text-slate-400">MATH RPG · PHIÊU LƯU TOÁN HỌC</p>
+            <h1 className="text-base sm:text-lg font-bold tracking-tight text-white font-rpg">HÀNH TRÌNH TRI THỨC</h1>
+            <p className="text-[10px] sm:text-xs text-slate-400">MATH RPG · PHIÊU LƯU TOÁN HỌC</p>
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <button
             onClick={() => {
               sound.playClick();
               onToggleMute();
             }}
-            className="flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-800/80 hover:bg-slate-700 border border-slate-700/60 text-slate-300 text-xs font-medium transition-all"
+            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-lg bg-slate-800/80 hover:bg-slate-700 border border-slate-700/60 text-slate-300 text-xs font-medium transition-all"
             title="Bật/Tắt âm thanh"
           >
-            {isMuted ? <VolumeX className="w-4 h-4 text-red-400" /> : <Volume2 className="w-4 h-4 text-emerald-400" />}
+            {isMuted ? <VolumeX className="w-4 h-4 text-red-400" /> : <Volume2 className="w-4 h-4 text-teal-400" />}
             <span className="hidden sm:inline">{isMuted ? 'Bật âm thanh' : 'Âm thanh'}</span>
           </button>
 
@@ -63,7 +63,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
               sound.playClick();
               onImportFile();
             }}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-slate-800/80 hover:bg-slate-700 border border-slate-700/60 text-slate-300 text-xs font-medium transition-all"
+            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-lg bg-slate-800/80 hover:bg-slate-700 border border-slate-700/60 text-slate-300 text-xs font-medium transition-all"
             title="Tải file tiến trình đã lưu từ máy"
           >
             <Upload className="w-4 h-4 text-purple-400" />

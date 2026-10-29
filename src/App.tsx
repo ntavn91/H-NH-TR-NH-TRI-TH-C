@@ -41,6 +41,7 @@ import { ParallelWorldModal } from './components/ParallelWorldModal';
 import { StoryModal } from './components/StoryModal';
 import { GameOverModal } from './components/GameOverModal';
 import { LevelUpModal } from './components/LevelUpModal';
+import { MusicGeneratorModal } from './components/MusicGeneratorModal';
 
 export default function App() {
   const [saveData, setSaveData] = useState<GameSaveSchema>(() => loadGameData());
@@ -49,6 +50,13 @@ export default function App() {
   >('WELCOME');
   const [activeHubTab, setActiveHubTab] = useState<'map' | 'shop' | 'character'>('map');
   const [isMuted, setIsMuted] = useState<boolean>(sound.getIsMuted());
+  const [volume, setVolume] = useState<number>(() => sound.getVolume());
+  const [isMusicStudioOpen, setIsMusicStudioOpen] = useState<boolean>(false);
+
+  const handleVolumeChange = (newVol: number) => {
+    sound.setVolume(newVol);
+    setVolume(newVol);
+  };
 
   // Level Up Celebration state
   const [levelUpData, setLevelUpData] = useState<{
@@ -856,6 +864,9 @@ export default function App() {
             onSelectTab={setActiveHubTab}
             isMuted={isMuted}
             onToggleMute={handleToggleMute}
+            volume={volume}
+            onVolumeChange={handleVolumeChange}
+            onOpenMusicStudio={() => setIsMusicStudioOpen(true)}
             onExportSave={handleExportSave}
             onSwitchProfile={() => setCurrentScreen('PROFILE')}
           />
@@ -987,6 +998,14 @@ export default function App() {
           onClose={() => setLevelUpData(null)}
         />
       )}
+
+      {/* Modal: AI Music Studio & Volume Master */}
+      <MusicGeneratorModal
+        isOpen={isMusicStudioOpen}
+        onClose={() => setIsMusicStudioOpen(false)}
+        currentVolume={volume}
+        onVolumeChange={handleVolumeChange}
+      />
     </div>
   );
 }
