@@ -875,6 +875,8 @@ export default function App() {
             {activeHubTab === 'map' && (
               <MapTab
                 character={activeChar}
+                activeChapterId={activeChapterId}
+                onSelectChapter={setActiveChapterId}
                 onEnterStage={handleEnterStage}
                 onOpenStoryIntro={(chId) => {
                   const ch = CHAPTERS.find((c) => c.chapterId === chId) || CHAPTERS[0];

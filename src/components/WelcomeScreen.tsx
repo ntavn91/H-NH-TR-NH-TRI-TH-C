@@ -141,7 +141,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
 
       {/* Footer Info */}
       <footer className="relative z-10 py-4 px-6 border-t border-slate-800/60 text-center text-xs text-slate-500">
-        <p>© 2026 Hành Trình Tri Thức · DẪN LỐI THÀNH CÔNG</p>
+        <p>© 2026 Hành Trình Tri Thức · Dẫn Lối Thành Công</p>
       </footer>
     </div>
   );

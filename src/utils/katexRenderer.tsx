@@ -20,41 +20,61 @@ export const LatexRenderer: React.FC<LatexRendererProps> = ({
   const renderedHtml = useMemo(() => {
     if (!content) return '';
 
-    // If content does not contain $ at all, check if it's a raw formula (like options "\dfrac{1}{14}", "-0{,}8", "x = 3", etc.)
-    if (!content.includes('$')) {
-      const hasMathChars = /[\\^_{}]|[=<>+\-*/]|\d+/.test(content);
-      const hasVietnamese = /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/i.test(content);
-      if (!hasVietnamese && hasMathChars) {
+    // Helper to normalize degrees and common symbols
+    const cleanMath = (str: string) => {
+      return str
+        .replace(/([0-9a-zA-Z\)\}])\s*°/g, '$1^\\circ')
+        .replace(/\^°/g, '^\\circ')
+        .replace(/°/g, '^\\circ');
+    };
+
+    // 1. Process mixed text containing $...$ (inline) or $$...$$ (display block)
+    if (content.includes('$')) {
+      const regex = /(\$\$[\s\S]*?\$\$|\$[\s\S]*?\$)/g;
+      return content.replace(regex, (match) => {
+        const isDisplay = match.startsWith('$$');
+        const rawMath = isDisplay ? match.slice(2, -2) : match.slice(1, -1);
+        const math = cleanMath(rawMath);
         try {
-          return katex.renderToString(content.trim(), {
-            displayMode: displayMode,
+          const rendered = katex.renderToString(math.trim(), {
+            displayMode: isDisplay,
             throwOnError: false,
           });
+          if (isDisplay) {
+            return `<div class="my-3 overflow-x-auto text-center">${rendered}</div>`;
+          }
+          return `<span class="inline-block px-1 align-middle whitespace-nowrap">${rendered}</span>`;
         } catch {
-          // fallback to text
+          return match;
         }
+      });
+    }
+
+    // 2. If content does NOT contain $, check if it has LaTeX macros or is a math expression
+    const hasLatexMacro = /\\[a-zA-Z]+/.test(content);
+    const hasMathSymbols = /[\^_{}=<>+\-*/]/.test(content);
+    const hasDegree = content.includes('°');
+
+    if (hasLatexMacro || hasMathSymbols || hasDegree) {
+      // Check if it's pure text with no LaTeX commands
+      const hasVietnamese = /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/i.test(content);
+      // If it contains Vietnamese and doesn't have explicit backslash macros like \text or \widehat or \dfrac, leave as text
+      if (hasVietnamese && !hasLatexMacro) {
+        return content;
+      }
+
+      try {
+        const math = cleanMath(content.trim());
+        return katex.renderToString(math, {
+          displayMode: displayMode,
+          throwOnError: false,
+        });
+      } catch {
+        return content;
       }
     }
 
-    // Process mixed text containing $...$ (inline) or $$...$$ (display block)
-    const regex = /(\$\$[\s\S]*?\$\$|\$[\s\S]*?\$)/g;
-    return content.replace(regex, (match) => {
-      const isDisplay = match.startsWith('$$');
-      const math = isDisplay ? match.slice(2, -2) : match.slice(1, -1);
-      try {
-        // ALWAYS use displayMode: false for single $...$ to prevent forcing full-width line breaks!
-        const rendered = katex.renderToString(math.trim(), {
-          displayMode: isDisplay,
-          throwOnError: false,
-        });
-        if (isDisplay) {
-          return `<div class="my-3 overflow-x-auto text-center">${rendered}</div>`;
-        }
-        return `<span class="inline-block px-1 align-middle whitespace-nowrap">${rendered}</span>`;
-      } catch {
-        return match;
-      }
-    });
+    return content;
   }, [content, displayMode]);
 
   return (

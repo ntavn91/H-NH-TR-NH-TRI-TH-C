@@ -11,6 +11,8 @@ import { sound } from '../utils/sound';
 
 interface MapTabProps {
   character: CharacterData;
+  activeChapterId?: number;
+  onSelectChapter?: (chapterId: number) => void;
   onEnterStage: (chapterId: number, stageId: number) => void;
   onOpenStoryIntro: (chapterId: number) => void;
   onOpenParallelWorld: () => void;
@@ -18,11 +20,21 @@ interface MapTabProps {
 
 export const MapTab: React.FC<MapTabProps> = ({
   character,
+  activeChapterId,
+  onSelectChapter,
   onEnterStage,
   onOpenStoryIntro,
   onOpenParallelWorld,
 }) => {
-  const [selectedChapterId, setSelectedChapterId] = useState<number>(character.journey.chapterId || 1);
+  const [selectedChapterId, setSelectedChapterId] = useState<number>(
+    activeChapterId || character.journey.chapterId || 1
+  );
+
+  React.useEffect(() => {
+    if (activeChapterId && activeChapterId !== selectedChapterId) {
+      setSelectedChapterId(activeChapterId);
+    }
+  }, [activeChapterId]);
   const [selectedStage, setSelectedStage] = useState<StageDefinition | null>(null);
 
   const pendingFailedQuestions = character.journey.failedQuestions.filter(q => q.status === 'pending');
@@ -146,6 +158,7 @@ export const MapTab: React.FC<MapTabProps> = ({
                 onClick={() => {
                   sound.playClick();
                   setSelectedChapterId(ch.chapterId);
+                  onSelectChapter?.(ch.chapterId);
                 }}
                 className={`p-3 rounded-xl border text-left transition-all relative overflow-hidden ${
                   isSelected

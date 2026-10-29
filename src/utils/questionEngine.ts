@@ -57,24 +57,43 @@ export function generateDynamicQuestionVariant(questionId: string): QuestionVari
   switch (questionId) {
     // 1-1: Sắp xếp số hữu tỉ
     case 'W1-S01': {
-      const a = randomInt(-10, -1);
-      const b = randomInt(2, 6);
-      const c = randomInt(1, 10);
-      const d = randomInt(2, 6);
-      const dec = -0.5;
-      const sorted = [-1, dec, a / b, c / d].sort((x, y) => x - y);
-      const correctLatex = sorted
-        .map(val => (val === dec ? `-0{,}5` : val === a / b ? formatFractionLatex(a, b) : val === c / d ? formatFractionLatex(c, d) : `-1`))
-        .join(' < ');
+      let a = randomInt(-9, -2);
+      const b = randomInt(2, 5);
+      if (a / b === -1) a = -b - 1; // ensure distinct from -1
+      const c = randomInt(1, 9);
+      const d = randomInt(2, 5);
+
+      const items = [
+        { val: a / b, latex: formatFractionLatex(a, b) },
+        { val: 0, latex: '0' },
+        { val: c / d, latex: formatFractionLatex(c, d) },
+        { val: -1, latex: '-1' },
+      ];
+
+      // Shuffle prompt presentation order
+      const shuffledForPrompt = [...items].sort(() => Math.random() - 0.5);
+      const promptLatex = shuffledForPrompt.map(it => it.latex).join(';\\; ');
+
+      // Ascending sort
+      const sorted = [...items].sort((x, y) => x.val - y.val);
+      const correctLatex = sorted.map(it => it.latex).join(' < ');
+
+      // Distractor 1: descending order
+      const wrong1 = [...sorted].reverse().map(it => it.latex).join(' < ');
+      // Distractor 2: swapped middle elements
+      const wrong2 = [sorted[1], sorted[0], sorted[2], sorted[3]].map(it => it.latex).join(' < ');
+      // Distractor 3: positive before negative
+      const wrong3 = [sorted[0], sorted[2], sorted[1], sorted[3]].map(it => it.latex).join(' < ');
+
       return {
         variantId,
-        questionLatex: `Hãy sắp xếp các số hữu tỉ sau theo thứ tự từ nhỏ đến lớn: $${formatFractionLatex(a, b)};\\; 0;\\; ${formatFractionLatex(c, d)};\\; -1$`,
+        questionLatex: `Hãy sắp xếp các số hữu tỉ sau theo thứ tự từ nhỏ đến lớn: $${promptLatex}$`,
         storyContext: 'Dòng năng lượng số học bị đảo lộn, hãy sắp xếp các giá trị theo thứ tự tăng dần.',
         options: [
           { optionId: 'A', latex: `$${correctLatex}$` },
-          { optionId: 'B', latex: `$0 < -1 < ${formatFractionLatex(a, b)} < ${formatFractionLatex(c, d)}$` },
-          { optionId: 'C', latex: `$-1 < 0 < ${formatFractionLatex(c, d)} < ${formatFractionLatex(a, b)}$` },
-          { optionId: 'D', latex: `$${formatFractionLatex(c, d)} < 0 < ${formatFractionLatex(a, b)} < -1$` },
+          { optionId: 'B', latex: `$${wrong1}$` },
+          { optionId: 'C', latex: `$${wrong2}$` },
+          { optionId: 'D', latex: `$${wrong3}$` },
         ],
         correctOptionId: 'A'
       };
@@ -561,16 +580,36 @@ export function getCharacterVariant(
   return questionDef.variants[0];
 }
 
+export function normalizeOptionLatex(latex: string): string {
+  if (!latex) return '';
+  if (latex.includes('$')) return latex;
+  const hasMacro = /\\[a-zA-Z]+/.test(latex);
+  const hasMathSymbols = /[\^_{}=<>+\-*/]|\d+/.test(latex);
+  const hasVietnamese = /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/i.test(latex);
+  
+  if (latex.startsWith('\\text{') || hasMacro) {
+    return `$${latex}$`;
+  }
+  if (!hasVietnamese && hasMathSymbols) {
+    return `$${latex}$`;
+  }
+  return latex;
+}
+
 export function prepareOptionsForDisplay(
   variant: QuestionVariant,
   cardType: 'light' | 'dark'
 ): { options: QuestionOption[]; correctId: 'A' | 'B' | 'C' | 'D' } {
-  const correctOption = variant.options.find(o => o.optionId === variant.correctOptionId)!;
-  const wrongOptions = variant.options.filter(o => o.optionId !== variant.correctOptionId);
+  const normalizedVariantOptions = variant.options.map(opt => ({
+    ...opt,
+    latex: normalizeOptionLatex(opt.latex)
+  }));
+  const correctOption = normalizedVariantOptions.find(o => o.optionId === variant.correctOptionId)!;
+  const wrongOptions = normalizedVariantOptions.filter(o => o.optionId !== variant.correctOptionId);
 
   if (cardType === 'light') {
     // Pick 1 wrong option at random to make 2 options
-    const pickedWrong = wrongOptions[Math.floor(Math.random() * wrongOptions.length)] || variant.options[1];
+    const pickedWrong = wrongOptions[Math.floor(Math.random() * wrongOptions.length)] || normalizedVariantOptions[1];
     const twoOptions = [correctOption, pickedWrong];
     
     // Shuffle the 2 options
@@ -587,7 +626,7 @@ export function prepareOptionsForDisplay(
     return { options: remapped, correctId: newCorrect };
   } else {
     // Dark card: 4 options shuffled
-    const shuffled = [...variant.options].sort(() => Math.random() - 0.5);
+    const shuffled = [...normalizedVariantOptions].sort(() => Math.random() - 0.5);
     const remapped = shuffled.map((opt, idx) => {
       const letters: ('A' | 'B' | 'C' | 'D')[] = ['A', 'B', 'C', 'D'];
       return {

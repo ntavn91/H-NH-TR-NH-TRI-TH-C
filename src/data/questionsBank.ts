@@ -352,10 +352,10 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Cho hai góc $\\widehat{xAy}$ và $\\widehat{zAt}$ là hai góc đối đỉnh. Biết $\\widehat{xAy} = 65^\\circ$. Tính số đo $\\widehat{zAt}$.',
         storyContext: 'Hai luồng sáng giao nhau tại điểm A của ngã tư đối đỉnh.',
         options: [
-          { optionId: 'A', latex: '\\widehat{zAt} = 65^\\circ' },
-          { optionId: 'B', latex: '\\widehat{zAt} = 115^\\circ' },
-          { optionId: 'C', latex: '\\widehat{zAt} = 25^\\circ' },
-          { optionId: 'D', latex: '\\widehat{zAt} = 180^\\circ' },
+          { optionId: 'A', latex: '$\\widehat{zAt} = 65^\\circ$' },
+          { optionId: 'B', latex: '$\\widehat{zAt} = 115^\\circ$' },
+          { optionId: 'C', latex: '$\\widehat{zAt} = 25^\\circ$' },
+          { optionId: 'D', latex: '$\\widehat{zAt} = 180^\\circ$' },
         ],
         correctOptionId: 'A'
       },
@@ -364,10 +364,10 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Hai góc $\\widehat{mOn}$ và $\\widehat{pOk}$ đối đỉnh với nhau. Nếu $\\widehat{mOn} = 110^\\circ$ thì số đo $\\widehat{pOk}$ là:',
         storyContext: 'Tia sáng định hướng ngã tư đối xứng mở lối đi tiếp theo.',
         options: [
-          { optionId: 'A', latex: '\\widehat{pOk} = 110^\\circ' },
-          { optionId: 'B', latex: '\\widehat{pOk} = 70^\\circ' },
-          { optionId: 'C', latex: '\\widehat{pOk} = 90^\\circ' },
-          { optionId: 'D', latex: '\\widehat{pOk} = 55^\\circ' },
+          { optionId: 'A', latex: '$\\widehat{pOk} = 110^\\circ$' },
+          { optionId: 'B', latex: '$\\widehat{pOk} = 70^\\circ$' },
+          { optionId: 'C', latex: '$\\widehat{pOk} = 90^\\circ$' },
+          { optionId: 'D', latex: '$\\widehat{pOk} = 55^\\circ$' },
         ],
         correctOptionId: 'A'
       }
@@ -385,10 +385,10 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Cho $\\widehat{xAy}$ và $\\widehat{yAz}$ là hai góc kề bù. Biết $\\widehat{xAy} = 72^\\circ$. Tính số đo góc $\\widehat{yAz}$.',
         storyContext: 'Cung điện cẩm thạch dựng trên một đường thẳng thẳng tắp tạo bởi hai góc bù nhau.',
         options: [
-          { optionId: 'A', latex: '\\widehat{yAz} = 108^\\circ' },
-          { optionId: 'B', latex: '\\widehat{yAz} = 18^\\circ' },
-          { optionId: 'C', latex: '\\widehat{yAz} = 72^\\circ' },
-          { optionId: 'D', latex: '\\widehat{yAz} = 90^\\circ' },
+          { optionId: 'A', latex: '$\\widehat{yAz} = 108^\\circ$' },
+          { optionId: 'B', latex: '$\\widehat{yAz} = 18^\\circ$' },
+          { optionId: 'C', latex: '$\\widehat{yAz} = 72^\\circ$' },
+          { optionId: 'D', latex: '$\\widehat{yAz} = 90^\\circ$' },
         ],
         correctOptionId: 'A'
       },
@@ -397,10 +397,10 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Biết hai góc $\\widehat{AOB}$ và $\\widehat{BOC}$ kề bù và $\\widehat{AOB} = 135^\\circ$. Số đo góc $\\widehat{BOC}$ là:',
         storyContext: 'Chiếc gương bán nguyệt yêu cầu góc còn lại để ghép thành 180 độ.',
         options: [
-          { optionId: 'A', latex: '\\widehat{BOC} = 45^\\circ' },
-          { optionId: 'B', latex: '\\widehat{BOC} = 55^\\circ' },
-          { optionId: 'C', latex: '\\widehat{BOC} = 135^\\circ' },
-          { optionId: 'D', latex: '\\widehat{BOC} = 90^\\circ' },
+          { optionId: 'A', latex: '$\\widehat{BOC} = 45^\\circ$' },
+          { optionId: 'B', latex: '$\\widehat{BOC} = 55^\\circ$' },
+          { optionId: 'C', latex: '$\\widehat{BOC} = 135^\\circ$' },
+          { optionId: 'D', latex: '$\\widehat{BOC} = 90^\\circ$' },
         ],
         correctOptionId: 'A'
       }
@@ -418,10 +418,10 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Cho hai đường thẳng song song $a \\parallel b$. Đường thẳng $c$ cắt $a$ và $b$ tạo thành cặp góc so le trong $\\widehat{A_1}$ và $\\widehat{B_1}$. Biết $\\widehat{A_1} = 50^\\circ$, tính $\\widehat{B_1}$.',
         storyContext: 'Đường ray song song dẫn thuyền mây cần hai góc so le chuẩn xác.',
         options: [
-          { optionId: 'A', latex: '\\widehat{B_1} = 50^\\circ' },
-          { optionId: 'B', latex: '\\widehat{B_1} = 130^\\circ' },
-          { optionId: 'C', latex: '\\widehat{B_1} = 40^\\circ' },
-          { optionId: 'D', latex: '\\widehat{B_1} = 90^\\circ' },
+          { optionId: 'A', latex: '$\\widehat{B_1} = 50^\\circ$' },
+          { optionId: 'B', latex: '$\\widehat{B_1} = 130^\\circ$' },
+          { optionId: 'C', latex: '$\\widehat{B_1} = 40^\\circ$' },
+          { optionId: 'D', latex: '$\\widehat{B_1} = 90^\\circ$' },
         ],
         correctOptionId: 'A'
       },
@@ -430,10 +430,10 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Nếu $x \\parallel y$ và một đường thẳng thứ ba cắt cả hai đường, thì hai góc so le trong có mối quan hệ gì?',
         storyContext: 'Định lý song song cổ đại được khắc trên phiến đá chắn đường.',
         options: [
-          { optionId: 'A', latex: '\\text{Bằng nhau}' },
-          { optionId: 'B', latex: '\\text{Có tổng bằng } 180^\\circ' },
-          { optionId: 'C', latex: '\\text{Phụ nhau}' },
-          { optionId: 'D', latex: '\\text{Góc này gấp đôi góc kia}' },
+          { optionId: 'A', latex: 'Bằng nhau' },
+          { optionId: 'B', latex: 'Có tổng bằng $180^\\circ$' },
+          { optionId: 'C', latex: 'Phụ nhau' },
+          { optionId: 'D', latex: 'Góc này gấp đôi góc kia' },
         ],
         correctOptionId: 'A'
       }
@@ -451,10 +451,10 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Cho $m \\parallel n$. Hai góc đồng vị $\\widehat{M_2}$ và $\\widehat{N_2}$ có quan hệ như thế nào và nếu $\\widehat{M_2} = 125^\\circ$ thì $\\widehat{N_2}$ bằng bao nhiêu?',
         storyContext: 'Hai ngọn hải đăng mây hướng về cùng một vị trí đồng vị.',
         options: [
-          { optionId: 'A', latex: '\\widehat{N_2} = 125^\\circ' },
-          { optionId: 'B', latex: '\\widehat{N_2} = 55^\\circ' },
-          { optionId: 'C', latex: '\\widehat{N_2} = 65^\\circ' },
-          { optionId: 'D', latex: '\\widehat{N_2} = 180^\\circ' },
+          { optionId: 'A', latex: '$\\widehat{N_2} = 125^\\circ$' },
+          { optionId: 'B', latex: '$\\widehat{N_2} = 55^\\circ$' },
+          { optionId: 'C', latex: '$\\widehat{N_2} = 65^\\circ$' },
+          { optionId: 'D', latex: '$\\widehat{N_2} = 180^\\circ$' },
         ],
         correctOptionId: 'A'
       },
@@ -463,10 +463,10 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Cho hai đường thẳng song song bị cắt bởi một cát tuyến. Khẳng định nào sau đây là ĐÚNG?',
         storyContext: 'Lời sấm truyền về hình học phẳng mở ra cánh cổng mây.',
         options: [
-          { optionId: 'A', latex: '\\text{Hai góc đồng vị thì bằng nhau}' },
-          { optionId: 'B', latex: '\\text{Hai góc trong cùng phía bằng nhau}' },
-          { optionId: 'C', latex: '\\text{Hai góc so le trong có tổng bằng } 180^\\circ' },
-          { optionId: 'D', latex: '\\text{Hai góc đồng vị có tổng bằng } 90^\\circ' },
+          { optionId: 'A', latex: 'Hai góc đồng vị thì bằng nhau' },
+          { optionId: 'B', latex: 'Hai góc trong cùng phía bằng nhau' },
+          { optionId: 'C', latex: 'Hai góc so le trong có tổng bằng $180^\\circ$' },
+          { optionId: 'D', latex: 'Hai góc đồng vị có tổng bằng $90^\\circ$' },
         ],
         correctOptionId: 'A'
       }
@@ -484,10 +484,10 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Cho góc $\\widehat{xAy} = 84^\\circ$ và tia $At$ là tia phân giác của góc $\\widehat{xAy}$. Tính số đo của góc $\\widehat{xAt}$.',
         storyContext: 'Mũi tên phân giác thần kỳ chia đôi góc ánh sáng.',
         options: [
-          { optionId: 'A', latex: '\\widehat{xAt} = 42^\\circ' },
-          { optionId: 'B', latex: '\\widehat{xAt} = 84^\\circ' },
-          { optionId: 'C', latex: '\\widehat{xAt} = 96^\\circ' },
-          { optionId: 'D', latex: '\\widehat{xAt} = 21^\\circ' },
+          { optionId: 'A', latex: '$\\widehat{xAt} = 42^\\circ$' },
+          { optionId: 'B', latex: '$\\widehat{xAt} = 84^\\circ$' },
+          { optionId: 'C', latex: '$\\widehat{xAt} = 96^\\circ$' },
+          { optionId: 'D', latex: '$\\widehat{xAt} = 21^\\circ$' },
         ],
         correctOptionId: 'A'
       },
@@ -496,10 +496,10 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Biết $Oz$ là tia phân giác của $\\widehat{xOy}$ và $\\widehat{xOz} = 35^\\circ$. Tính số đo toàn bộ góc $\\widehat{xOy}$.',
         storyContext: 'Khôi phục độ mở hoàn chỉnh của chiếc cổng vòm hình quạt.',
         options: [
-          { optionId: 'A', latex: '\\widehat{xOy} = 70^\\circ' },
-          { optionId: 'B', latex: '\\widehat{xOy} = 35^\\circ' },
-          { optionId: 'C', latex: '\\widehat{xOy} = 55^\\circ' },
-          { optionId: 'D', latex: '\\widehat{xOy} = 145^\\circ' },
+          { optionId: 'A', latex: '$\\widehat{xOy} = 70^\\circ$' },
+          { optionId: 'B', latex: '$\\widehat{xOy} = 35^\\circ$' },
+          { optionId: 'C', latex: '$\\widehat{xOy} = 55^\\circ$' },
+          { optionId: 'D', latex: '$\\widehat{xOy} = 145^\\circ$' },
         ],
         correctOptionId: 'A'
       }
@@ -517,10 +517,10 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Cho $\\triangle ABC$ có $\\widehat{B} = 45^\\circ$ và $\\widehat{C} = 65^\\circ$. Tính số đo của góc $\\widehat{A}$.',
         storyContext: 'Đỉnh tháp tam giác cần đo góc chóp để hạ thang dây an toàn.',
         options: [
-          { optionId: 'A', latex: '\\widehat{A} = 70^\\circ' },
-          { optionId: 'B', latex: '\\widehat{A} = 80^\\circ' },
-          { optionId: 'C', latex: '\\widehat{A} = 110^\\circ' },
-          { optionId: 'D', latex: '\\widehat{A} = 60^\\circ' },
+          { optionId: 'A', latex: '$\\widehat{A} = 70^\\circ$' },
+          { optionId: 'B', latex: '$\\widehat{A} = 80^\\circ$' },
+          { optionId: 'C', latex: '$\\widehat{A} = 110^\\circ$' },
+          { optionId: 'D', latex: '$\\widehat{A} = 60^\\circ$' },
         ],
         correctOptionId: 'A'
       },
@@ -529,10 +529,10 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Trong tam giác $MNP$, biết $\\widehat{M} = 55^\\circ$ và $\\widehat{N} = 75^\\circ$. Số đo góc $\\widehat{P}$ là:',
         storyContext: 'Cân bằng ba đỉnh năng lượng của kim tự tháp đá.',
         options: [
-          { optionId: 'A', latex: '\\widehat{P} = 50^\\circ' },
-          { optionId: 'B', latex: '\\widehat{P} = 60^\\circ' },
-          { optionId: 'C', latex: '\\widehat{P} = 40^\\circ' },
-          { optionId: 'D', latex: '\\widehat{P} = 70^\\circ' },
+          { optionId: 'A', latex: '$\\widehat{P} = 50^\\circ$' },
+          { optionId: 'B', latex: '$\\widehat{P} = 60^\\circ$' },
+          { optionId: 'C', latex: '$\\widehat{P} = 40^\\circ$' },
+          { optionId: 'D', latex: '$\\widehat{P} = 70^\\circ$' },
         ],
         correctOptionId: 'A'
       }
@@ -550,10 +550,10 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Cho $\\triangle ABC$ vuông tại $A$. Biết góc $\\widehat{B} = 38^\\circ$. Tính số đo góc nhọn $\\widehat{C}$.',
         storyContext: 'Thềm đá vuông góc tạo thành góc 90 độ tại đỉnh A, hãy tính góc nhọn còn lại.',
         options: [
-          { optionId: 'A', latex: '\\widehat{C} = 52^\\circ' },
-          { optionId: 'B', latex: '\\widehat{C} = 142^\\circ' },
-          { optionId: 'C', latex: '\\widehat{C} = 62^\\circ' },
-          { optionId: 'D', latex: '\\widehat{C} = 42^\\circ' },
+          { optionId: 'A', latex: '$\\widehat{C} = 52^\\circ$' },
+          { optionId: 'B', latex: '$\\widehat{C} = 142^\\circ$' },
+          { optionId: 'C', latex: '$\\widehat{C} = 62^\\circ$' },
+          { optionId: 'D', latex: '$\\widehat{C} = 42^\\circ$' },
         ],
         correctOptionId: 'A'
       },
@@ -562,10 +562,10 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Cho tam giác $DEF$ vuông tại $D$. Nếu $\\widehat{E} = 64^\\circ$, thì số đo của góc $\\widehat{F}$ là:',
         storyContext: 'Hai góc nhọn của tam giác vuông luôn phụ nhau.',
         options: [
-          { optionId: 'A', latex: '\\widehat{F} = 26^\\circ' },
-          { optionId: 'B', latex: '\\widehat{F} = 36^\\circ' },
-          { optionId: 'C', latex: '\\widehat{F} = 116^\\circ' },
-          { optionId: 'D', latex: '\\widehat{F} = 46^\\circ' },
+          { optionId: 'A', latex: '$\\widehat{F} = 26^\\circ$' },
+          { optionId: 'B', latex: '$\\widehat{F} = 36^\\circ$' },
+          { optionId: 'C', latex: '$\\widehat{F} = 116^\\circ$' },
+          { optionId: 'D', latex: '$\\widehat{F} = 46^\\circ$' },
         ],
         correctOptionId: 'A'
       }
@@ -583,10 +583,10 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Cho $\\triangle ABC$ có $\\widehat{B} = 30^\\circ$ và $\\widehat{C} = 40^\\circ$. Hỏi $\\triangle ABC$ là tam giác gì?',
         storyContext: 'Phán đoán thế trận phòng ngự của trận địa tam giác cổ.',
         options: [
-          { optionId: 'A', latex: '\\text{Tam giác tù (vì } \\widehat{A} = 110^\\circ > 90^\\circ\\text{)}' },
-          { optionId: 'B', latex: '\\text{Tam giác nhọn}' },
-          { optionId: 'C', latex: '\\text{Tam giác vuông}' },
-          { optionId: 'D', latex: '\\text{Tam giác đều}' },
+          { optionId: 'A', latex: 'Tam giác tù (vì $\\widehat{A} = 110^\\circ > 90^\\circ$)' },
+          { optionId: 'B', latex: 'Tam giác nhọn' },
+          { optionId: 'C', latex: 'Tam giác vuông' },
+          { optionId: 'D', latex: 'Tam giác đều' },
         ],
         correctOptionId: 'A'
       },
@@ -595,10 +595,10 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Tam giác $XYZ$ có $\\widehat{Y} = 40^\\circ$ và $\\widehat{Z} = 50^\\circ$. Đây là tam giác gì?',
         storyContext: 'Xác định loại tam giác để gắn đúng khiên chiến binh.',
         options: [
-          { optionId: 'A', latex: '\\text{Tam giác vuông tại } X' },
-          { optionId: 'B', latex: '\\text{Tam giác nhọn}' },
-          { optionId: 'C', latex: '\\text{Tam giác tù}' },
-          { optionId: 'D', latex: '\\text{Tam giác cân tại } X' },
+          { optionId: 'A', latex: 'Tam giác vuông tại $X$' },
+          { optionId: 'B', latex: 'Tam giác nhọn' },
+          { optionId: 'C', latex: 'Tam giác tù' },
+          { optionId: 'D', latex: 'Tam giác cân tại $X$' },
         ],
         correctOptionId: 'A'
       }
@@ -616,10 +616,10 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Cho $\\triangle ABC$. Biết $\\widehat{B} = 45^\\circ$ và $\\widehat{C} = 75^\\circ$. Tính số đo góc ngoài tại đỉnh $A$.',
         storyContext: 'Hào quang bảo vệ phát xạ góc ngoài đỉnh A bằng tổng hai góc trong không kề.',
         options: [
-          { optionId: 'A', latex: '\\widehat{A}_{\\text{ngoài}} = 120^\\circ' },
-          { optionId: 'B', latex: '\\widehat{A}_{\\text{ngoài}} = 60^\\circ' },
-          { optionId: 'C', latex: '\\widehat{A}_{\\text{ngoài}} = 135^\\circ' },
-          { optionId: 'D', latex: '\\widehat{A}_{\\text{ngoài}} = 105^\\circ' },
+          { optionId: 'A', latex: '$\\widehat{A}_{\\text{ngoài}} = 120^\\circ$' },
+          { optionId: 'B', latex: '$\\widehat{A}_{\\text{ngoài}} = 60^\\circ$' },
+          { optionId: 'C', latex: '$\\widehat{A}_{\\text{ngoài}} = 135^\\circ$' },
+          { optionId: 'D', latex: '$\\widehat{A}_{\\text{ngoài}} = 105^\\circ$' },
         ],
         correctOptionId: 'A'
       },
@@ -628,10 +628,10 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Một góc ngoài tại một đỉnh của tam giác có tính chất nào sau đây?',
         storyContext: 'Bản khắc bí truyền định nghĩa góc ngoài tam giác.',
         options: [
-          { optionId: 'A', latex: '\\text{Bằng tổng hai góc trong không kề với nó}' },
-          { optionId: 'B', latex: '\\text{Bằng góc kề với nó}' },
-          { optionId: 'C', latex: '\\text{Luôn bằng } 90^\\circ' },
-          { optionId: 'D', latex: '\\text{Bằng hiệu hai góc trong}' },
+          { optionId: 'A', latex: 'Bằng tổng hai góc trong không kề với nó' },
+          { optionId: 'B', latex: 'Bằng góc kề với nó' },
+          { optionId: 'C', latex: 'Luôn bằng $90^\\circ$' },
+          { optionId: 'D', latex: 'Bằng hiệu hai góc trong' },
         ],
         correctOptionId: 'A'
       }
@@ -650,10 +650,10 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Tướng Quân Lượng Giác giăng kết giới tam giác có $\\widehat{A} = x$, $\\widehat{B} = x + 20^\\circ$, $\\widehat{C} = x + 40^\\circ$. Hãy tìm giá trị của $x$ để phá tan kết giới!',
         storyContext: 'TRẬN ĐẤU TRÙM: Tướng Quân Lượng Giác vung kiếm tạo ra ma trận góc tam giác tổng 180 độ, hãy giải tìm ẩn số x!',
         options: [
-          { optionId: 'A', latex: 'x = 40^\\circ' },
-          { optionId: 'B', latex: 'x = 30^\\circ' },
-          { optionId: 'C', latex: 'x = 50^\\circ' },
-          { optionId: 'D', latex: 'x = 60^\\circ' },
+          { optionId: 'A', latex: '$x = 40^\\circ$' },
+          { optionId: 'B', latex: '$x = 30^\\circ$' },
+          { optionId: 'C', latex: '$x = 50^\\circ$' },
+          { optionId: 'D', latex: '$x = 60^\\circ$' },
         ],
         correctOptionId: 'A'
       },
@@ -662,10 +662,10 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Tam giác ma pháp của Tướng Quân có $\\widehat{A} = 2x$, $\\widehat{B} = 3x$, $\\widehat{C} = 4x$. Hãy tìm giá trị của $x$.',
         storyContext: 'TRẬN ĐẤU TRÙM: Ba luồng tia năng lượng tỉ lệ 2x : 3x : 4x hợp thành tam giác, hãy tìm góc cơ sở x!',
         options: [
-          { optionId: 'A', latex: 'x = 20^\\circ' },
-          { optionId: 'B', latex: 'x = 18^\\circ' },
-          { optionId: 'C', latex: 'x = 25^\\circ' },
-          { optionId: 'D', latex: 'x = 15^\\circ' },
+          { optionId: 'A', latex: '$x = 20^\\circ$' },
+          { optionId: 'B', latex: '$x = 18^\\circ$' },
+          { optionId: 'C', latex: '$x = 25^\\circ$' },
+          { optionId: 'D', latex: '$x = 15^\\circ$' },
         ],
         correctOptionId: 'A'
       }
@@ -685,22 +685,22 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Từ đẳng thức $3 \\cdot 12 = 4 \\cdot 9$, ta có thể lập được tỉ lệ thức nào sau đây?',
         storyContext: 'Cổng đá tỉ lệ thức chuyển đổi giữa tích hai đường chéo.',
         options: [
-          { optionId: 'A', latex: '\\dfrac{3}{4} = \\dfrac{9}{12}' },
-          { optionId: 'B', latex: '\\dfrac{3}{12} = \\dfrac{4}{9}' },
-          { optionId: 'C', latex: '\\dfrac{3}{9} = \\dfrac{12}{4}' },
-          { optionId: 'D', latex: '\\dfrac{4}{3} = \\dfrac{9}{12}' },
+          { optionId: 'A', latex: '$\\dfrac{3}{4} = \\dfrac{9}{12}$' },
+          { optionId: 'B', latex: '$\\dfrac{3}{12} = \\dfrac{4}{9}$' },
+          { optionId: 'C', latex: '$\\dfrac{3}{9} = \\dfrac{12}{4}$' },
+          { optionId: 'D', latex: '$\\dfrac{4}{3} = \\dfrac{9}{12}$' },
         ],
         correctOptionId: 'A'
       },
       {
         variantId: 'W3-S01-V2',
-        questionLatex: 'Cho tỉ lệ thức $\\dfrac{a}{b} = \\dfrac{c}{d}$ (với $b, d \\neq 0$). Đẳng thức tích nào sau đây luôn ĐÚNG?',
+        questionLatex: 'Cho tỉ lệ thức $\\dfrac{a}{b} = \\dfrac{c}{d}$ (với $b,d \\neq 0$). Đẳng thức tích nào sau đây luôn ĐÚNG?',
         storyContext: 'Nguyên lý tích chéo cân bằng của đầm lầy.',
         options: [
-          { optionId: 'A', latex: 'a \\cdot d = b \\cdot c' },
-          { optionId: 'B', latex: 'a \\cdot c = b \\cdot d' },
-          { optionId: 'C', latex: 'a \\cdot b = c \\cdot d' },
-          { optionId: 'D', latex: 'a + d = b + c' },
+          { optionId: 'A', latex: '$a \\cdot d = b \\cdot c$' },
+          { optionId: 'B', latex: '$a \\cdot c = b \\cdot d$' },
+          { optionId: 'C', latex: '$a \\cdot b = c \\cdot d$' },
+          { optionId: 'D', latex: '$a + d = b + c$' },
         ],
         correctOptionId: 'A'
       }
@@ -814,13 +814,13 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
     variants: [
       {
         variantId: 'W3-S05-V1',
-        questionLatex: 'Nếu đại lượng $y$ liên hệ với đại lượng $x$ theo công thức $y = kx$ ($k \\neq 0$) thì ta nói:',
+        questionLatex: 'Nếu đại lượng $y$ liên hệ với đại lượng $x$ theo tỉ lệ thức $\\dfrac{a}{b} = \\dfrac{c}{d}$ (với $b,d \\neq 0$) hay công thức $y = kx$ ($k \\neq 0$) thì ta nói:',
         storyContext: 'Quy luật sinh trưởng cây cỏ đầm lầy tỉ lệ thuận với ánh sáng.',
         options: [
-          { optionId: 'A', latex: 'y \\text{ tỉ lệ thuận với } x \\text{ theo hệ số tỉ lệ } k' },
-          { optionId: 'B', latex: 'y \\text{ tỉ lệ nghịch với } x \\text{ theo hệ số tỉ lệ } k' },
-          { optionId: 'C', latex: 'x \\text{ tỉ lệ thuận với } y \\text{ theo hệ số tỉ lệ } k' },
-          { optionId: 'D', latex: 'x \\text{ và } y \\text{ là hai đại lượng không phụ thuộc}' },
+          { optionId: 'A', latex: '$y$ tỉ lệ thuận với $x$ theo hệ số tỉ lệ $k$' },
+          { optionId: 'B', latex: '$y$ tỉ lệ nghịch với $x$ theo hệ số tỉ lệ $k$' },
+          { optionId: 'C', latex: '$x$ tỉ lệ thuận với $y$ theo hệ số tỉ lệ $k$' },
+          { optionId: 'D', latex: '$x$ và $y$ là hai đại lượng không phụ thuộc' },
         ],
         correctOptionId: 'A'
       },
@@ -829,10 +829,10 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Cho biết $y$ tỉ lệ thuận với $x$ theo hệ số tỉ lệ $k = -3$. Khi $x = 4$ thì $y$ bằng:',
         storyContext: 'Nhân hệ số tỉ lệ thuận để tìm kết quả biến đổi y.',
         options: [
-          { optionId: 'A', latex: 'y = -12' },
-          { optionId: 'B', latex: 'y = 12' },
-          { optionId: 'C', latex: 'y = -\\dfrac{4}{3}' },
-          { optionId: 'D', latex: 'y = -\\dfrac{3}{4}' },
+          { optionId: 'A', latex: '$y = -12$' },
+          { optionId: 'B', latex: '$y = 12$' },
+          { optionId: 'C', latex: '$y = -\\dfrac{4}{3}$' },
+          { optionId: 'D', latex: '$y = -\\dfrac{3}{4}$' },
         ],
         correctOptionId: 'A'
       }
@@ -850,10 +850,10 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Nếu đại lượng $y$ liên hệ với đại lượng $x$ theo công thức $y = \\dfrac{a}{x}$ ($a \\neq 0$) thì ta nói:',
         storyContext: 'Vực sâu nghịch đảo: một bên tăng thì bên kia giảm.',
         options: [
-          { optionId: 'A', latex: 'y \\text{ tỉ lệ nghịch với } x \\text{ theo hệ số tỉ lệ } a' },
-          { optionId: 'B', latex: 'y \\text{ tỉ lệ thuận với } x \\text{ theo hệ số tỉ lệ } a' },
-          { optionId: 'C', latex: 'y \\text{ tỉ lệ nghịch với } x \\text{ theo hệ số tỉ lệ } \\dfrac{1}{a}' },
-          { optionId: 'D', latex: 'x \\text{ và } y \\text{ có tổng không đổi}' },
+          { optionId: 'A', latex: '$y$ tỉ lệ nghịch với $x$ theo hệ số tỉ lệ $a$' },
+          { optionId: 'B', latex: '$y$ tỉ lệ thuận với $x$ theo hệ số tỉ lệ $a$' },
+          { optionId: 'C', latex: '$y$ tỉ lệ nghịch với $x$ theo hệ số tỉ lệ $\\dfrac{1}{a}$' },
+          { optionId: 'D', latex: '$x$ và $y$ có tổng không đổi' },
         ],
         correctOptionId: 'A'
       },
@@ -949,10 +949,10 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Cho chuyển động đều với công thức $s = v \\cdot t$. Chọn khẳng định **SAI** trong các câu sau:',
         storyContext: 'Vạch trần cạm bẫy ngụy biện của đầm lầy về mối liên hệ vận tốc, thời gian và quãng đường.',
         options: [
-          { optionId: 'A', latex: 's \\text{ và } t \\text{ là hai đại lượng tỉ lệ nghịch (khi } v \\text{ không đổi)}' },
-          { optionId: 'B', latex: 's \\text{ và } t \\text{ là hai đại lượng tỉ lệ thuận (khi } v \\text{ không đổi)}' },
-          { optionId: 'C', latex: 'v \\text{ và } t \\text{ là hai đại lượng tỉ lệ nghịch (khi } s \\text{ không đổi)}' },
-          { optionId: 'D', latex: 's \\text{ và } v \\text{ là hai đại lượng tỉ lệ thuận (khi } t \\text{ không đổi)}' },
+          { optionId: 'A', latex: '$s$ và $t$ là hai đại lượng tỉ lệ nghịch (khi $v$ không đổi)' },
+          { optionId: 'B', latex: '$s$ và $t$ là hai đại lượng tỉ lệ thuận (khi $v$ không đổi)' },
+          { optionId: 'C', latex: '$v$ và $t$ là hai đại lượng tỉ lệ nghịch (khi $s$ không đổi)' },
+          { optionId: 'D', latex: '$s$ và $v$ là hai đại lượng tỉ lệ thuận (khi $t$ không đổi)' },
         ],
         correctOptionId: 'A'
       },
@@ -961,10 +961,10 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Trong công thức tính khối lượng $m = D \\cdot V$ (với khối lượng riêng $D$ không đổi), mối quan hệ giữa $m$ và $V$ là:',
         storyContext: 'Xác định sự phụ thuộc giữa khối lượng và thể tích vật thể đá.',
         options: [
-          { optionId: 'A', latex: 'm \\text{ tỉ lệ thuận với } V' },
-          { optionId: 'B', latex: 'm \\text{ tỉ lệ nghịch với } V' },
-          { optionId: 'C', latex: 'm \\text{ không phụ thuộc vào } V' },
-          { optionId: 'D', latex: 'm \\text{ và } V \\text{ có tích không đổi}' },
+          { optionId: 'A', latex: '$m$ tỉ lệ thuận với $V$' },
+          { optionId: 'B', latex: '$m$ tỉ lệ nghịch với $V$' },
+          { optionId: 'C', latex: '$m$ không phụ thuộc vào $V$' },
+          { optionId: 'D', latex: '$m$ và $V$ có tích không đổi' },
         ],
         correctOptionId: 'A'
       }
@@ -983,10 +983,10 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Vua Đầm Lầy thử thách: Biết $x$ tỉ lệ thuận với $y$ theo hệ số $k = 3$, và $y$ tỉ lệ nghịch với $z$ theo hệ số $a = 8$. Hỏi $x$ tỉ lệ thuận hay nghịch với $z$, và hệ số tỉ lệ là bao nhiêu?',
         storyContext: 'TRẬN ĐẤU TRÙM: Vua Đầm Lầy Bùn Lầy giơ chiếc cân bắc cầu ma quái, hãy tìm mối quan hệ giữa x và z!',
         options: [
-          { optionId: 'A', latex: 'x \\text{ tỉ lệ nghịch với } z \\text{ theo hệ số } 24' },
-          { optionId: 'B', latex: 'x \\text{ tỉ lệ thuận với } z \\text{ theo hệ số } 24' },
-          { optionId: 'C', latex: 'x \\text{ tỉ lệ nghịch với } z \\text{ theo hệ số } \\dfrac{8}{3}' },
-          { optionId: 'D', latex: 'x \\text{ tỉ lệ thuận với } z \\text{ theo hệ số } \\dfrac{3}{8}' },
+          { optionId: 'A', latex: '$x$ tỉ lệ nghịch với $z$ theo hệ số $24$' },
+          { optionId: 'B', latex: '$x$ tỉ lệ thuận với $z$ theo hệ số $24$' },
+          { optionId: 'C', latex: '$x$ tỉ lệ nghịch với $z$ theo hệ số $\\dfrac{8}{3}$' },
+          { optionId: 'D', latex: '$x$ tỉ lệ thuận với $z$ theo hệ số $\\dfrac{3}{8}$' },
         ],
         correctOptionId: 'A'
       },
@@ -995,10 +995,10 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Nếu $x$ tỉ lệ thuận với $y$ theo hệ số $k = 2$, và $y$ tỉ lệ thuận với $z$ theo hệ số $m = 5$, thì $x$ tỉ lệ thuận với $z$ theo hệ số:',
         storyContext: 'TRẬN ĐẤU TRÙM: Mối liên kết bắc cầu thuận - thuận của vua đầm lầy.',
         options: [
-          { optionId: 'A', latex: '10' },
-          { optionId: 'B', latex: '7' },
-          { optionId: 'C', latex: '\\dfrac{2}{5}' },
-          { optionId: 'D', latex: '2{,}5' },
+          { optionId: 'A', latex: '$10$' },
+          { optionId: 'B', latex: '$7$' },
+          { optionId: 'C', latex: '$\\dfrac{2}{5}$' },
+          { optionId: 'D', latex: '$2{,}5$' },
         ],
         correctOptionId: 'A'
       }
@@ -1018,10 +1018,10 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Thu gọn đơn thức $A(x) = \\dfrac{2}{3} \\cdot 6 \\cdot x^2 \\cdot x^3$ và xác định hệ số cùng bậc của nó.',
         storyContext: 'Cổng vào Thị Trấn Đa Thức yêu cầu nhận dạng đơn thức đã thu gọn.',
         options: [
-          { optionId: 'A', latex: '\\text{Hệ số: } 4;\\; \\text{Bậc: } 5' },
-          { optionId: 'B', latex: '\\text{Hệ số: } 4;\\; \\text{Bậc: } 6' },
-          { optionId: 'C', latex: '\\text{Hệ số: } 12;\\; \\text{Bậc: } 5' },
-          { optionId: 'D', latex: '\\text{Hệ số: } 2;\\; \\text{Bậc: } 5' },
+          { optionId: 'A', latex: 'Hệ số $4$, bậc $5$' },
+          { optionId: 'B', latex: 'Hệ số $4$, bậc $6$' },
+          { optionId: 'C', latex: 'Hệ số $12$, bậc $5$' },
+          { optionId: 'D', latex: 'Hệ số $2$, bậc $5$' },
         ],
         correctOptionId: 'A'
       },
@@ -1030,10 +1030,10 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Cho đơn thức $B(x) = -3x^4 \\cdot 2x$. Hệ số và bậc của $B(x)$ lần lượt là:',
         storyContext: 'Nhân các hệ số số học và cộng các số mũ của biến x.',
         options: [
-          { optionId: 'A', latex: '\\text{Hệ số: } -6;\\; \\text{Bậc: } 5' },
-          { optionId: 'B', latex: '\\text{Hệ số: } 6;\\; \\text{Bậc: } 5' },
-          { optionId: 'C', latex: '\\text{Hệ số: } -6;\\; \\text{Bậc: } 4' },
-          { optionId: 'D', latex: '\\text{Hệ số: } -5;\\; \\text{Bậc: } 4' },
+          { optionId: 'A', latex: 'Hệ số $-6$, bậc $5$' },
+          { optionId: 'B', latex: 'Hệ số $6$, bậc $5$' },
+          { optionId: 'C', latex: 'Hệ số $-6$, bậc $4$' },
+          { optionId: 'D', latex: 'Hệ số $-5$, bậc $4$' },
         ],
         correctOptionId: 'A'
       }
@@ -1051,10 +1051,10 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Xác định bậc của đa thức: $P(x) = 5x^4 - 2x^6 + 7x^2 - 9$',
         storyContext: 'Tìm số mũ cao nhất của biến có hệ số khác 0 để đo sức mạnh đa thức.',
         options: [
-          { optionId: 'A', latex: '\\text{Bậc } 6' },
-          { optionId: 'B', latex: '\\text{Bậc } 4' },
-          { optionId: 'C', latex: '\\text{Bậc } 2' },
-          { optionId: 'D', latex: '\\text{Bậc } 12' },
+          { optionId: 'A', latex: 'Bậc $6$' },
+          { optionId: 'B', latex: 'Bậc $4$' },
+          { optionId: 'C', latex: 'Bậc $2$' },
+          { optionId: 'D', latex: 'Bậc $12$' },
         ],
         correctOptionId: 'A'
       },
@@ -1063,10 +1063,10 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Cho đa thức $Q(x) = 3x^3 - x^5 + 4x^5 + 2$. Bậc của đa thức $Q(x)$ sau khi thu gọn là:',
         storyContext: 'Cần thu gọn các hạng tử đồng dạng trước khi đọc bậc.',
         options: [
-          { optionId: 'A', latex: '\\text{Bậc } 5' },
-          { optionId: 'B', latex: '\\text{Bậc } 3' },
-          { optionId: 'C', latex: '\\text{Bậc } 8' },
-          { optionId: 'D', latex: '\\text{Bậc } 0' },
+          { optionId: 'A', latex: 'Bậc $5$' },
+          { optionId: 'B', latex: 'Bậc $3$' },
+          { optionId: 'C', latex: 'Bậc $8$' },
+          { optionId: 'D', latex: 'Bậc $0$' },
         ],
         correctOptionId: 'A'
       }
@@ -1084,10 +1084,10 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Cho $P(x) = -7x^5 + 3x^3 - 4x + 12$. Hệ số cao nhất và hệ số tự do của $P(x)$ lần lượt là:',
         storyContext: 'Xác định thủ lĩnh dẫn đầu và thành phần tự do của đa thức.',
         options: [
-          { optionId: 'A', latex: '\\text{Hệ số cao nhất: } -7;\\; \\text{Hệ số tự do: } 12' },
-          { optionId: 'B', latex: '\\text{Hệ số cao nhất: } 12;\\; \\text{Hệ số tự do: } -7' },
-          { optionId: 'C', latex: '\\text{Hệ số cao nhất: } 5;\\; \\text{Hệ số tự do: } 12' },
-          { optionId: 'D', latex: '\\text{Hệ số cao nhất: } 7;\\; \\text{Hệ số tự do: } -4' },
+          { optionId: 'A', latex: 'Hệ số cao nhất: $-7$, hệ số tự do: $12$' },
+          { optionId: 'B', latex: 'Hệ số cao nhất: $12$, hệ số tự do: $-7$' },
+          { optionId: 'C', latex: 'Hệ số cao nhất: $5$, hệ số tự do: $12$' },
+          { optionId: 'D', latex: 'Hệ số cao nhất: $7$, hệ số tự do: $-4$' },
         ],
         correctOptionId: 'A'
       },
@@ -1096,10 +1096,10 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Đa thức $R(x) = 8 - 4x^2 + 5x^4$. Hệ số cao nhất của $R(x)$ là:',
         storyContext: 'Chú ý trật tự các hạng tử chưa được sắp xếp giảm dần.',
         options: [
-          { optionId: 'A', latex: '5' },
-          { optionId: 'B', latex: '8' },
-          { optionId: 'C', latex: '-4' },
-          { optionId: 'D', latex: '4' },
+          { optionId: 'A', latex: '$5$' },
+          { optionId: 'B', latex: '$8$' },
+          { optionId: 'C', latex: '$-4$' },
+          { optionId: 'D', latex: '$4$' },
         ],
         correctOptionId: 'A'
       }
@@ -1316,10 +1316,10 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Đại Hiền Triết Tri Thức phóng ra biểu thức tối hậu: $Q(x) = (3x^2 \\cdot x^3) \\cdot (-4x^4 \\cdot x)$. Xác định hệ số và bậc của $Q(x)$ sau khi thu gọn hoàn toàn!',
         storyContext: 'TRẬN ĐẤU CUỐI CÙNG: Boss Tối Thượng đứng trước cổng Đền Thờ Trí Tuệ, hãy giải mã hệ số và bậc tối cao!',
         options: [
-          { optionId: 'A', latex: '\\text{Hệ số: } -12;\\; \\text{Bậc: } 10' },
-          { optionId: 'B', latex: '\\text{Hệ số: } 12;\\; \\text{Bậc: } 10' },
-          { optionId: 'C', latex: '\\text{Hệ số: } -12;\\; \\text{Bậc: } 9' },
-          { optionId: 'D', latex: '\\text{Hệ số: } -7;\\; \\text{Bậc: } 10' },
+          { optionId: 'A', latex: 'Hệ số $-12$, bậc $10$' },
+          { optionId: 'B', latex: 'Hệ số $12$, bậc $10$' },
+          { optionId: 'C', latex: 'Hệ số $-12$, bậc $9$' },
+          { optionId: 'D', latex: 'Hệ số $-7$, bậc $10$' },
         ],
         correctOptionId: 'A'
       },
@@ -1328,10 +1328,10 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         questionLatex: 'Biểu thức tối thượng: $K(x) = (-2x^3 \\cdot 5x^2) \\cdot (x^4 \\cdot 3x^2)$. Tìm hệ số và bậc của $K(x)$.',
         storyContext: 'TRẬN ĐẤU CUỐI CÙNG: Thu gọn nhân tất cả hệ số và cộng dồn toàn bộ số mũ bậc lũy thừa của x!',
         options: [
-          { optionId: 'A', latex: '\\text{Hệ số: } -30;\\; \\text{Bậc: } 11' },
-          { optionId: 'B', latex: '\\text{Hệ số: } 30;\\; \\text{Bậc: } 11' },
-          { optionId: 'C', latex: '\\text{Hệ số: } -30;\\; \\text{Bậc: } 12' },
-          { optionId: 'D', latex: '\\text{Hệ số: } -10;\\; \\text{Bậc: } 11' },
+          { optionId: 'A', latex: 'Hệ số $-30$, bậc $11$' },
+          { optionId: 'B', latex: 'Hệ số $30$, bậc $11$' },
+          { optionId: 'C', latex: 'Hệ số $-30$, bậc $12$' },
+          { optionId: 'D', latex: 'Hệ số $-10$, bậc $11$' },
         ],
         correctOptionId: 'A'
       }
