@@ -382,8 +382,8 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
                     <ul className="text-[11px] text-slate-400 space-y-1">
                       <li>• HP ban đầu: 2/2</li>
                       <li>• <strong>+2 Max HP</strong> mỗi cấp</li>
-                      <li>• 20s đếm ngược</li>
-                      <li>• 2 thẻ (1 Sáng, 1 Tối)</li>
+                      <li>• 20s đếm ngược (2 thẻ)</li>
+                      <li className="text-amber-300 font-semibold">• <strong>Giảm 50%</strong> giá Túi Vàng May Mắn</li>
                     </ul>
                   </div>
 
@@ -408,8 +408,8 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
                     <ul className="text-[11px] text-slate-400 space-y-1">
                       <li>• HP ban đầu: 2/2</li>
                       <li>• +1 Max HP mỗi cấp</li>
-                      <li>• <strong>30s đếm ngược</strong></li>
-                      <li>• 2 thẻ (1 Sáng, 1 Tối)</li>
+                      <li>• <strong>30s đếm ngược</strong> (2 thẻ)</li>
+                      <li className="text-cyan-300 font-semibold">• <strong>Giảm 50%</strong> giá Đồng Hồ Minh Triết</li>
                     </ul>
                   </div>
 
@@ -434,8 +434,8 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
                     <ul className="text-[11px] text-slate-400 space-y-1">
                       <li>• HP ban đầu: 2/2</li>
                       <li>• +1 Max HP mỗi cấp</li>
-                      <li>• 20s đếm ngược</li>
                       <li>• <strong>3 thẻ</strong> (2 Sáng, 1 Tối)</li>
+                      <li className="text-amber-300 font-semibold">• <strong>Giảm 50%</strong> giá Cổ Thư Tinh Thông</li>
                     </ul>
                   </div>
                 </div>

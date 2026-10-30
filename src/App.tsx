@@ -24,6 +24,7 @@ import {
 import { sound } from './utils/sound';
 import { calculateLevelFromExp, getMaxHpForLevel } from './data/titles';
 import { CHAPTERS, STAGES_BY_CHAPTER } from './data/chapters';
+import { getItemPriceForCharacter } from './data/items';
 import { getQuestionById } from './data/questionsBank';
 import { getCharacterVariant, prepareOptionsForDisplay, generateDynamicQuestionVariant } from './utils/questionEngine';
 
@@ -41,17 +42,16 @@ import { ParallelWorldModal } from './components/ParallelWorldModal';
 import { StoryModal } from './components/StoryModal';
 import { GameOverModal } from './components/GameOverModal';
 import { LevelUpModal } from './components/LevelUpModal';
-import { MusicGeneratorModal } from './components/MusicGeneratorModal';
+import { LeaderboardTab } from './components/LeaderboardTab';
 
 export default function App() {
   const [saveData, setSaveData] = useState<GameSaveSchema>(() => loadGameData());
   const [currentScreen, setCurrentScreen] = useState<
     'WELCOME' | 'PROFILE' | 'HUB' | 'CARD_SELECT' | 'QUESTION' | 'RESULT' | 'PARALLEL' | 'STORY' | 'GAME_OVER'
   >('WELCOME');
-  const [activeHubTab, setActiveHubTab] = useState<'map' | 'shop' | 'character'>('map');
+  const [activeHubTab, setActiveHubTab] = useState<'map' | 'shop' | 'character' | 'leaderboard'>('map');
   const [isMuted, setIsMuted] = useState<boolean>(sound.getIsMuted());
   const [volume, setVolume] = useState<number>(() => sound.getVolume());
-  const [isMusicStudioOpen, setIsMusicStudioOpen] = useState<boolean>(false);
 
   const handleVolumeChange = (newVol: number) => {
     sound.setVolume(newVol);
@@ -426,9 +426,11 @@ export default function App() {
       const hasAncientTome = Boolean(activeChar.inventory.passiveItems['ancient_tome']);
       const hasLuckyPouch = Boolean(activeChar.inventory.passiveItems['lucky_pouch']);
 
-      // Requirement 6: Replaying an already cleared stage yields 0 EXP, 10 Gold (11 with Túi Vàng May Mắn)
+      // Replaying an already cleared stage yields 10 EXP (12 with Cổ Thư Tinh Thông), 10 Gold (11 with Túi Vàng May Mắn)
       // First clear: 100 EXP (115 with Cổ Thư), 100 Gold (110 with Túi Vàng)
-      const baseExp = isReplay ? 0 : (hasAncientTome ? 115 : 100);
+      const baseExp = isReplay
+        ? (hasAncientTome ? 12 : 10)
+        : (hasAncientTome ? 115 : 100);
       const baseGold = isReplay
         ? (hasLuckyPouch ? 11 : 10)
         : (hasLuckyPouch ? 110 : 100);
@@ -670,12 +672,15 @@ export default function App() {
 
     setSaveData((prev) => {
       const char = prev.characters[prev.activeCharacterId!];
-      const newGold = char.stats.gold - item.price;
+      const effectivePrice = getItemPriceForCharacter(item, char.profile.heroClass);
+      const newGold = char.stats.gold - effectivePrice;
 
       if (item.id === 'life_stone') {
-        // Special life stone: Max HP +1 AND heal +1 HP
-        const newMaxHp = char.stats.maxHp + 1;
-        const newHp = Math.min(newMaxHp, char.stats.hp + 1);
+        // Tâm Mạch Sinh Mệnh: Lập tức hồi +1 HP hiện tại, không tăng HP tối đa, nếu đang đầy HP thì không mua được
+        if (char.stats.hp >= char.stats.maxHp) {
+          return prev;
+        }
+        const newHp = Math.min(char.stats.maxHp, char.stats.hp + 1);
         return {
           ...prev,
           characters: {
@@ -685,7 +690,6 @@ export default function App() {
               stats: {
                 ...char.stats,
                 gold: newGold,
-                maxHp: newMaxHp,
                 hp: newHp,
               },
             },
@@ -866,7 +870,6 @@ export default function App() {
             onToggleMute={handleToggleMute}
             volume={volume}
             onVolumeChange={handleVolumeChange}
-            onOpenMusicStudio={() => setIsMusicStudioOpen(true)}
             onExportSave={handleExportSave}
             onSwitchProfile={() => setCurrentScreen('PROFILE')}
           />
@@ -902,6 +905,16 @@ export default function App() {
                 onUpdateCustomTitle={handleUpdateCustomTitle}
                 onAddNewCustomTitle={handleAddNewCustomTitle}
                 onSelectCustomTitle={handleSelectCustomTitle}
+              />
+            )}
+
+            {activeHubTab === 'leaderboard' && (
+              <LeaderboardTab
+                characters={saveData.characters}
+                activeCharacterId={saveData.activeCharacterId}
+                onSelectCharacter={handleSelectCharacter}
+                onExportSave={handleExportSave}
+                onImportFile={handleImportFileClick}
               />
             )}
           </main>
@@ -1000,14 +1013,6 @@ export default function App() {
           onClose={() => setLevelUpData(null)}
         />
       )}
-
-      {/* Modal: AI Music Studio & Volume Master */}
-      <MusicGeneratorModal
-        isOpen={isMusicStudioOpen}
-        onClose={() => setIsMusicStudioOpen(false)}
-        currentVolume={volume}
-        onVolumeChange={handleVolumeChange}
-      />
     </div>
   );
 }

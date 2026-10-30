@@ -44,12 +44,12 @@ export const ACTIVE_ITEMS: ItemDefinition[] = [
   },
   {
     id: 'life_stone',
-    name: 'Tâm Thạch Sinh Mệnh',
+    name: 'Tâm Mạch Sinh Mệnh',
     category: 'active',
-    price: 800,
-    description: 'Viên ngọc tinh hoa của các bậc hiền giả giúp bồi bổ sinh lực.',
+    price: 500,
+    description: 'Đan dược tinh hoa giúp hồi phục sinh lực và ổn định tâm mạch tức thì.',
     icon: 'Heart',
-    effectDescription: 'Tăng vĩnh viễn +1 HP Tối đa và lập tức hồi phục +1 HP hiện tại.'
+    effectDescription: 'Lập tức hồi phục +1 HP hiện tại (không tăng HP tối đa). Nếu đang đầy HP thì không thể mua.'
   },
   {
     id: 'time_hourglass',
@@ -97,7 +97,7 @@ export const PASSIVE_ITEMS: ItemDefinition[] = [
     id: 'freedom_seal',
     name: 'Ấn Danh Tự Tại',
     category: 'active',
-    price: 500,
+    price: 250,
     description: 'Con dấu hoàng gia cho phép tạo thêm một Danh hiệu Cá nhân độc lập.',
     icon: 'Award',
     effectDescription: 'Có thể mua nhiều lần: mỗi lần mua cho phép tạo và lưu thêm 1 danh hiệu độc lập theo ý muốn.'
@@ -105,3 +105,37 @@ export const PASSIVE_ITEMS: ItemDefinition[] = [
 ];
 
 export const ALL_ITEMS = [...ACTIVE_ITEMS, ...PASSIVE_ITEMS];
+
+/**
+ * Calculates item purchase price taking hero class discounts into account:
+ * - Hiệp sĩ (knight): -50% for Túi Vàng May Mắn (lucky_pouch)
+ * - Pháp sư (mage): -50% for Đồng Hồ Minh Triết (wisdom_watch)
+ * - Tu sĩ (light_monk): -50% for Cổ Thư Tinh Thông (ancient_tome)
+ */
+export const getItemPriceForCharacter = (item: ItemDefinition, heroClass?: string): number => {
+  if (!heroClass) return item.price;
+  if (heroClass === 'knight' && item.id === 'lucky_pouch') {
+    return Math.round(item.price * 0.5);
+  }
+  if (heroClass === 'mage' && item.id === 'wisdom_watch') {
+    return Math.round(item.price * 0.5);
+  }
+  if (heroClass === 'light_monk' && item.id === 'ancient_tome') {
+    return Math.round(item.price * 0.5);
+  }
+  return item.price;
+};
+
+export const getDiscountInfoForCharacter = (item: ItemDefinition, heroClass?: string): string | null => {
+  if (!heroClass) return null;
+  if (heroClass === 'knight' && item.id === 'lucky_pouch') {
+    return 'Giảm 50% (Đặc quyền Hiệp Sĩ)';
+  }
+  if (heroClass === 'mage' && item.id === 'wisdom_watch') {
+    return 'Giảm 50% (Đặc quyền Pháp Sư)';
+  }
+  if (heroClass === 'light_monk' && item.id === 'ancient_tome') {
+    return 'Giảm 50% (Đặc quyền Tu Sĩ)';
+  }
+  return null;
+};

@@ -18,7 +18,7 @@ import {
   VolumeX,
   Download,
   ArrowLeftCircle,
-  Music,
+  Trophy,
   Sliders,
 } from 'lucide-react';
 import { sound } from '../utils/sound';
@@ -26,13 +26,12 @@ import { calculateLevelFromExp } from '../data/titles';
 
 interface TopHUDProps {
   character: CharacterData;
-  activeTab: 'map' | 'shop' | 'character';
-  onSelectTab: (tab: 'map' | 'shop' | 'character') => void;
+  activeTab: 'map' | 'shop' | 'character' | 'leaderboard';
+  onSelectTab: (tab: 'map' | 'shop' | 'character' | 'leaderboard') => void;
   isMuted: boolean;
   onToggleMute: () => void;
   volume: number;
   onVolumeChange: (vol: number) => void;
-  onOpenMusicStudio: () => void;
   onExportSave: () => void;
   onSwitchProfile: () => void;
 }
@@ -45,7 +44,6 @@ export const TopHUD: React.FC<TopHUDProps> = ({
   onToggleMute,
   volume,
   onVolumeChange,
-  onOpenMusicStudio,
   onExportSave,
   onSwitchProfile,
 }) => {
@@ -187,20 +185,22 @@ export const TopHUD: React.FC<TopHUDProps> = ({
                 <User className="w-3.5 h-3.5" />
                 <span>Nhân Vật</span>
               </button>
-            </div>
 
-            {/* Music Studio Button */}
-            <button
-              onClick={() => {
-                sound.playClick();
-                onOpenMusicStudio();
-              }}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-indigo-900/80 to-purple-900/80 hover:from-indigo-800 hover:to-purple-800 border border-purple-500/40 text-purple-200 text-xs font-semibold transition-all cursor-pointer shadow-md"
-              title="Phòng Hòa Âm AI Lyria & Tinh chỉnh âm thanh"
-            >
-              <Music className="w-3.5 h-3.5 text-purple-300" />
-              <span>Âm Nhạc AI</span>
-            </button>
+              <button
+                onClick={() => {
+                  sound.playClick();
+                  onSelectTab('leaderboard');
+                }}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                  activeTab === 'leaderboard'
+                    ? 'bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-950 font-bold shadow-md shadow-amber-500/20'
+                    : 'text-slate-400 hover:text-amber-300 hover:bg-slate-800'
+                }`}
+              >
+                <Trophy className="w-3.5 h-3.5 text-amber-400" />
+                <span>Bảng Xếp Hạng</span>
+              </button>
+            </div>
 
             {/* Quick Utility Buttons */}
             <div className="flex items-center gap-1 relative">
@@ -309,18 +309,8 @@ export const TopHUD: React.FC<TopHUDProps> = ({
               </div>
             </div>
 
-            {/* Mobile Actions: Music, Volume, Exit */}
+            {/* Mobile Actions: Volume, Exit */}
             <div className="flex items-center gap-1 shrink-0">
-              <button
-                onClick={() => {
-                  sound.playClick();
-                  onOpenMusicStudio();
-                }}
-                className="p-1.5 rounded-lg bg-purple-900/50 border border-purple-500/40 text-purple-300"
-                title="Phòng hòa âm AI"
-              >
-                <Music className="w-3.5 h-3.5" />
-              </button>
 
               <button
                 onClick={() => {
@@ -410,12 +400,16 @@ export const TopHUD: React.FC<TopHUDProps> = ({
         <button
           onClick={() => {
             sound.playClick();
-            onOpenMusicStudio();
+            onSelectTab('leaderboard');
           }}
-          className="flex flex-col items-center gap-1 py-1 px-3 rounded-xl text-indigo-400 hover:text-indigo-300 transition-all cursor-pointer"
+          className={`flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-all cursor-pointer ${
+            activeTab === 'leaderboard'
+              ? 'text-amber-400 font-bold scale-105'
+              : 'text-slate-400 hover:text-slate-200'
+          }`}
         >
-          <Music className="w-5 h-5" />
-          <span className="text-[10px]">Âm Nhạc</span>
+          <Trophy className="w-5 h-5 text-amber-400" />
+          <span className="text-[10px]">Xếp Hạng</span>
         </button>
 
         <button

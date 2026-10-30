@@ -60,8 +60,8 @@ export const CharacterTab: React.FC<CharacterTabProps> = ({
           <h3 className="text-2xl font-black font-rpg text-white">{profile.name}</h3>
           <p className="text-xs text-slate-400 mt-1">
             {profile.classGroup} · {
-              profile.heroClass === 'knight' ? 'Hiệp sĩ (Sức bền & HP)' :
-              profile.heroClass === 'mage' ? 'Pháp sư (Ma thuật & Thời gian)' : 'Tu sĩ Ánh Sáng'
+              profile.heroClass === 'knight' ? 'Hiệp sĩ (Giảm 50% Túi Vàng)' :
+              profile.heroClass === 'mage' ? 'Pháp sư (Giảm 50% Đồng Hồ)' : 'Tu sĩ (Giảm 50% Cổ Thư)'
             }
           </p>
 
@@ -219,7 +219,7 @@ export const CharacterTab: React.FC<CharacterTabProps> = ({
           </div>
         ) : (
           <p className="text-xs text-slate-400 leading-relaxed">
-            Bạn chưa có danh hiệu riêng nào. Hãy ghé <strong>Thương Hội Tri Thức</strong> mua <strong>Ấn Danh Tự Tại (500 Vàng)</strong> để tự do đặt và chuyển đổi nhiều danh hiệu độc lập theo ý muốn!
+            Bạn chưa có danh hiệu riêng nào. Hãy ghé <strong>Thương Hội Tri Thức</strong> mua <strong>Ấn Danh Tự Tại (250 Vàng)</strong> để tự do đặt và chuyển đổi nhiều danh hiệu độc lập theo ý muốn!
           </p>
         )}
       </div>
@@ -248,7 +248,7 @@ export const CharacterTab: React.FC<CharacterTabProps> = ({
                       <p className="text-[11px] text-slate-400">{item.description}</p>
                     </div>
                     <span className="text-xs px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-amber-300 font-mono font-bold shrink-0">
-                      x{count}
+                      {item.id === 'life_stone' ? 'Hiệu lực tức thì' : `x${count}`}
                     </span>
                   </div>
                 );

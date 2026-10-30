@@ -5,7 +5,7 @@
 
 import React, { useState } from 'react';
 import { CharacterData, ItemDefinition } from '../types/game';
-import { ACTIVE_ITEMS, PASSIVE_ITEMS } from '../data/items';
+import { ACTIVE_ITEMS, PASSIVE_ITEMS, getItemPriceForCharacter, getDiscountInfoForCharacter } from '../data/items';
 import { Coins, Shield, Sparkles, Feather, Hourglass, Scroll, Heart, Clock, BookOpen, Award, Check, ShoppingBag } from 'lucide-react';
 import { sound } from '../utils/sound';
 
@@ -47,11 +47,16 @@ export const ShopTab: React.FC<ShopTabProps> = ({ character, onBuyItem }) => {
   };
 
   const handleBuy = (item: ItemDefinition) => {
-    if (character.stats.gold < item.price) {
+    const effectivePrice = getItemPriceForCharacter(item, character.profile.heroClass);
+    if (character.stats.gold < effectivePrice) {
       sound.playWrong();
       return;
     }
     if (item.category === 'passive' && character.inventory.passiveItems[item.id]) {
+      sound.playWrong();
+      return;
+    }
+    if (item.id === 'life_stone' && character.stats.hp >= character.stats.maxHp) {
       sound.playWrong();
       return;
     }
@@ -117,8 +122,14 @@ export const ShopTab: React.FC<ShopTabProps> = ({ character, onBuyItem }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {itemsList.map(item => {
           const isPassiveOwned = item.category === 'passive' && character.inventory.passiveItems[item.id];
+          const isLifeStone = item.id === 'life_stone';
+          const isHpFull = isLifeStone && character.stats.hp >= character.stats.maxHp;
           const activeCount = character.inventory.activeItems[item.id] || 0;
-          const canAfford = character.stats.gold >= item.price;
+          const effectivePrice = getItemPriceForCharacter(item, character.profile.heroClass);
+          const discountInfo = getDiscountInfoForCharacter(item, character.profile.heroClass);
+          const isDiscounted = effectivePrice < item.price;
+          const canAfford = character.stats.gold >= effectivePrice;
+          const isDisabled = isPassiveOwned || !canAfford || isHpFull;
 
           return (
             <div
@@ -126,13 +137,19 @@ export const ShopTab: React.FC<ShopTabProps> = ({ character, onBuyItem }) => {
               className={`rounded-3xl p-6 border transition-all flex flex-col justify-between ${
                 isPassiveOwned
                   ? 'bg-slate-900/40 border-emerald-500/30 opacity-80'
+                  : isHpFull
+                  ? 'bg-slate-900/60 border-slate-800 opacity-90'
+                  : isDiscounted
+                  ? 'bg-gradient-to-b from-slate-900/90 to-purple-950/30 border-amber-500/50 hover:border-amber-400 shadow-xl shadow-amber-950/20'
                   : 'bg-slate-900/80 border-slate-800 hover:border-purple-500/50 shadow-xl'
               }`}
             >
               <div>
                 {/* Top Badge & Owned Count */}
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-14 h-14 rounded-2xl bg-slate-950 border border-slate-700/80 flex items-center justify-center shadow-inner">
+                  <div className={`w-14 h-14 rounded-2xl bg-slate-950 border flex items-center justify-center shadow-inner ${
+                    isDiscounted ? 'border-amber-500/60' : 'border-slate-700/80'
+                  }`}>
                     {renderIcon(item.icon)}
                   </div>
 
@@ -146,12 +163,28 @@ export const ShopTab: React.FC<ShopTabProps> = ({ character, onBuyItem }) => {
                         Hiệu ứng vĩnh viễn
                       </span>
                     )
+                  ) : isLifeStone ? (
+                    <span className={`text-xs px-2.5 py-1 rounded-full font-semibold border flex items-center gap-1 ${
+                      isHpFull
+                        ? 'bg-rose-500/20 text-rose-300 border-rose-500/30'
+                        : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
+                    }`}>
+                      <Heart className="w-3.5 h-3.5 fill-current" /> Sinh lực: {character.stats.hp}/{character.stats.maxHp}
+                    </span>
                   ) : (
                     <span className="text-xs px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700 font-semibold">
                       Đang có: {activeCount}
                     </span>
                   )}
                 </div>
+
+                {/* Hero Class Discount Tag */}
+                {isDiscounted && !isPassiveOwned && (
+                  <div className="mb-2.5 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 text-[11px] font-bold">
+                    <Sparkles className="w-3 h-3 text-amber-400" />
+                    <span>{discountInfo}</span>
+                  </div>
+                )}
 
                 <h3 className="text-lg font-bold text-white mb-1 font-rpg">{item.name}</h3>
                 <p className="text-xs text-purple-300/90 mb-3">{item.description}</p>
@@ -162,22 +195,32 @@ export const ShopTab: React.FC<ShopTabProps> = ({ character, onBuyItem }) => {
 
               {/* Purchase Button */}
               <button
-                disabled={isPassiveOwned || !canAfford}
+                disabled={isDisabled}
                 onClick={() => handleBuy(item)}
-                className={`w-full py-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-all ${
-                  isPassiveOwned
-                    ? 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-800'
-                    : !canAfford
+                className={`w-full py-3.5 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all ${
+                  isDisabled
                     ? 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-800'
                     : 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 shadow-lg shadow-amber-950/40 cursor-pointer active:scale-95'
                 }`}
               >
                 {isPassiveOwned ? (
                   <span>ĐÃ KÍCH HOẠT VĨNH VIỄN</span>
+                ) : isHpFull ? (
+                  <span className="text-rose-400">SINH LỰC ĐÃ ĐẦY ({character.stats.hp}/{character.stats.maxHp})</span>
+                ) : !canAfford ? (
+                  <span>THIẾU VÀNG ({effectivePrice} Vàng)</span>
+                ) : isDiscounted ? (
+                  <>
+                    <Coins className="w-4 h-4 fill-current text-slate-950" />
+                    <span>MUA (</span>
+                    <span className="line-through text-slate-700 font-semibold mr-1">{item.price}</span>
+                    <span className="font-black underline">{effectivePrice} Vàng</span>
+                    <span>)</span>
+                  </>
                 ) : (
                   <>
                     <Coins className="w-4 h-4 fill-current" />
-                    <span>MUA ({item.price} Vàng)</span>
+                    <span>MUA ({effectivePrice} Vàng)</span>
                   </>
                 )}
               </button>
