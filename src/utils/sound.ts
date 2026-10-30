@@ -205,25 +205,75 @@ class SoundEngine {
 
     try {
       const now = this.ctx.currentTime;
-      // Fanfare: G4, C5, E5, G5 (sustained)
-      const notes = [392, 523.25, 659.25, 783.99];
-      notes.forEach((freq, idx) => {
+
+      // Layer 1: Sub-bass triumphant foundation (C2 -> C3)
+      const subOsc = this.ctx.createOscillator();
+      const subGain = this.ctx.createGain();
+      subOsc.type = 'sine';
+      subOsc.frequency.setValueAtTime(65.41, now);
+      subOsc.frequency.exponentialRampToValueAtTime(130.81, now + 0.3);
+      subGain.gain.setValueAtTime(0, now);
+      subGain.gain.linearRampToValueAtTime(this.volume * 0.45, now + 0.05);
+      subGain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+      subOsc.connect(subGain);
+      subGain.connect(this.ctx.destination);
+      subOsc.start(now);
+      subOsc.stop(now + 1.2);
+
+      // Layer 2: Heroic Brass Fanfare: C4 -> E4 -> G4 -> C5 -> E5 -> G5 (sustained chord triumph)
+      const brassNotes = [
+        { freq: 261.63, time: 0, dur: 0.2 },
+        { freq: 329.63, time: 0.12, dur: 0.2 },
+        { freq: 392.00, time: 0.24, dur: 0.2 },
+        { freq: 523.25, time: 0.36, dur: 0.3 },
+        { freq: 659.25, time: 0.50, dur: 0.35 },
+        { freq: 783.99, time: 0.65, dur: 1.4 },  // High G5 triumphant finish
+        { freq: 1046.50, time: 0.65, dur: 1.4 }, // Octave C6 support
+      ];
+
+      brassNotes.forEach(({ freq, time, dur }) => {
         if (!this.ctx) return;
+        const start = now + time;
         const osc = this.ctx.createOscillator();
+        const filter = this.ctx.createBiquadFilter();
         const gain = this.ctx.createGain();
-        osc.type = 'triangle';
+
+        osc.type = 'sawtooth';
         osc.frequency.value = freq;
 
-        const start = now + idx * 0.12;
-        const duration = idx === 3 ? 0.7 : 0.2;
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(1800, start);
+        filter.frequency.exponentialRampToValueAtTime(800, start + dur);
+
         gain.gain.setValueAtTime(0, start);
-        gain.gain.linearRampToValueAtTime(this.volume * 0.75, start + 0.03);
-        gain.gain.exponentialRampToValueAtTime(0.001, start + duration);
+        gain.gain.linearRampToValueAtTime(this.volume * 0.5, start + 0.03);
+        gain.gain.exponentialRampToValueAtTime(0.001, start + dur);
+
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(start);
+        osc.stop(start + dur);
+      });
+
+      // Layer 3: Shimmering Angelic Bell Arpeggio
+      const chimeNotes = [1046.5, 1318.5, 1567.98, 2093.0];
+      chimeNotes.forEach((freq, idx) => {
+        if (!this.ctx) return;
+        const start = now + 0.65 + idx * 0.08;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+
+        gain.gain.setValueAtTime(0, start);
+        gain.gain.linearRampToValueAtTime(this.volume * 0.4, start + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.8);
 
         osc.connect(gain);
         gain.connect(this.ctx.destination);
         osc.start(start);
-        osc.stop(start + duration);
+        osc.stop(start + 0.8);
       });
     } catch {
       // Fallback
@@ -237,21 +287,125 @@ class SoundEngine {
 
     try {
       const now = this.ctx.currentTime;
-      [987.77, 1318.51].forEach((freq, idx) => {
+
+      // 1. Heavy leather pouch coin drop / thud
+      const thudOsc = this.ctx.createOscillator();
+      const thudGain = this.ctx.createGain();
+      thudOsc.type = 'triangle';
+      thudOsc.frequency.setValueAtTime(140, now);
+      thudOsc.frequency.exponentialRampToValueAtTime(50, now + 0.12);
+      thudGain.gain.setValueAtTime(this.volume * 0.45, now);
+      thudGain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+      thudOsc.connect(thudGain);
+      thudGain.connect(this.ctx.destination);
+      thudOsc.start(now);
+      thudOsc.stop(now + 0.12);
+
+      // 2. Realistic multi-coin clinking jingle (metallic resonance)
+      const coinClinks = [
+        { freq: 2489, time: 0.02 },
+        { freq: 3135, time: 0.06 },
+        { freq: 2793, time: 0.11 },
+        { freq: 3520, time: 0.16 },
+        { freq: 4186, time: 0.22 },
+      ];
+
+      coinClinks.forEach(({ freq, time }) => {
         if (!this.ctx) return;
+        const start = now + time;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, start);
+        osc.frequency.exponentialRampToValueAtTime(freq * 0.95, start + 0.1);
+
+        gain.gain.setValueAtTime(this.volume * 0.4, start);
+        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.1);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(start);
+        osc.stop(start + 0.1);
+      });
+
+      // 3. Magical purchase acquisition chime (celestial shimmer)
+      const chimeNotes = [783.99, 987.77, 1318.51, 1567.98];
+      chimeNotes.forEach((freq, idx) => {
+        if (!this.ctx) return;
+        const start = now + 0.12 + idx * 0.07;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.value = freq;
+
+        gain.gain.setValueAtTime(0, start);
+        gain.gain.linearRampToValueAtTime(this.volume * 0.45, start + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.35);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(start);
+        osc.stop(start + 0.35);
+      });
+    } catch {
+      // Fallback
+    }
+  }
+
+  public playOpenShop() {
+    if (this.isMuted) return;
+    this.initContext();
+    if (!this.ctx) return;
+
+    try {
+      const now = this.ctx.currentTime;
+      // Medieval merchant wind chimes
+      const chimeTones = [1174.66, 1479.98, 1760.00, 2217.46];
+      chimeTones.forEach((freq, idx) => {
+        if (!this.ctx) return;
+        const start = now + idx * 0.06;
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
         osc.type = 'sine';
         osc.frequency.value = freq;
 
-        const start = now + idx * 0.08;
-        gain.gain.setValueAtTime(this.volume * 0.55, start);
-        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.2);
+        gain.gain.setValueAtTime(this.volume * 0.25, start);
+        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.45);
 
         osc.connect(gain);
         gain.connect(this.ctx.destination);
         osc.start(start);
-        osc.stop(start + 0.2);
+        osc.stop(start + 0.45);
+      });
+    } catch {
+      // Fallback
+    }
+  }
+
+  public playHeal() {
+    if (this.isMuted) return;
+    this.initContext();
+    if (!this.ctx) return;
+
+    try {
+      const now = this.ctx.currentTime;
+      // Healing pulse: gentle warm rising tones
+      [329.63, 440.0, 554.37, 659.25, 880.0].forEach((freq, idx) => {
+        if (!this.ctx) return;
+        const start = now + idx * 0.09;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+
+        gain.gain.setValueAtTime(0, start);
+        gain.gain.linearRampToValueAtTime(this.volume * 0.4, start + 0.04);
+        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.5);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(start);
+        osc.stop(start + 0.5);
       });
     } catch {
       // Fallback

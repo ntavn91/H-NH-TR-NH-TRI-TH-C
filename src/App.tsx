@@ -27,6 +27,7 @@ import { CHAPTERS, STAGES_BY_CHAPTER } from './data/chapters';
 import { getItemPriceForCharacter } from './data/items';
 import { getQuestionById } from './data/questionsBank';
 import { getCharacterVariant, prepareOptionsForDisplay, generateDynamicQuestionVariant } from './utils/questionEngine';
+import { triggerRewardParticles } from './utils/particles';
 
 // Components
 import { WelcomeScreen } from './components/WelcomeScreen';
@@ -418,7 +419,6 @@ export default function App() {
     // Main Journey Resolution
     if (isCorrect) {
       sound.playCorrect();
-      confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 } });
 
       const stageKey = `${activeChapterId}-${activeStageId}`;
       const isReplay = activeChar.journey.completedStages.includes(stageKey);
@@ -434,6 +434,9 @@ export default function App() {
       const baseGold = isReplay
         ? (hasLuckyPouch ? 11 : 10)
         : (hasLuckyPouch ? 110 : 100);
+
+      // Trigger custom themed EXP & Gold particles effect
+      triggerRewardParticles(baseExp, baseGold);
 
       const newExp = activeChar.stats.exp + baseExp;
       const newGold = activeChar.stats.gold + baseGold;

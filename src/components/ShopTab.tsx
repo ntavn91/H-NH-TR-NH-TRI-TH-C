@@ -3,11 +3,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CharacterData, ItemDefinition } from '../types/game';
 import { ACTIVE_ITEMS, PASSIVE_ITEMS, getItemPriceForCharacter, getDiscountInfoForCharacter } from '../data/items';
-import { Coins, Shield, Sparkles, Feather, Hourglass, Scroll, Heart, Clock, BookOpen, Award, Check, ShoppingBag } from 'lucide-react';
+import { Coins, Shield, Sparkles, Feather, Hourglass, Scroll, Heart, Clock, BookOpen, Award, Check, ShoppingBag, CheckCircle2 } from 'lucide-react';
 import { sound } from '../utils/sound';
+import { triggerGoldParticles } from '../utils/particles';
 
 interface ShopTabProps {
   character: CharacterData;
@@ -16,6 +17,12 @@ interface ShopTabProps {
 
 export const ShopTab: React.FC<ShopTabProps> = ({ character, onBuyItem }) => {
   const [activeCategory, setActiveCategory] = useState<'active' | 'passive'>('active');
+  const [purchaseToast, setPurchaseToast] = useState<{ name: string; price: number } | null>(null);
+
+  // Play ambient shop wind chime upon entering
+  useEffect(() => {
+    sound.playOpenShop();
+  }, []);
 
   const itemsList = activeCategory === 'active' ? ACTIVE_ITEMS : PASSIVE_ITEMS;
 
@@ -60,12 +67,44 @@ export const ShopTab: React.FC<ShopTabProps> = ({ character, onBuyItem }) => {
       sound.playWrong();
       return;
     }
+
+    // Play rich coin-clinking purchase sound
     sound.playBuyItem();
+    if (item.id === 'life_stone') {
+      setTimeout(() => sound.playHeal(), 200);
+    }
+
+    // Trigger golden particles & visual celebration toast
+    triggerGoldParticles(0.5, 0.45);
+    setPurchaseToast({ name: item.name, price: effectivePrice });
+    setTimeout(() => {
+      setPurchaseToast(null);
+    }, 2800);
+
     onBuyItem(item);
   };
 
   return (
-    <div className="max-w-6xl mx-auto w-full px-4 sm:px-6 pt-6 pb-28 md:pb-12">
+    <div className="max-w-6xl mx-auto w-full px-4 sm:px-6 pt-6 pb-28 md:pb-12 relative">
+      {/* Purchase Success Toast Notification */}
+      {purchaseToast && (
+        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 animate-in fade-in slide-in-from-top-4 duration-300">
+          <div className="px-6 py-3.5 rounded-2xl bg-slate-900/95 border-2 border-amber-400/90 shadow-2xl shadow-amber-500/25 backdrop-blur-md flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-400 flex items-center justify-center text-amber-300">
+              <CheckCircle2 className="w-6 h-6 text-emerald-400" />
+            </div>
+            <div>
+              <p className="text-xs font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5" /> Giao Dịch Thành Công!
+              </p>
+              <p className="text-sm font-black text-white">
+                Đã nhận <span className="text-amber-200">{purchaseToast.name}</span> <span className="text-amber-400 font-mono">(-{purchaseToast.price.toLocaleString()} Vàng)</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Shop Header */}
       <div className="flex items-center justify-between pb-6 mb-6 border-b border-slate-800 flex-wrap gap-4">
         <div>

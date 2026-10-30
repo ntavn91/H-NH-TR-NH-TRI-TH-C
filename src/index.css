@@ -26,3 +26,30 @@
   background: #475569;
 }
 
+
+@keyframes float-particle {
+  0% {
+    transform: translateY(0px) scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-14px) scale(1.15);
+  }
+  100% {
+    transform: translateY(-26px) scale(0.5);
+    opacity: 0;
+  }
+}
+
+.animate-float-particle-1 {
+  animation: float-particle 1.8s ease-in-out infinite;
+}
+
+.animate-float-particle-2 {
+  animation: float-particle 2.2s ease-in-out 0.4s infinite;
+}
+
+.animate-float-particle-3 {
+  animation: float-particle 1.6s ease-in-out 0.8s infinite;
+}
