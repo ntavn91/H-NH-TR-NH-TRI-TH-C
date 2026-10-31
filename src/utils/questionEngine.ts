@@ -350,6 +350,23 @@ export function generateDynamicQuestionVariant(questionId: string): QuestionVari
       };
     }
 
+    // 2-4: Cặp góc đồng vị
+    case 'W2-S04': {
+      const alpha = randomInt(35, 145);
+      return {
+        variantId,
+        questionLatex: `Cho hai đường thẳng song song $m \\parallel n$ bị cắt bởi một cát tuyến. Biết một góc đồng vị có số đo bằng $${alpha}^\\circ$. Góc đồng vị còn lại có số đo bằng bao nhiêu?`,
+        storyContext: 'Xác định cặp góc cùng vị trí để cân chỉnh hướng đi của thuyền mây.',
+        options: [
+          { optionId: 'A', latex: `$${alpha}^\\circ$` },
+          { optionId: 'B', latex: `$${180 - alpha}^\\circ$` },
+          { optionId: 'C', latex: `$${Math.abs(90 - alpha)}^\\circ$` },
+          { optionId: 'D', latex: `$${(alpha + 20) % 180}^\\circ$` },
+        ],
+        correctOptionId: 'A'
+      };
+    }
+
     // 2-5: Tia phân giác
     case 'W2-S05': {
       const half = randomInt(18, 75);
@@ -466,6 +483,25 @@ export function generateDynamicQuestionVariant(questionId: string): QuestionVari
           { optionId: 'B', latex: `$x = ${y};\\; y = ${x}$` },
           { optionId: 'C', latex: `$x = ${x + 5};\\; y = ${y - 5}$` },
           { optionId: 'D', latex: `$x = ${a};\\; y = ${b}$` },
+        ],
+        correctOptionId: 'A'
+      };
+    }
+
+    // 3-5: Định nghĩa tỉ lệ thuận y = kx (k \neq 0)
+    case 'W3-S05': {
+      const k = randomNonZero(-12, 12);
+      const xVal = randomInt(-10, 10) || 3;
+      const yVal = k * xVal;
+      return {
+        variantId,
+        questionLatex: `Cho biết đại lượng $y$ tỉ lệ thuận với đại lượng $x$ theo công thức $y = kx$ (với $k \\neq 0$). Biết khi $x = ${xVal}$ thì $y = ${yVal}$. Hệ số tỉ lệ $k$ bằng:`,
+        storyContext: 'Xác định hệ số tỉ lệ thuận giữa năng lượng ánh sáng và sự phát triển.',
+        options: [
+          { optionId: 'A', latex: `$k = ${k}$` },
+          { optionId: 'B', latex: `$k = ${-k}$` },
+          { optionId: 'C', latex: `$k = ${k + 2}$` },
+          { optionId: 'D', latex: `$k = ${yVal}$` },
         ],
         correctOptionId: 'A'
       };

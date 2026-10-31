@@ -464,7 +464,7 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
         storyContext: 'Lời sấm truyền về hình học phẳng mở ra cánh cổng mây.',
         options: [
           { optionId: 'A', latex: 'Hai góc đồng vị thì bằng nhau' },
-          { optionId: 'B', latex: 'Hai góc trong cùng phía bằng nhau' },
+          { optionId: 'B', latex: 'Hai góc so le trong thì bù nhau' },
           { optionId: 'C', latex: 'Hai góc so le trong có tổng bằng $180^\\circ$' },
           { optionId: 'D', latex: 'Hai góc đồng vị có tổng bằng $90^\\circ$' },
         ],
@@ -814,7 +814,7 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
     variants: [
       {
         variantId: 'W3-S05-V1',
-        questionLatex: 'Nếu đại lượng $y$ liên hệ với đại lượng $x$ theo tỉ lệ thức $\\dfrac{a}{b} = \\dfrac{c}{d}$ (với $b,d \\neq 0$) hay công thức $y = kx$ ($k \\neq 0$) thì ta nói:',
+        questionLatex: 'Nếu đại lượng $y$ liên hệ với đại lượng $x$ theo công thức $y = kx$ (với hằng số $k \\neq 0$) thì ta nói:',
         storyContext: 'Quy luật sinh trưởng cây cỏ đầm lầy tỉ lệ thuận với ánh sáng.',
         options: [
           { optionId: 'A', latex: '$y$ tỉ lệ thuận với $x$ theo hệ số tỉ lệ $k$' },
@@ -826,7 +826,7 @@ export const QUESTIONS_BANK: QuestionDefinition[] = [
       },
       {
         variantId: 'W3-S05-V2',
-        questionLatex: 'Cho biết $y$ tỉ lệ thuận với $x$ theo hệ số tỉ lệ $k = -3$. Khi $x = 4$ thì $y$ bằng:',
+        questionLatex: 'Cho biết $y$ tỉ lệ thuận với $x$ theo công thức $y = kx$ với hệ số tỉ lệ $k = -3$ ($k \\neq 0$). Khi $x = 4$ thì $y$ bằng:',
         storyContext: 'Nhân hệ số tỉ lệ thuận để tìm kết quả biến đổi y.',
         options: [
           { optionId: 'A', latex: '$y = -12$' },

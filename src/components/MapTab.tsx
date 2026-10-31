@@ -98,8 +98,8 @@ export const MapTab: React.FC<MapTabProps> = ({
     1: {
       title: 'Mưa Tinh Thể Số Thực',
       desc: 'Mưa pha lê phản chiếu lấp lánh qua thung lũng hữu tỉ',
-      icon: <CloudRain className="w-3.5 h-3.5 text-blue-300" />,
-      color: 'bg-blue-950/60 border-blue-500/40 text-blue-200',
+      icon: <CloudRain className="w-3.5 h-3.5 text-cyan-300" />,
+      color: 'bg-cyan-950/60 border-cyan-500/40 text-cyan-200',
     },
     2: {
       title: 'Gió Tuyết Tầng Mây',
@@ -121,16 +121,116 @@ export const MapTab: React.FC<MapTabProps> = ({
     },
   };
 
+  const chapterThemes: Record<
+    number,
+    {
+      bgGradient: string;
+      ambientAura: string;
+      panelBg: string;
+      panelBorder: string;
+      compassIconColor: string;
+      tabSelectedBg: string;
+      tabText: string;
+      nodeCurrent: string;
+      nodeCurrentRing: string;
+      nodeSelectedRing: string;
+      actionBtnGradient: string;
+      actionBtnText: string;
+      storyBtnBorder: string;
+      detailTitleColor: string;
+      detailBorder: string;
+      accentBadge: string;
+    }
+  > = {
+    1: {
+      bgGradient: 'from-slate-950/90 via-[#061e2b]/85 to-[#02111a]',
+      ambientAura: 'from-cyan-500/25 via-teal-500/10 to-transparent',
+      panelBg: 'bg-[#061824]/90',
+      panelBorder: 'border-cyan-500/30',
+      compassIconColor: 'text-cyan-400',
+      tabSelectedBg: 'bg-gradient-to-r from-cyan-950/90 to-blue-950/90 border-cyan-400 shadow-lg shadow-cyan-950/60',
+      tabText: 'text-cyan-300',
+      nodeCurrent: 'bg-gradient-to-br from-cyan-500 to-blue-700 border-2 border-cyan-300 text-white shadow-xl shadow-cyan-950/60',
+      nodeCurrentRing: 'ring-4 ring-cyan-400/40 animate-pulse',
+      nodeSelectedRing: 'ring-4 ring-cyan-300',
+      actionBtnGradient: 'bg-gradient-to-r from-cyan-500 via-teal-600 to-blue-600 hover:from-cyan-400 hover:to-blue-500 shadow-xl shadow-cyan-950/60',
+      actionBtnText: 'text-white',
+      storyBtnBorder: 'bg-cyan-950/70 hover:bg-cyan-900/70 border-cyan-500/40 text-cyan-200',
+      detailTitleColor: 'text-cyan-400',
+      detailBorder: 'border-cyan-500/40 shadow-2xl shadow-cyan-950/50',
+      accentBadge: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
+    },
+    2: {
+      bgGradient: 'from-slate-950/90 via-[#0a1c38]/85 to-[#051124]',
+      ambientAura: 'from-sky-500/25 via-indigo-500/10 to-transparent',
+      panelBg: 'bg-[#081830]/90',
+      panelBorder: 'border-sky-500/30',
+      compassIconColor: 'text-sky-400',
+      tabSelectedBg: 'bg-gradient-to-r from-sky-950/90 to-indigo-950/90 border-sky-400 shadow-lg shadow-sky-950/60',
+      tabText: 'text-sky-300',
+      nodeCurrent: 'bg-gradient-to-br from-sky-500 to-indigo-700 border-2 border-sky-300 text-white shadow-xl shadow-sky-950/60',
+      nodeCurrentRing: 'ring-4 ring-sky-400/40 animate-pulse',
+      nodeSelectedRing: 'ring-4 ring-sky-300',
+      actionBtnGradient: 'bg-gradient-to-r from-sky-500 via-indigo-600 to-blue-700 hover:from-sky-400 hover:to-indigo-500 shadow-xl shadow-sky-950/60',
+      actionBtnText: 'text-white',
+      storyBtnBorder: 'bg-sky-950/70 hover:bg-sky-900/70 border-sky-500/40 text-sky-200',
+      detailTitleColor: 'text-sky-400',
+      detailBorder: 'border-sky-500/40 shadow-2xl shadow-sky-950/50',
+      accentBadge: 'bg-sky-500/20 text-sky-300 border-sky-500/30',
+    },
+    3: {
+      bgGradient: 'from-slate-950/90 via-[#1f0c2e]/85 to-[#10051a]',
+      ambientAura: 'from-purple-500/25 via-fuchsia-500/10 to-transparent',
+      panelBg: 'bg-[#170824]/90',
+      panelBorder: 'border-purple-500/30',
+      compassIconColor: 'text-purple-400',
+      tabSelectedBg: 'bg-gradient-to-r from-purple-950/90 to-fuchsia-950/90 border-purple-400 shadow-lg shadow-purple-950/60',
+      tabText: 'text-purple-300',
+      nodeCurrent: 'bg-gradient-to-br from-purple-600 to-fuchsia-700 border-2 border-purple-300 text-white shadow-xl shadow-purple-950/60',
+      nodeCurrentRing: 'ring-4 ring-purple-400/40 animate-pulse',
+      nodeSelectedRing: 'ring-4 ring-purple-300',
+      actionBtnGradient: 'bg-gradient-to-r from-purple-600 via-fuchsia-600 to-pink-700 hover:from-purple-500 hover:to-fuchsia-500 shadow-xl shadow-purple-950/60',
+      actionBtnText: 'text-white',
+      storyBtnBorder: 'bg-purple-950/70 hover:bg-purple-900/70 border-purple-500/40 text-purple-200',
+      detailTitleColor: 'text-purple-400',
+      detailBorder: 'border-purple-500/40 shadow-2xl shadow-purple-950/50',
+      accentBadge: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
+    },
+    4: {
+      bgGradient: 'from-slate-950/90 via-[#261505]/85 to-[#140b02]',
+      ambientAura: 'from-amber-500/25 via-orange-500/10 to-transparent',
+      panelBg: 'bg-[#1c0f03]/90',
+      panelBorder: 'border-amber-500/30',
+      compassIconColor: 'text-amber-400',
+      tabSelectedBg: 'bg-gradient-to-r from-amber-950/90 to-orange-950/90 border-amber-400 shadow-lg shadow-amber-950/60',
+      tabText: 'text-amber-300',
+      nodeCurrent: 'bg-gradient-to-br from-amber-500 to-orange-700 border-2 border-amber-300 text-white shadow-xl shadow-amber-950/60',
+      nodeCurrentRing: 'ring-4 ring-amber-400/40 animate-pulse',
+      nodeSelectedRing: 'ring-4 ring-amber-300',
+      actionBtnGradient: 'bg-gradient-to-r from-amber-400 via-yellow-500 to-amber-500 hover:from-amber-300 hover:to-yellow-400 shadow-xl shadow-amber-950/60',
+      actionBtnText: 'text-slate-950 font-black',
+      storyBtnBorder: 'bg-amber-950/70 hover:bg-amber-900/70 border-amber-500/40 text-amber-200',
+      detailTitleColor: 'text-amber-400',
+      detailBorder: 'border-amber-500/40 shadow-2xl shadow-amber-950/50',
+      accentBadge: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
+    },
+  };
+
   const currentWeather = weatherInfo[selectedChapterId] || weatherInfo[1];
+  const theme = chapterThemes[selectedChapterId] || chapterThemes[1];
 
   return (
     <div className="relative w-full min-h-[calc(100vh-80px)] pb-28 md:pb-12 flex flex-col justify-between overflow-hidden">
       {/* Dynamic Background Image of current Chapter */}
       <div
-        className="absolute inset-0 bg-cover bg-center opacity-30 transition-all duration-700 pointer-events-none"
+        className="absolute inset-0 bg-cover bg-center opacity-45 transition-all duration-700 pointer-events-none scale-105"
         style={{ backgroundImage: `url('${currentChapter.bgImage}')` }}
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-[#101827]/80 via-[#101827]/60 to-[#101827] pointer-events-none" />
+      {/* Thematic Atmosphere Dynamic Gradient per Chapter */}
+      <div className={`absolute inset-0 bg-gradient-to-b ${theme.bgGradient} transition-all duration-700 pointer-events-none`} />
+
+      {/* Ambient Radial Aura for Realm Depth */}
+      <div className={`absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[500px] rounded-full bg-radial ${theme.ambientAura} blur-3xl pointer-events-none transition-all duration-700`} />
 
       {/* Dynamic Thematic Weather Layer */}
       <WeatherOverlay chapterId={selectedChapterId} />
@@ -140,7 +240,7 @@ export const MapTab: React.FC<MapTabProps> = ({
         <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
           <div>
             <h2 className="text-xl sm:text-2xl font-black font-rpg text-white tracking-wide flex items-center gap-2">
-              <Compass className="w-6 h-6 text-purple-400" />
+              <Compass className={`w-6 h-6 ${theme.compassIconColor}`} />
               <span>{currentChapter.name}</span>
             </h2>
             <p className="text-xs text-slate-300 max-w-xl mt-1">
@@ -162,9 +262,9 @@ export const MapTab: React.FC<MapTabProps> = ({
                 sound.playClick();
                 onOpenStoryIntro(selectedChapterId);
               }}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-purple-950/60 hover:bg-purple-900/60 border border-purple-500/40 text-purple-200 text-xs font-semibold backdrop-blur-sm cursor-pointer transition-all"
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-xl border text-xs font-semibold backdrop-blur-sm cursor-pointer transition-all ${theme.storyBtnBorder}`}
             >
-              <BookOpen className="w-4 h-4 text-purple-300" />
+              <BookOpen className="w-4 h-4" />
               <span>Dẫn Truyện Chương</span>
             </button>
 
@@ -203,14 +303,14 @@ export const MapTab: React.FC<MapTabProps> = ({
                 }}
                 className={`p-3 rounded-xl border text-left transition-all relative overflow-hidden ${
                   isSelected
-                    ? 'bg-purple-900/60 border-purple-400 shadow-lg shadow-purple-950/50'
+                    ? theme.tabSelectedBg
                     : unlocked
                     ? 'bg-slate-900/70 border-slate-700/80 hover:border-slate-600 hover:bg-slate-800/60 cursor-pointer'
                     : 'bg-slate-950/60 border-slate-900 text-slate-600 cursor-not-allowed opacity-60'
                 }`}
               >
                 <div className="flex items-center justify-between text-xs mb-1">
-                  <span className={`font-bold ${isSelected ? 'text-purple-300' : 'text-slate-400'}`}>
+                  <span className={`font-bold ${isSelected ? theme.tabText : 'text-slate-400'}`}>
                     CHƯƠNG 0{ch.chapterId}
                   </span>
                   {!unlocked ? (
@@ -231,7 +331,7 @@ export const MapTab: React.FC<MapTabProps> = ({
       {/* Stage Nodes Pathway & Selected Stage Details Container */}
       <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start my-auto">
         {/* Left Column: Interactive 10-Stage Path Grid */}
-        <div className="lg:col-span-8 bg-slate-900/80 backdrop-blur-md border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl">
+        <div className={`lg:col-span-8 ${theme.panelBg} backdrop-blur-md border ${theme.panelBorder} rounded-3xl p-6 sm:p-8 shadow-2xl transition-all duration-500`}>
           <div className="flex items-center justify-between mb-6 pb-3 border-b border-slate-800">
             <span className="text-xs uppercase tracking-wider font-bold text-slate-400">
               ĐƯỜNG HÀNH TRÌNH KHÁM PHÁ (10 ẢI)
@@ -243,7 +343,7 @@ export const MapTab: React.FC<MapTabProps> = ({
 
           {/* Grid of Stage Nodes */}
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 sm:gap-6 relative">
-            {stages.map((stage, idx) => {
+            {stages.map((stage) => {
               const status = getStageStatus(stage);
               const isSelected = selectedStage?.stageId === stage.stageId;
 
@@ -261,9 +361,9 @@ export const MapTab: React.FC<MapTabProps> = ({
                         : status === 'completed'
                         ? 'bg-emerald-950/70 border-2 border-emerald-500/80 text-emerald-300 shadow-md shadow-emerald-950/40'
                         : status === 'current'
-                        ? 'bg-purple-900/80 border-2 border-purple-400 text-white shadow-xl shadow-purple-900/50 scale-105 ring-4 ring-purple-500/30'
+                        ? `${theme.nodeCurrent} ${theme.nodeCurrentRing} scale-105`
                         : 'bg-slate-900/70 border border-slate-800 text-slate-600'
-                    } ${isSelected ? 'ring-4 ring-amber-400/80' : ''}`}
+                    } ${isSelected ? theme.nodeSelectedRing : ''}`}
                   >
                     {stage.isBoss ? (
                       <Crown className={`w-7 h-7 sm:w-8 sm:h-8 ${status === 'completed' ? 'text-amber-100' : 'text-amber-400'}`} />
@@ -292,9 +392,9 @@ export const MapTab: React.FC<MapTabProps> = ({
         {/* Right Column: Stage Detail Action Panel */}
         <div className="lg:col-span-4">
           {selectedStage ? (
-            <div className="bg-slate-900/90 backdrop-blur-md border border-purple-500/30 rounded-3xl p-6 shadow-2xl animate-in fade-in">
+            <div className={`${theme.panelBg} backdrop-blur-md border ${theme.detailBorder} rounded-3xl p-6 shadow-2xl animate-in fade-in transition-all duration-500`}>
               <div className="flex items-center justify-between mb-3">
-                <span className="text-xs uppercase tracking-wider font-bold text-purple-400">
+                <span className={`text-xs uppercase tracking-wider font-bold ${theme.detailTitleColor}`}>
                   CHI TIẾT THỬ THÁCH
                 </span>
                 {getStageStatus(selectedStage) === 'completed' && (
@@ -303,7 +403,7 @@ export const MapTab: React.FC<MapTabProps> = ({
                   </span>
                 )}
                 {getStageStatus(selectedStage) === 'current' && (
-                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30 font-semibold flex items-center gap-1">
+                  <span className={`text-xs px-2.5 py-0.5 rounded-full ${theme.accentBadge} font-semibold flex items-center gap-1`}>
                     <Sparkles className="w-3 h-3 text-amber-300" /> Sẵn Sàng
                   </span>
                 )}
@@ -339,12 +439,12 @@ export const MapTab: React.FC<MapTabProps> = ({
                 <button
                   disabled={getStageStatus(selectedStage) === 'locked'}
                   onClick={handleStartStage}
-                  className={`w-full py-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all ${
+                  className={`w-full py-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer active:scale-95 ${
                     getStageStatus(selectedStage) === 'locked'
                       ? 'bg-slate-800 text-slate-600 border border-slate-800 cursor-not-allowed'
                       : selectedStage.isBoss
-                      ? 'bg-gradient-to-r from-amber-600 via-orange-600 to-amber-700 hover:from-amber-500 hover:to-orange-500 text-white shadow-xl shadow-amber-950/50 cursor-pointer active:scale-95'
-                      : 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white shadow-xl shadow-purple-950/50 cursor-pointer active:scale-95'
+                      ? 'bg-gradient-to-r from-amber-600 via-orange-600 to-amber-700 hover:from-amber-500 hover:to-orange-500 text-white shadow-xl shadow-amber-950/50'
+                      : `${theme.actionBtnGradient} ${theme.actionBtnText}`
                   }`}
                 >
                   <Play className="w-4 h-4 fill-current" />
