@@ -4,9 +4,10 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
-import { QuestionVariant, QuestionOption, CharacterData, HeroClass } from '../types/game';
+import confetti from 'canvas-confetti';
+import { QuestionVariant, QuestionOption, CharacterData } from '../types/game';
 import { LatexRenderer } from '../utils/katexRenderer';
-import { Clock, Shield, Hourglass, Scroll, Sparkles, AlertCircle, BookOpen, Crown } from 'lucide-react';
+import { Clock, Shield, Hourglass, Scroll, Sparkles, AlertCircle, BookOpen, Crown, Flame } from 'lucide-react';
 import { sound } from '../utils/sound';
 
 interface QuestionModalProps {
@@ -17,6 +18,8 @@ interface QuestionModalProps {
   stageTitle: string;
   isBoss: boolean;
   bossName?: string;
+  bossTitle?: string;
+  bossImage?: string;
   character: CharacterData;
   isParallelWorld?: boolean;
   onAnswer: (selectedOptionId: 'A' | 'B' | 'C' | 'D', isTimeout: boolean) => void;
@@ -32,6 +35,8 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
   stageTitle,
   isBoss,
   bossName,
+  bossTitle,
+  bossImage,
   character,
   isParallelWorld = false,
   onAnswer,
@@ -56,8 +61,29 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
     Boolean(character.inventory.activeEffects['heart_shield'])
   );
   const [selectedOpt, setSelectedOpt] = useState<string | null>(null);
+  const [answerStatus, setAnswerStatus] = useState<'idle' | 'correct' | 'wrong'>('idle');
+  const [screenShaking, setScreenShaking] = useState<boolean>(false);
+  const [showWrongFlash, setShowWrongFlash] = useState<boolean>(false);
+
+  // 3 visual states for Boss: 'intro' (spawn), 'idle' (waiting/breathing), 'defeated' (dissolving)
+  const [bossState, setBossState] = useState<'intro' | 'idle' | 'defeated'>('idle');
 
   const initialTotalSecondsRef = useRef<number>(getBaseTimeSeconds());
+
+  // Boss appearance intro sequence
+  useEffect(() => {
+    if (isBoss) {
+      setBossState('intro');
+      sound.playBossIntro();
+      setScreenShaking(true);
+      const shakeTimer = setTimeout(() => setScreenShaking(false), 200);
+      const idleTimer = setTimeout(() => setBossState('idle'), 1300);
+      return () => {
+        clearTimeout(shakeTimer);
+        clearTimeout(idleTimer);
+      };
+    }
+  }, [isBoss]);
 
   // Inventory counts
   const hourglassCount = character.inventory.activeItems['time_hourglass'] || 0;
@@ -90,16 +116,56 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
   const handleTimeout = () => {
     if (isResolving) return;
     setIsResolving(true);
+    setAnswerStatus('wrong');
+    setShowWrongFlash(true);
     sound.playWrong();
-    onAnswer('A', true); // timeout flagged
+    setTimeout(() => {
+      onAnswer('A', true); // timeout flagged
+    }, 550);
   };
 
   const handleSelectOption = (optId: 'A' | 'B' | 'C' | 'D') => {
     if (isResolving) return;
     setIsResolving(true);
     setSelectedOpt(optId);
-    sound.playClick();
-    onAnswer(optId, false);
+
+    const isCorrect = optId === correctOptionId;
+    if (isCorrect) {
+      sound.playClick();
+      setAnswerStatus('correct');
+      setScreenShaking(true);
+      setTimeout(() => setScreenShaking(false), 140);
+
+      // Delicate celebratory confetti
+      confetti({
+        particleCount: 50,
+        spread: 65,
+        origin: { y: 0.65 },
+        colors: ['#F59E0B', '#10B981', '#38BDF8', '#FCD34D', '#A855F7'],
+        disableForReducedMotion: true,
+      });
+
+      if (isBoss) {
+        setBossState('defeated');
+        sound.playBossDefeat();
+        setTimeout(() => {
+          onAnswer(optId, false);
+        }, 1100);
+      } else {
+        setTimeout(() => {
+          onAnswer(optId, false);
+        }, 450);
+      }
+    } else {
+      sound.playWrong();
+      setAnswerStatus('wrong');
+      setShowWrongFlash(true);
+      setScreenShaking(true);
+      setTimeout(() => setScreenShaking(false), 140);
+      setTimeout(() => {
+        onAnswer(optId, false);
+      }, 600);
+    }
   };
 
   // Add 10 seconds via Hourglass
@@ -107,7 +173,7 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
     if (hourglassCount <= 0 || isResolving) return;
     sound.playBuyItem();
     onUseItem('time_hourglass');
-    setDeadline(prev => prev + 10000);
+    setDeadline((prev) => prev + 10000);
     initialTotalSecondsRef.current += 10;
   };
 
@@ -130,9 +196,17 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
   const timerRatio = Math.min(1, Math.max(0, secondsLeft / initialTotalSecondsRef.current));
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#101827]/95 backdrop-blur-lg flex items-center justify-center p-2.5 sm:p-6 overflow-y-auto">
-      <div className="max-w-4xl w-full bg-[#1C293B] border border-purple-500/30 rounded-3xl p-4 sm:p-7 shadow-2xl my-auto animate-in fade-in zoom-in-95 max-h-[96vh] overflow-y-auto">
-        
+    <div className={`fixed inset-0 z-50 bg-[#101827]/95 backdrop-blur-lg flex items-center justify-center p-2.5 sm:p-6 overflow-y-auto ${screenShaking ? 'animate-shake' : ''}`}>
+      {/* Wrong Answer Red Vignette Flash & Ash Particles */}
+      {showWrongFlash && (
+        <div className="fixed inset-0 pointer-events-none z-50 animate-vignette-flash bg-[radial-gradient(circle_at_center,transparent_40%,rgba(220,38,38,0.75)_100%)]">
+          <div className="absolute top-1/4 left-1/3 w-3 h-3 rounded-full bg-slate-400 opacity-60 animate-ash-1" />
+          <div className="absolute top-1/3 left-1/2 w-4 h-4 rounded-full bg-slate-300 opacity-50 animate-ash-2" />
+          <div className="absolute top-1/4 right-1/3 w-2.5 h-2.5 rounded-full bg-red-400 opacity-70 animate-ash-3" />
+        </div>
+      )}
+
+      <div className="max-w-4xl w-full bg-[#1C293B] border border-purple-500/30 rounded-3xl p-4 sm:p-7 shadow-2xl my-auto animate-in fade-in zoom-in-95 max-h-[96vh] overflow-y-auto relative">
         {/* Top Header Row */}
         <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-700/60 flex-wrap gap-2">
           <div className="flex items-center gap-2">
@@ -159,11 +233,13 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
 
           {/* Countdown Timer Display */}
           <div className="flex items-center gap-3">
-            <div className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl border font-mono font-bold text-sm shadow-inner transition-colors ${
-              secondsLeft <= 5
-                ? 'bg-red-950/80 border-red-500 text-red-300 animate-pulse'
-                : 'bg-slate-900 border-slate-700 text-slate-100'
-            }`}>
+            <div
+              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl border font-mono font-bold text-sm shadow-inner transition-colors ${
+                secondsLeft <= 5
+                  ? 'bg-red-950/80 border-red-500 text-red-300 animate-pulse'
+                  : 'bg-slate-900 border-slate-700 text-slate-100'
+              }`}
+            >
               <Clock className={`w-4 h-4 ${secondsLeft <= 5 ? 'text-red-400' : 'text-teal-400'}`} />
               <span className="tabular-nums text-base">{secondsLeft}s</span>
             </div>
@@ -171,7 +247,7 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
         </div>
 
         {/* Timer Bar */}
-        <div className="w-full h-2 rounded-full bg-slate-900 overflow-hidden mb-6 border border-slate-800">
+        <div className="w-full h-2 rounded-full bg-slate-900 overflow-hidden mb-5 border border-slate-800">
           <div
             className={`h-full transition-all duration-300 ${
               secondsLeft <= 5
@@ -182,9 +258,75 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
           />
         </div>
 
+        {/* BOSS SHOWCASE BANNER (Stage 10) */}
+        {isBoss && (
+          <div
+            className={`p-4 rounded-2xl border mb-5 flex flex-col sm:flex-row items-center gap-4 transition-all duration-500 relative overflow-hidden ${
+              bossState === 'defeated'
+                ? 'bg-gradient-to-r from-amber-950/90 via-yellow-950/80 to-purple-950/90 border-amber-400 shadow-2xl shadow-amber-500/40'
+                : bossState === 'intro'
+                ? 'bg-gradient-to-r from-purple-950/90 via-red-950/80 to-slate-950/90 border-amber-500/70 shadow-2xl shadow-purple-900/50'
+                : 'bg-slate-950/80 border-amber-500/40 shadow-xl'
+            }`}
+          >
+            {/* Background rotating magic rune circle */}
+            <div className="absolute -right-10 -bottom-10 w-36 h-36 rounded-full border border-amber-400/20 border-dashed animate-rune-spin pointer-events-none" />
+
+            {/* Boss Portrait Frame with 3 states */}
+            <div className="relative shrink-0">
+              <div
+                className={`w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden border-2 border-amber-400/80 shadow-xl relative bg-slate-900 ${
+                  bossState === 'idle'
+                    ? 'animate-idle-breathe shadow-amber-500/30'
+                    : bossState === 'intro'
+                    ? 'animate-pulse ring-4 ring-amber-400'
+                    : 'animate-boss-dissolve ring-4 ring-yellow-300'
+                }`}
+              >
+                {bossImage ? (
+                  <img
+                    src={bossImage}
+                    alt={bossName || 'Boss'}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-slate-900 text-amber-400">
+                    <Crown className="w-10 h-10" />
+                  </div>
+                )}
+              </div>
+
+              {/* Boss state indicator badge */}
+              <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-slate-950 border border-amber-400 text-amber-300 shadow whitespace-nowrap">
+                {bossState === 'intro' && 'Triệu Hồi'}
+                {bossState === 'idle' && 'Nghênh Chiến'}
+                {bossState === 'defeated' && 'Bị Đánh Bại!'}
+              </div>
+            </div>
+
+            {/* Boss Info Text */}
+            <div className="flex-1 text-center sm:text-left z-10">
+              <div className="flex items-center justify-center sm:justify-start gap-2 mb-1">
+                <Crown className="w-4 h-4 text-amber-400" />
+                <h4 className="text-base sm:text-lg font-bold font-rpg text-amber-200">
+                  {bossName || 'Trùm Vùng Đất'}
+                </h4>
+              </div>
+              <p className="text-xs text-amber-300/80 font-medium mb-1">
+                {bossTitle || 'Chúa Tể Tri Thức'}
+              </p>
+              <p className="text-[11px] text-slate-300 leading-snug">
+                {bossState === 'intro' && '⚡ Uy áp cực đại! Trùm đã xuất hiện từ vết nứt không gian!'}
+                {bossState === 'idle' && '🛡️ Hộ thể bằng kết giới toán học. Hãy giải chính xác để phá vỡ phong ấn!'}
+                {bossState === 'defeated' && '✨ Trùm đã tan rã thành muôn ngàn hạt sáng! Cánh cổng chương kế tiếp bừng mở!'}
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Context / Story Narration Frame */}
         {variant.storyContext && (
-          <div className="p-3.5 sm:p-4 rounded-2xl bg-purple-950/40 border border-purple-500/20 text-xs sm:text-sm text-purple-200/90 italic leading-relaxed mb-6 flex items-start gap-2.5">
+          <div className="p-3.5 sm:p-4 rounded-2xl bg-purple-950/40 border border-purple-500/20 text-xs sm:text-sm text-purple-200/90 italic leading-relaxed mb-5 flex items-start gap-2.5">
             <BookOpen className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
             <div>
               <span className="font-semibold text-purple-300 not-italic block mb-0.5 text-xs">
@@ -196,7 +338,7 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
         )}
 
         {/* Mathematical Problem LaTeX Frame */}
-        <div className="p-5 sm:p-7 rounded-2xl bg-slate-950/90 border border-slate-800 shadow-inner mb-6 text-center">
+        <div className="p-5 sm:p-7 rounded-2xl bg-slate-950/90 border border-slate-800 shadow-inner mb-5 text-center">
           <div className="text-base sm:text-lg md:text-xl text-white font-medium leading-relaxed overflow-x-auto py-2">
             <LatexRenderer content={variant.questionLatex} />
           </div>
@@ -204,7 +346,7 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
 
         {/* Active Items Support Bar (During Quiz) */}
         {!isParallelWorld && (
-          <div className="flex items-center justify-between p-3 rounded-xl bg-slate-900/60 border border-slate-800/80 mb-6 flex-wrap gap-2 text-xs">
+          <div className="flex items-center justify-between p-3 rounded-xl bg-slate-900/60 border border-slate-800/80 mb-5 flex-wrap gap-2 text-xs">
             <span className="text-slate-400 font-semibold flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5 text-amber-400" />
               Vật phẩm hỗ trợ:
@@ -261,22 +403,43 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
           </div>
         )}
 
-        {/* Options Grid */}
+        {/* Options Grid with Golden / Red Flash */}
         <div className={`grid gap-3 sm:gap-4 ${options.length === 2 ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1 sm:grid-cols-2'}`}>
           {options.map((opt) => {
             const isSelected = selectedOpt === opt.optionId;
+            const isCorrect = opt.optionId === correctOptionId;
+
+            // Visual highlight logic on submit
+            let buttonStyle = 'bg-slate-900/80 hover:bg-slate-850 border-slate-700/80 hover:border-purple-400/80 text-slate-100 hover:shadow-md';
+            if (isSelected) {
+              if (answerStatus === 'correct') {
+                buttonStyle = 'bg-amber-950/90 border-amber-400 ring-4 ring-amber-400 shadow-[0_0_30px_rgba(251,191,36,0.9)] text-white animate-shimmer scale-[1.02]';
+              } else if (answerStatus === 'wrong') {
+                buttonStyle = 'bg-red-950/90 border-red-500 ring-4 ring-red-500/70 shadow-[0_0_25px_rgba(239,68,68,0.8)] text-white';
+              } else {
+                buttonStyle = 'bg-purple-900/60 border-purple-400 shadow-lg text-white';
+              }
+            } else if (isResolving && answerStatus === 'wrong' && isCorrect) {
+              // Highlight the true correct answer gently if player chose wrong
+              buttonStyle = 'bg-emerald-950/60 border-emerald-400 text-emerald-200';
+            }
+
             return (
               <button
                 key={opt.optionId}
                 disabled={isResolving}
                 onClick={() => handleSelectOption(opt.optionId)}
-                className={`p-4 sm:p-5 rounded-2xl border-2 text-left transition-all duration-200 flex items-center gap-3.5 cursor-pointer active:scale-98 ${
-                  isSelected
-                    ? 'bg-purple-900/60 border-purple-400 shadow-lg text-white'
-                    : 'bg-slate-900/80 hover:bg-slate-850 border-slate-700/80 hover:border-purple-400/80 text-slate-100 hover:shadow-md'
-                }`}
+                className={`p-4 sm:p-5 rounded-2xl border-2 text-left transition-all duration-200 flex items-center gap-3.5 cursor-pointer active:scale-98 relative overflow-hidden ${buttonStyle}`}
               >
-                <span className="w-8 h-8 rounded-xl bg-purple-950 border border-purple-500/40 text-purple-300 font-bold text-sm flex items-center justify-center shrink-0">
+                <span
+                  className={`w-8 h-8 rounded-xl font-bold text-sm flex items-center justify-center shrink-0 border transition-all ${
+                    isSelected && answerStatus === 'correct'
+                      ? 'bg-amber-500 text-slate-950 border-amber-300'
+                      : isSelected && answerStatus === 'wrong'
+                      ? 'bg-red-600 text-white border-red-400'
+                      : 'bg-purple-950 border-purple-500/40 text-purple-300'
+                  }`}
+                >
                   {opt.optionId}
                 </span>
 
@@ -290,8 +453,9 @@ export const QuestionModal: React.FC<QuestionModalProps> = ({
 
         {/* Resolving indicator */}
         {isResolving && (
-          <div className="mt-4 text-center text-xs text-purple-400 animate-pulse font-semibold">
-            Đang chốt kết quả và tính toán phong ấn...
+          <div className="mt-4 text-center text-xs text-purple-400 animate-pulse font-semibold flex items-center justify-center gap-1.5">
+            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+            <span>Đang chốt phong ấn kết quả...</span>
           </div>
         )}
       </div>

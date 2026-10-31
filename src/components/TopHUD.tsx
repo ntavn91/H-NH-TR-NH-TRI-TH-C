@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { sound } from '../utils/sound';
 import { calculateLevelFromExp } from '../data/titles';
+import { HERO_PORTRAITS } from '../utils/heroAssets';
 
 interface TopHUDProps {
   character: CharacterData;
@@ -67,10 +68,13 @@ export const TopHUD: React.FC<TopHUDProps> = ({
           {/* Left: Avatar, Name, Level, Title */}
           <div className="flex items-center gap-3">
             <div className="relative">
-              <div className="w-12 h-12 rounded-xl bg-slate-900 border-2 border-purple-500/50 flex items-center justify-center text-purple-300 shadow-md overflow-hidden">
-                {profile.heroClass === 'knight' && <Shield className="w-6 h-6 text-blue-400" />}
-                {profile.heroClass === 'mage' && <Sparkles className="w-6 h-6 text-purple-400" />}
-                {profile.heroClass === 'light_monk' && <Sun className="w-6 h-6 text-amber-400" />}
+              <div className="w-12 h-12 rounded-xl bg-slate-900 border-2 border-purple-500/70 shadow-lg shadow-purple-950/50 overflow-hidden relative group">
+                <img
+                  src={HERO_PORTRAITS[profile.heroClass]?.image}
+                  alt={profile.name}
+                  className="w-full h-full object-cover animate-idle-breathe"
+                />
+                <div className="absolute inset-0 animate-shimmer pointer-events-none" />
               </div>
               <div className="absolute -bottom-1 -right-1 px-1.5 py-0.2 rounded-md bg-purple-700 border border-purple-400 text-[10px] font-black text-white shadow">
                 Lv.{stats.level}
@@ -274,10 +278,13 @@ export const TopHUD: React.FC<TopHUDProps> = ({
             {/* Hero Minimal Header */}
             <div className="flex items-center gap-2 min-w-0">
               <div className="relative shrink-0">
-                <div className="w-9 h-9 rounded-xl bg-slate-900 border border-purple-500/60 flex items-center justify-center text-purple-300 shadow">
-                  {profile.heroClass === 'knight' && <Shield className="w-4 h-4 text-blue-400" />}
-                  {profile.heroClass === 'mage' && <Sparkles className="w-4 h-4 text-purple-400" />}
-                  {profile.heroClass === 'light_monk' && <Sun className="w-4 h-4 text-amber-400" />}
+                <div className="w-9 h-9 rounded-xl bg-slate-900 border border-purple-500/60 overflow-hidden shadow relative">
+                  <img
+                    src={HERO_PORTRAITS[profile.heroClass]?.image}
+                    alt={profile.name}
+                    className="w-full h-full object-cover animate-idle-breathe"
+                  />
+                  <div className="absolute inset-0 animate-shimmer pointer-events-none" />
                 </div>
                 <div className="absolute -bottom-1 -right-1 px-1 py-0.2 rounded-full bg-purple-700 text-[8px] font-black text-white">
                   {stats.level}

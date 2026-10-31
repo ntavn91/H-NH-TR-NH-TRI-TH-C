@@ -86,6 +86,7 @@ export interface StageDefinition {
   isBoss: boolean;
   bossName?: string;
   bossTitle?: string;
+  bossImage?: string;
   questionId: string;
 }
 

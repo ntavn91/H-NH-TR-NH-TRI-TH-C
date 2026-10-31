@@ -53,3 +53,181 @@
 .animate-float-particle-3 {
   animation: float-particle 1.6s ease-in-out 0.8s infinite;
 }
+
+/* Screen shake for correct impact & boss spawn */
+@keyframes screen-shake {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  20% { transform: translate(-4px, 3px) rotate(-0.5deg); }
+  40% { transform: translate(4px, -3px) rotate(0.5deg); }
+  60% { transform: translate(-3px, -2px) rotate(0.3deg); }
+  80% { transform: translate(3px, 2px) rotate(-0.3deg); }
+}
+
+.animate-shake {
+  animation: screen-shake 0.15s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+/* Red vignette flash on wrong answer */
+@keyframes vignette-flash {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.animate-vignette-flash {
+  animation: vignette-flash 0.5s ease-out forwards;
+}
+
+/* Pulsating danger heartbeat when HP = 1 */
+@keyframes danger-heartbeat {
+  0%, 100% {
+    box-shadow: inset 0 0 35px 8px rgba(220, 38, 38, 0.45);
+    opacity: 0.65;
+  }
+  50% {
+    box-shadow: inset 0 0 75px 22px rgba(239, 68, 68, 0.85);
+    opacity: 1;
+  }
+}
+
+.animate-danger-heartbeat {
+  animation: danger-heartbeat 1.3s ease-in-out infinite;
+}
+
+/* Idle breathing animation for hero portraits and boss */
+@keyframes idle-breathe {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-3px) scale(1.025);
+  }
+}
+
+.animate-idle-breathe {
+  animation: idle-breathe 2.4s ease-in-out infinite;
+}
+
+/* Shimmer gleam beam across cards and titles */
+@keyframes shimmer-slide {
+  0% {
+    transform: translateX(-150%) skewX(-20deg);
+  }
+  100% {
+    transform: translateX(200%) skewX(-20deg);
+  }
+}
+
+.animate-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.animate-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  animation: shimmer-slide 3s infinite ease-in-out;
+  pointer-events: none;
+}
+
+/* Slow rotating magic rune circle for boss stages */
+@keyframes rune-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-rune-spin {
+  animation: rune-spin 18s linear infinite;
+}
+
+@keyframes rune-spin-reverse {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+.animate-rune-spin-reverse {
+  animation: rune-spin-reverse 26s linear infinite;
+}
+
+/* Energy line flowing pulse */
+@keyframes energy-flow {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-energy-line {
+  stroke-dasharray: 8 6;
+  animation: energy-flow 1.5s linear infinite;
+}
+
+/* Boss defeat dissolve particles effect */
+@keyframes boss-dissolve {
+  0% {
+    filter: brightness(1) drop-shadow(0 0 0px gold);
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    filter: brightness(2.2) drop-shadow(0 0 35px #f59e0b);
+    opacity: 0.8;
+    transform: scale(1.06);
+  }
+  100% {
+    filter: brightness(4) blur(12px);
+    opacity: 0;
+    transform: scale(1.15) translateY(-20px);
+  }
+}
+
+.animate-boss-dissolve {
+  animation: boss-dissolve 1.4s ease-out forwards;
+}
+
+/* Falling ash / mist particles for wrong answers */
+@keyframes ash-fall {
+  0% {
+    transform: translateY(-10px) translateX(0) scale(0.8);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(70px) translateX(25px) scale(0.4);
+    opacity: 0;
+  }
+}
+
+.animate-ash-1 {
+  animation: ash-fall 1.5s ease-out infinite;
+}
+.animate-ash-2 {
+  animation: ash-fall 1.8s ease-out 0.3s infinite;
+}
+.animate-ash-3 {
+  animation: ash-fall 2.1s ease-out 0.6s infinite;
+}
+

@@ -855,7 +855,12 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#101827] text-slate-100 flex flex-col font-sans selection:bg-purple-600 selection:text-white">
+    <div className="min-h-screen bg-[#101827] text-slate-100 flex flex-col font-sans selection:bg-purple-600 selection:text-white relative">
+      {/* Critical Danger Vignette Heartbeat warning when HP = 1 */}
+      {activeChar && activeChar.stats.hp === 1 && currentScreen !== 'WELCOME' && currentScreen !== 'PROFILE' && currentScreen !== 'GAME_OVER' && (
+        <div className="fixed inset-0 pointer-events-none z-30 animate-danger-heartbeat border-4 border-red-600/50" />
+      )}
+
       {/* Hidden file input for import */}
       <input
         type="file"
@@ -1002,6 +1007,12 @@ export default function App() {
           isBoss={activeStageId === 10}
           bossName={
             STAGES_BY_CHAPTER[activeChapterId]?.find((s) => s.stageId === activeStageId)?.bossName
+          }
+          bossTitle={
+            STAGES_BY_CHAPTER[activeChapterId]?.find((s) => s.stageId === activeStageId)?.bossTitle
+          }
+          bossImage={
+            STAGES_BY_CHAPTER[activeChapterId]?.find((s) => s.stageId === activeStageId)?.bossImage
           }
           character={activeChar}
           isParallelWorld={isParallelActive}

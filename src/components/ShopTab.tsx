@@ -68,8 +68,9 @@ export const ShopTab: React.FC<ShopTabProps> = ({ character, onBuyItem }) => {
       return;
     }
 
-    // Play rich coin-clinking purchase sound
+    // Play rich coin-clinking purchase sound & bright magical ting
     sound.playBuyItem();
+    setTimeout(() => sound.playTing(), 80);
     if (item.id === 'life_stone') {
       setTimeout(() => sound.playHeal(), 200);
     }

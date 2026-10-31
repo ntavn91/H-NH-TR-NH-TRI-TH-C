@@ -168,6 +168,7 @@ export const STAGES_BY_CHAPTER: Record<number, StageDefinition[]> = {
       isBoss: true,
       bossName: 'Hộ Vệ Thần Thạch',
       bossTitle: 'Chúa Tể Căn Thức',
+      bossImage: '/src/assets/images/boss_golem_1793446395399.jpg',
       questionId: 'W1-S10'
     }
   ],
@@ -260,8 +261,9 @@ export const STAGES_BY_CHAPTER: Record<number, StageDefinition[]> = {
       subtitle: 'Giải mã phương trình góc',
       description: 'Đối đầu Tướng Quân Lượng Giác để tìm giá trị biến x thỏa mãn tổng ba góc!',
       isBoss: true,
-      bossName: 'Tướng Quân Lượng Giác',
-      bossTitle: 'Hộ Thần Không Gian',
+      bossName: 'Thần Góc',
+      bossTitle: 'Vệ Thần Không Gian',
+      bossImage: '/src/assets/images/boss_angles_1793446407913.jpg',
       questionId: 'W2-S10'
     }
   ],
@@ -354,8 +356,9 @@ export const STAGES_BY_CHAPTER: Record<number, StageDefinition[]> = {
       subtitle: 'Tỉ lệ bắc cầu hợp thành',
       description: 'Đối đầu Vua Đầm Lầy Bùn Lầy để xác định hệ số tỉ lệ bắc cầu giữa ba đại lượng!',
       isBoss: true,
-      bossName: 'Vua Đầm Lầy Bùn Lầy',
-      bossTitle: 'Bậc Thầy Cân Bằng',
+      bossName: 'Kẻ Gác Cân',
+      bossTitle: 'Bậc Thầy Cân Bằng Cổ Đại',
+      bossImage: '/src/assets/images/boss_scale_1793446420649.jpg',
       questionId: 'W3-S10'
     }
   ],
@@ -448,8 +451,9 @@ export const STAGES_BY_CHAPTER: Record<number, StageDefinition[]> = {
       subtitle: 'Biến đổi thu gọn tối cao',
       description: 'Trận chiến cuối cùng: Xác định hệ số và bậc của biểu thức tích đa biến phức hợp!',
       isBoss: true,
-      bossName: 'Đại Hiền Triết Tri Thức',
+      bossName: 'Đại Hiền Triết',
       bossTitle: 'Vị Thần Đại Số Học',
+      bossImage: '/src/assets/images/boss_sage_1793446432574.jpg',
       questionId: 'W4-S10'
     }
   ]

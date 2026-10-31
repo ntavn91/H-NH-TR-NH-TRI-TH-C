@@ -7,8 +7,9 @@ import React, { useState } from 'react';
 import { CharacterData } from '../types/game';
 import { SYSTEM_TITLES, calculateLevelFromExp } from '../data/titles';
 import { ACTIVE_ITEMS, PASSIVE_ITEMS } from '../data/items';
-import { Shield, Sparkles, Sun, Heart, Coins, Award, Plus, Check, BookOpen, Layers, CheckCircle2 } from 'lucide-react';
+import { Shield, Sparkles, Sun, Heart, Coins, Award, Plus, Check, BookOpen, Layers, CheckCircle2, Crown, Flame, Star } from 'lucide-react';
 import { sound } from '../utils/sound';
+import { HERO_PORTRAITS } from '../utils/heroAssets';
 
 interface CharacterTabProps {
   character: CharacterData;
@@ -35,7 +36,7 @@ export const CharacterTab: React.FC<CharacterTabProps> = ({
   const handleCreateNewTitle = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newTitleInput.trim() || sealCount <= 0) return;
-    sound.playLevelUp();
+    sound.playUnlockTitle();
     onAddNewCustomTitle(newTitleInput.trim());
     setNewTitleInput('');
     setIsAddingTitle(false);
@@ -45,14 +46,17 @@ export const CharacterTab: React.FC<CharacterTabProps> = ({
     <div className="max-w-6xl mx-auto w-full px-4 sm:px-6 pt-6 pb-28 md:pb-12">
       {/* Top Profile Summary Card */}
       <div className="bg-slate-900/90 border border-purple-500/30 rounded-3xl p-6 sm:p-8 backdrop-blur-md shadow-2xl mb-8 grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-        {/* Left: Avatar & Hero Emblem */}
+        {/* Left: Avatar & Hero Emblem with Breathing Idle Animation */}
         <div className="md:col-span-4 flex flex-col items-center text-center">
-          <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl bg-slate-950 border-4 border-purple-500/40 flex items-center justify-center text-purple-300 shadow-2xl shadow-purple-950/60 mb-4 relative">
-            {profile.heroClass === 'knight' && <Shield className="w-16 h-16 text-blue-400" />}
-            {profile.heroClass === 'mage' && <Sparkles className="w-16 h-16 text-purple-400" />}
-            {profile.heroClass === 'light_monk' && <Sun className="w-16 h-16 text-amber-400" />}
+          <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl bg-slate-950 border-4 border-purple-500/50 flex items-center justify-center text-purple-300 shadow-2xl shadow-purple-950/60 mb-4 relative overflow-hidden group">
+            <img
+              src={HERO_PORTRAITS[profile.heroClass]?.image}
+              alt={profile.name}
+              className="w-full h-full object-cover animate-idle-breathe"
+            />
+            <div className="absolute inset-0 animate-shimmer pointer-events-none" />
 
-            <div className="absolute -bottom-3 px-3 py-1 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold text-xs border border-purple-400 shadow-md">
+            <div className="absolute -bottom-3 px-3 py-1 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold text-xs border border-purple-400 shadow-md z-10">
               CẤP {stats.level}
             </div>
           </div>
@@ -60,22 +64,24 @@ export const CharacterTab: React.FC<CharacterTabProps> = ({
           <h3 className="text-2xl font-black font-rpg text-white">{profile.name}</h3>
           <p className="text-xs text-slate-400 mt-1">
             {profile.classGroup} · {
-              profile.heroClass === 'knight' ? 'Hiệp sĩ (Giảm 50% Túi Vàng)' :
-              profile.heroClass === 'mage' ? 'Pháp sư (Giảm 50% Đồng Hồ)' : 'Tu sĩ (Giảm 50% Cổ Thư)'
+              profile.heroClass === 'knight' ? 'Hiệp sĩ Thép Lam (Giảm 50% Túi Vàng)' :
+              profile.heroClass === 'mage' ? 'Pháp sư Ma Trận (Giảm 50% Đồng Hồ)' : 'Tu sĩ Ánh Sáng (Giảm 50% Cổ Thư)'
             }
           </p>
 
           {/* Title Badges */}
           <div className="mt-4 flex flex-col items-center gap-1.5 w-full">
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-semibold">
-              <Award className="w-3.5 h-3.5 text-amber-400" />
-              <span>{systemTitle}</span>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-amber-500/20 via-yellow-500/10 to-amber-500/20 border-2 border-amber-400/80 text-amber-300 text-xs font-bold shadow-lg shadow-amber-950/40 relative overflow-hidden">
+              <Award className="w-4 h-4 text-amber-400 shrink-0" />
+              <span className="font-rpg tracking-wide">{systemTitle}</span>
+              <div className="absolute inset-0 animate-shimmer pointer-events-none" />
             </div>
 
             {/* Currently Equipped Custom Title */}
             {titles.customTitle && (
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/20 border border-purple-400/40 text-purple-200 text-xs font-semibold mt-1">
-                <span>Danh hiệu đang mang: <strong className="text-white">{titles.customTitle}</strong></span>
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-purple-950/80 border border-purple-400 text-purple-200 text-xs font-semibold mt-1">
+                <Star className="w-3.5 h-3.5 text-purple-400" />
+                <span>Danh hiệu đang mang: <strong className="text-white font-rpg">{titles.customTitle}</strong></span>
               </div>
             )}
           </div>
@@ -301,46 +307,110 @@ export const CharacterTab: React.FC<CharacterTabProps> = ({
           </h4>
 
           <div className="space-y-2.5">
-            {SYSTEM_TITLES.map(titleObj => {
+            {SYSTEM_TITLES.map((titleObj) => {
               const isUnlocked = stats.level >= titleObj.level;
               const isCurrent = stats.level === titleObj.level;
+              const lvl = titleObj.level;
+
+              // Rarity tier styling:
+              // 10-12: Legendary Gold (Hoàng Kim)
+              // 7-9: Epic Emerald (Xanh Ngọc)
+              // 4-6: Rare Amethyst (Thạch Anh Tím)
+              // 1-3: Common Steel (Thép Lam)
+              let rarityBadge = {
+                tierName: 'Cơ Bản',
+                border: 'border border-slate-700',
+                bg: 'bg-slate-950/70',
+                text: 'text-slate-200',
+                icon: <Shield className="w-4 h-4 text-blue-400" />,
+                glow: '',
+              };
+
+              if (lvl >= 10) {
+                rarityBadge = {
+                  tierName: 'Huyền Thoại',
+                  border: 'border-2 border-amber-400 shadow-lg shadow-amber-500/30',
+                  bg: 'bg-gradient-to-r from-amber-950/80 via-yellow-950/50 to-slate-950',
+                  text: 'text-amber-200 font-bold',
+                  icon: <Crown className="w-4 h-4 text-amber-400" />,
+                  glow: 'animate-shimmer',
+                };
+              } else if (lvl >= 7) {
+                rarityBadge = {
+                  tierName: 'Cao Cấp',
+                  border: 'border-2 border-emerald-400/90 shadow-md shadow-emerald-500/20',
+                  bg: 'bg-gradient-to-r from-emerald-950/80 via-teal-950/50 to-slate-950',
+                  text: 'text-emerald-200 font-bold',
+                  icon: <Sparkles className="w-4 h-4 text-emerald-400" />,
+                  glow: 'animate-shimmer',
+                };
+              } else if (lvl >= 4) {
+                rarityBadge = {
+                  tierName: 'Đặc Biệt',
+                  border: 'border-2 border-purple-400/90 shadow-md shadow-purple-500/20',
+                  bg: 'bg-gradient-to-r from-purple-950/80 via-indigo-950/50 to-slate-950',
+                  text: 'text-purple-200 font-bold',
+                  icon: <Flame className="w-4 h-4 text-purple-400" />,
+                  glow: '',
+                };
+              }
 
               return (
                 <div
                   key={titleObj.level}
-                  className={`p-3 rounded-xl border transition-all flex items-center justify-between ${
+                  className={`p-3.5 rounded-2xl transition-all flex items-center justify-between relative overflow-hidden ${
                     isCurrent
-                      ? 'bg-purple-900/40 border-amber-400 shadow-md text-white'
+                      ? `${rarityBadge.border} ${rarityBadge.bg} ring-2 ring-amber-400/80 shadow-xl ${rarityBadge.glow}`
                       : isUnlocked
-                      ? 'bg-slate-950/60 border-slate-800 text-slate-300'
-                      : 'bg-slate-950/30 border-slate-900 text-slate-600 opacity-60'
+                      ? `${rarityBadge.border} ${rarityBadge.bg} ${rarityBadge.glow}`
+                      : 'border border-slate-900 bg-slate-950/30 text-slate-600 opacity-60'
                   }`}
                 >
-                  <div className="flex items-center gap-3">
-                    <span className={`w-7 h-7 rounded-lg text-xs font-bold font-mono flex items-center justify-center ${
-                      isCurrent
-                        ? 'bg-amber-500 text-slate-950'
-                        : isUnlocked
-                        ? 'bg-purple-950 text-purple-300 border border-purple-500/40'
-                        : 'bg-slate-900 text-slate-600'
-                    }`}>
-                      {titleObj.level}
-                    </span>
+                  <div className="flex items-center gap-3.5 z-10">
+                    <div className="relative">
+                      <span
+                        className={`w-9 h-9 rounded-xl text-xs font-bold font-mono flex items-center justify-center border ${
+                          isCurrent
+                            ? 'bg-amber-500 text-slate-950 border-amber-300 shadow-md'
+                            : isUnlocked
+                            ? 'bg-slate-900 text-amber-300 border-slate-700'
+                            : 'bg-slate-950 text-slate-600 border-slate-800'
+                        }`}
+                      >
+                        {titleObj.level}
+                      </span>
+                    </div>
 
-                    <div>
-                      <h5 className="font-bold text-sm text-slate-100">{titleObj.title}</h5>
-                      <span className="text-[10px] text-slate-400">Yêu cầu: {titleObj.minExp} EXP</span>
+                    <div className="flex items-center gap-2.5">
+                      <div className="p-1.5 rounded-lg bg-slate-900/80 border border-slate-800">
+                        {rarityBadge.icon}
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h5 className={`font-bold text-sm font-rpg tracking-wide ${isUnlocked ? rarityBadge.text : 'text-slate-500'}`}>
+                            {titleObj.title}
+                          </h5>
+                          <span className="text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider bg-slate-950/80 border border-slate-700 text-slate-400">
+                            {rarityBadge.tierName}
+                          </span>
+                        </div>
+                        <span className="text-[10px] text-slate-400">Yêu cầu: {titleObj.minExp} EXP</span>
+                      </div>
                     </div>
                   </div>
 
-                  {isCurrent && (
-                    <span className="text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-400 text-amber-300 font-bold">
-                      Hiện Tại
-                    </span>
-                  )}
-                  {isUnlocked && !isCurrent && (
-                    <Check className="w-4 h-4 text-emerald-400" />
-                  )}
+                  <div className="flex items-center gap-2 z-10">
+                    {isCurrent && (
+                      <span className="text-xs px-2.5 py-1 rounded-full bg-amber-500 text-slate-950 font-black shadow-md border border-amber-300">
+                        Đang Mang
+                      </span>
+                    )}
+                    {isUnlocked && !isCurrent && (
+                      <div className="w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
+                        <Check className="w-3.5 h-3.5" />
+                      </div>
+                    )}
+                  </div>
                 </div>
               );
             })}

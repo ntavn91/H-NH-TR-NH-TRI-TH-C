@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 import { CharacterData, HeroClass } from '../types/game';
 import { Shield, Sparkles, Sun, ArrowLeft, UserPlus, Play, AlertTriangle, RotateCcw, Download, Upload, CheckCircle2 } from 'lucide-react';
 import { sound } from '../utils/sound';
+import { HERO_PORTRAITS } from '../utils/heroAssets';
 
 interface ProfileScreenProps {
   activeCharacter: CharacterData | null;
@@ -186,17 +187,20 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
                   {activeCharacter ? (
                     <div className="space-y-3 mb-6">
                       <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-xl bg-purple-600/30 border border-purple-500/40 flex items-center justify-center text-purple-300 font-bold text-lg font-rpg">
-                          {activeCharacter.profile.heroClass === 'knight' && <Shield className="w-6 h-6 text-blue-400" />}
-                          {activeCharacter.profile.heroClass === 'mage' && <Sparkles className="w-6 h-6 text-purple-400" />}
-                          {activeCharacter.profile.heroClass === 'light_monk' && <Sun className="w-6 h-6 text-amber-400" />}
+                        <div className="w-14 h-14 rounded-2xl bg-slate-950 border-2 border-purple-500/60 overflow-hidden shadow-lg relative group">
+                          <img
+                            src={HERO_PORTRAITS[activeCharacter.profile.heroClass]?.image}
+                            alt={activeCharacter.profile.name}
+                            className="w-full h-full object-cover animate-idle-breathe"
+                          />
+                          <div className="absolute inset-0 animate-shimmer pointer-events-none" />
                         </div>
                         <div>
                           <h4 className="text-xl font-bold text-white">{activeCharacter.profile.name}</h4>
                           <p className="text-xs text-slate-400">
                             {activeCharacter.profile.classGroup} · {
-                              activeCharacter.profile.heroClass === 'knight' ? 'Hiệp sĩ' :
-                              activeCharacter.profile.heroClass === 'mage' ? 'Pháp sư' : 'Tu sĩ Ánh Sáng'
+                              activeCharacter.profile.heroClass === 'knight' ? 'Hiệp sĩ Thép Lam' :
+                              activeCharacter.profile.heroClass === 'mage' ? 'Pháp sư Ma Trận' : 'Tu sĩ Ánh Sáng'
                             }
                           </p>
                         </div>
@@ -367,23 +371,33 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
                       sound.playCardFlip();
                       setSelectedClass('knight');
                     }}
-                    className={`cursor-pointer rounded-xl p-4 border transition-all text-left relative ${
+                    className={`cursor-pointer rounded-2xl p-4 border-2 transition-all text-left relative overflow-hidden group ${
                       selectedClass === 'knight'
-                        ? 'bg-blue-950/40 border-blue-400 shadow-lg shadow-blue-950/50'
+                        ? 'bg-blue-950/60 border-cyan-400 shadow-xl shadow-cyan-950/60'
                         : 'bg-slate-950/60 border-slate-800 hover:border-slate-700'
                     }`}
                   >
                     {selectedClass === 'knight' && (
-                      <CheckCircle2 className="w-4 h-4 text-blue-400 absolute top-3 right-3" />
+                      <CheckCircle2 className="w-5 h-5 text-cyan-300 absolute top-3 right-3 z-20" />
                     )}
-                    <Shield className="w-6 h-6 text-blue-400 mb-2" />
-                    <h5 className="font-bold text-sm text-white">Hiệp sĩ</h5>
-                    <p className="text-xs text-blue-300/80 mb-2">Sức bền & HP</p>
+                    <div className="w-full h-32 rounded-xl overflow-hidden mb-3 border border-cyan-500/30 bg-slate-900 relative">
+                      <img
+                        src={HERO_PORTRAITS.knight.image}
+                        alt="Hiệp sĩ Thép Lam"
+                        className="w-full h-full object-cover animate-idle-breathe"
+                      />
+                      <div className="absolute inset-0 animate-shimmer pointer-events-none" />
+                    </div>
+                    <div className="flex items-center gap-1.5 mb-1">
+                      <Shield className="w-4 h-4 text-cyan-400" />
+                      <h5 className="font-bold text-sm text-white">Hiệp sĩ Thép Lam</h5>
+                    </div>
+                    <p className="text-xs text-cyan-300/80 mb-2">Sức bền & Phòng vệ</p>
                     <ul className="text-[11px] text-slate-400 space-y-1">
                       <li>• HP ban đầu: 2/2</li>
                       <li>• <strong>+2 Max HP</strong> mỗi cấp</li>
-                      <li>• 20s đếm ngược (2 thẻ)</li>
-                      <li className="text-amber-300 font-semibold">• <strong>Giảm 50%</strong> giá Túi Vàng May Mắn</li>
+                      <li>• 20s đếm ngược</li>
+                      <li className="text-amber-300 font-semibold">• <strong>Giảm 50%</strong> Túi Vàng</li>
                     </ul>
                   </div>
 
@@ -393,23 +407,33 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
                       sound.playCardFlip();
                       setSelectedClass('mage');
                     }}
-                    className={`cursor-pointer rounded-xl p-4 border transition-all text-left relative ${
+                    className={`cursor-pointer rounded-2xl p-4 border-2 transition-all text-left relative overflow-hidden group ${
                       selectedClass === 'mage'
-                        ? 'bg-purple-950/40 border-purple-400 shadow-lg shadow-purple-950/50'
+                        ? 'bg-purple-950/60 border-purple-400 shadow-xl shadow-purple-950/60'
                         : 'bg-slate-950/60 border-slate-800 hover:border-slate-700'
                     }`}
                   >
                     {selectedClass === 'mage' && (
-                      <CheckCircle2 className="w-4 h-4 text-purple-400 absolute top-3 right-3" />
+                      <CheckCircle2 className="w-5 h-5 text-purple-300 absolute top-3 right-3 z-20" />
                     )}
-                    <Sparkles className="w-6 h-6 text-purple-400 mb-2" />
-                    <h5 className="font-bold text-sm text-white">Pháp sư</h5>
-                    <p className="text-xs text-purple-300/80 mb-2">Ma thuật & Thời gian</p>
+                    <div className="w-full h-32 rounded-xl overflow-hidden mb-3 border border-purple-500/30 bg-slate-900 relative">
+                      <img
+                        src={HERO_PORTRAITS.mage.image}
+                        alt="Pháp sư Ma Trận"
+                        className="w-full h-full object-cover animate-idle-breathe"
+                      />
+                      <div className="absolute inset-0 animate-shimmer pointer-events-none" />
+                    </div>
+                    <div className="flex items-center gap-1.5 mb-1">
+                      <Sparkles className="w-4 h-4 text-purple-400" />
+                      <h5 className="font-bold text-sm text-white">Pháp sư Ma Trận</h5>
+                    </div>
+                    <p className="text-xs text-purple-300/80 mb-2">Thời gian & Trí tuệ</p>
                     <ul className="text-[11px] text-slate-400 space-y-1">
                       <li>• HP ban đầu: 2/2</li>
                       <li>• +1 Max HP mỗi cấp</li>
-                      <li>• <strong>30s đếm ngược</strong> (2 thẻ)</li>
-                      <li className="text-cyan-300 font-semibold">• <strong>Giảm 50%</strong> giá Đồng Hồ Minh Triết</li>
+                      <li>• <strong>30s đếm ngược</strong> (Dài nhất)</li>
+                      <li className="text-cyan-300 font-semibold">• <strong>Giảm 50%</strong> Đồng Hồ</li>
                     </ul>
                   </div>
 
@@ -419,23 +443,33 @@ export const ProfileScreen: React.FC<ProfileScreenProps> = ({
                       sound.playCardFlip();
                       setSelectedClass('light_monk');
                     }}
-                    className={`cursor-pointer rounded-xl p-4 border transition-all text-left relative ${
+                    className={`cursor-pointer rounded-2xl p-4 border-2 transition-all text-left relative overflow-hidden group ${
                       selectedClass === 'light_monk'
-                        ? 'bg-amber-950/40 border-amber-400 shadow-lg shadow-amber-950/50'
+                        ? 'bg-amber-950/60 border-amber-400 shadow-xl shadow-amber-950/60'
                         : 'bg-slate-950/60 border-slate-800 hover:border-slate-700'
                     }`}
                   >
                     {selectedClass === 'light_monk' && (
-                      <CheckCircle2 className="w-4 h-4 text-amber-400 absolute top-3 right-3" />
+                      <CheckCircle2 className="w-5 h-5 text-amber-300 absolute top-3 right-3 z-20" />
                     )}
-                    <Sun className="w-6 h-6 text-amber-400 mb-2" />
-                    <h5 className="font-bold text-sm text-white">Tu sĩ Ánh Sáng</h5>
-                    <p className="text-xs text-amber-300/80 mb-2">Ánh sáng & Xác suất</p>
+                    <div className="w-full h-32 rounded-xl overflow-hidden mb-3 border border-amber-500/30 bg-slate-900 relative">
+                      <img
+                        src={HERO_PORTRAITS.light_monk.image}
+                        alt="Tu sĩ Ánh Sáng"
+                        className="w-full h-full object-cover animate-idle-breathe"
+                      />
+                      <div className="absolute inset-0 animate-shimmer pointer-events-none" />
+                    </div>
+                    <div className="flex items-center gap-1.5 mb-1">
+                      <Sun className="w-4 h-4 text-amber-400" />
+                      <h5 className="font-bold text-sm text-white">Tu sĩ Ánh Sáng</h5>
+                    </div>
+                    <p className="text-xs text-amber-300/80 mb-2">Thái Dương & Vận Mệnh</p>
                     <ul className="text-[11px] text-slate-400 space-y-1">
                       <li>• HP ban đầu: 2/2</li>
                       <li>• +1 Max HP mỗi cấp</li>
-                      <li>• <strong>3 thẻ</strong> (2 Sáng, 1 Tối)</li>
-                      <li className="text-amber-300 font-semibold">• <strong>Giảm 50%</strong> giá Cổ Thư Tinh Thông</li>
+                      <li>• <strong>3 thẻ lựa chọn</strong></li>
+                      <li className="text-amber-300 font-semibold">• <strong>Giảm 50%</strong> Cổ Thư</li>
                     </ul>
                   </div>
                 </div>

@@ -102,51 +102,240 @@ class SoundEngine {
 
   // --- Sound Effects ---
 
+  // Standard tactile UI button click
   public playClick() {
     if (this.isMuted) return;
     this.initContext();
     if (!this.ctx) return;
 
     try {
+      const now = this.ctx.currentTime;
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(440, this.ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(880, this.ctx.currentTime + 0.05);
+      osc.frequency.setValueAtTime(540, now);
+      osc.frequency.exponentialRampToValueAtTime(320, now + 0.04);
 
-      gain.gain.setValueAtTime(this.volume * 0.35, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.05);
+      gain.gain.setValueAtTime(this.volume * 0.35, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
 
       osc.connect(gain);
       gain.connect(this.ctx.destination);
-      osc.start();
-      osc.stop(this.ctx.currentTime + 0.05);
+      osc.start(now);
+      osc.stop(now + 0.04);
     } catch {
       // Audio fallback
     }
   }
 
+  // Card Flip: Parchment flutter noise + light whoosh
   public playCardFlip() {
     if (this.isMuted) return;
     this.initContext();
     if (!this.ctx) return;
 
     try {
+      const now = this.ctx.currentTime;
+
+      // 1. Whoosh pitch glide
       const osc = this.ctx.createOscillator();
+      const filter = this.ctx.createBiquadFilter();
       const gain = this.ctx.createGain();
+
       osc.type = 'triangle';
-      osc.frequency.setValueAtTime(300, this.ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(600, this.ctx.currentTime + 0.12);
+      osc.frequency.setValueAtTime(220, now);
+      osc.frequency.exponentialRampToValueAtTime(780, now + 0.14);
 
-      gain.gain.setValueAtTime(this.volume * 0.45, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.12);
+      filter.type = 'bandpass';
+      filter.frequency.setValueAtTime(600, now);
+      filter.Q.value = 2.0;
 
-      osc.connect(gain);
+      gain.gain.setValueAtTime(0.001, now);
+      gain.gain.linearRampToValueAtTime(this.volume * 0.45, now + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+
+      osc.connect(filter);
+      filter.connect(gain);
       gain.connect(this.ctx.destination);
-      osc.start();
-      osc.stop(this.ctx.currentTime + 0.12);
+      osc.start(now);
+      osc.stop(now + 0.14);
+
+      // 2. Parchment paper flutter noise (white noise burst through bandpass)
+      const bufferSize = this.ctx.sampleRate * 0.09;
+      const noiseBuffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+      const output = noiseBuffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        output[i] = Math.random() * 2 - 1;
+      }
+
+      const noise = this.ctx.createBufferSource();
+      noise.buffer = noiseBuffer;
+
+      const noiseFilter = this.ctx.createBiquadFilter();
+      noiseFilter.type = 'bandpass';
+      noiseFilter.frequency.setValueAtTime(1400, now);
+      noiseFilter.frequency.exponentialRampToValueAtTime(2200, now + 0.09);
+
+      const noiseGain = this.ctx.createGain();
+      noiseGain.gain.setValueAtTime(this.volume * 0.22, now);
+      noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+
+      noise.connect(noiseFilter);
+      noiseFilter.connect(noiseGain);
+      noiseGain.connect(this.ctx.destination);
+      noise.start(now);
     } catch {
       // Audio fallback
+    }
+  }
+
+  // Bright crystal "ting" when purchasing items or picking up loot
+  public playTing() {
+    if (this.isMuted) return;
+    this.initContext();
+    if (!this.ctx) return;
+
+    try {
+      const now = this.ctx.currentTime;
+      // High sparkling bell tone (E6 & B6 harmony)
+      [1318.51, 1975.53, 2637.02].forEach((freq, idx) => {
+        if (!this.ctx) return;
+        const start = now + idx * 0.03;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, start);
+        osc.frequency.exponentialRampToValueAtTime(freq * 0.98, start + 0.45);
+
+        gain.gain.setValueAtTime(0, start);
+        gain.gain.linearRampToValueAtTime(this.volume * (0.45 / (idx + 1)), start + 0.015);
+        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.45);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(start);
+        osc.stop(start + 0.45);
+      });
+    } catch {
+      // Audio fallback
+    }
+  }
+
+  // Title unlock fanfare with sparkling glissando
+  public playUnlockTitle() {
+    if (this.isMuted) return;
+    this.initContext();
+    if (!this.ctx) return;
+
+    try {
+      const now = this.ctx.currentTime;
+      // Majestic golden fanfare: F4 -> A4 -> C5 -> F5 -> A5 -> C6
+      const fanfare = [349.23, 440.0, 523.25, 698.46, 880.0, 1046.5];
+      fanfare.forEach((freq, idx) => {
+        if (!this.ctx) return;
+        const start = now + idx * 0.07;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, start);
+
+        gain.gain.setValueAtTime(0, start);
+        gain.gain.linearRampToValueAtTime(this.volume * 0.5, start + 0.03);
+        gain.gain.exponentialRampToValueAtTime(0.001, start + (idx === fanfare.length - 1 ? 0.9 : 0.35));
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(start);
+        osc.stop(start + (idx === fanfare.length - 1 ? 0.9 : 0.35));
+      });
+    } catch {
+      // Fallback
+    }
+  }
+
+  // Boss appearance intro: deep ominous rumble + summoning ring surge
+  public playBossIntro() {
+    if (this.isMuted) return;
+    this.initContext();
+    if (!this.ctx) return;
+
+    try {
+      const now = this.ctx.currentTime;
+
+      // 1. Sub-bass tremor 65Hz -> 45Hz
+      const sub = this.ctx.createOscillator();
+      const subGain = this.ctx.createGain();
+      sub.type = 'sine';
+      sub.frequency.setValueAtTime(65, now);
+      sub.frequency.exponentialRampToValueAtTime(40, now + 1.2);
+      subGain.gain.setValueAtTime(this.volume * 0.65, now);
+      subGain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+      sub.connect(subGain);
+      subGain.connect(this.ctx.destination);
+      sub.start(now);
+      sub.stop(now + 1.2);
+
+      // 2. Ominous brass chord (C3 + Gb3 tritone devil chord)
+      [130.81, 185.00, 261.63].forEach((freq) => {
+        if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const filter = this.ctx.createBiquadFilter();
+        const gain = this.ctx.createGain();
+
+        osc.type = 'sawtooth';
+        osc.frequency.value = freq;
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(900, now);
+        filter.frequency.exponentialRampToValueAtTime(300, now + 1.4);
+
+        gain.gain.setValueAtTime(0, now);
+        gain.gain.linearRampToValueAtTime(this.volume * 0.45, now + 0.08);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 1.4);
+
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 1.4);
+      });
+    } catch {
+      // Fallback
+    }
+  }
+
+  // Boss defeated: magical dissolution chime into golden particles
+  public playBossDefeat() {
+    if (this.isMuted) return;
+    this.initContext();
+    if (!this.ctx) return;
+
+    try {
+      const now = this.ctx.currentTime;
+      // High crystalline dispersion chord
+      const chords = [523.25, 659.25, 783.99, 1046.5, 1318.51, 1567.98, 2093.0];
+      chords.forEach((freq, idx) => {
+        if (!this.ctx) return;
+        const start = now + idx * 0.08;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, start);
+        osc.frequency.exponentialRampToValueAtTime(freq * 1.05, start + 0.6);
+
+        gain.gain.setValueAtTime(0, start);
+        gain.gain.linearRampToValueAtTime(this.volume * 0.45, start + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.6);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(start);
+        osc.stop(start + 0.6);
+      });
+    } catch {
+      // Fallback
     }
   }
 
@@ -945,6 +1134,105 @@ class SoundEngine {
           // Fallback
         }
       });
+
+      // 4. Unique Land-Specific Ambient Soundscapes
+      try {
+        if (targetChapter === 1) {
+          // Chapter 1: Thung Lũng Số Thực - Mountain Valley Breeze & Crystal Wind Chimes
+          const chimes = [1760.0, 2093.0, 2637.02, 3135.96];
+          const chimeOffsets = [0.6, 1.9, 2.7];
+          chimeOffsets.forEach((tOffset, i) => {
+            if (!this.ctx || !this.bgmMasterGain) return;
+            const chimeOsc = this.ctx.createOscillator();
+            const chimeGain = this.ctx.createGain();
+            const chimeFreq = chimes[(barIndex + i) % chimes.length];
+            chimeOsc.type = 'sine';
+            chimeOsc.frequency.setValueAtTime(chimeFreq, now + tOffset);
+            chimeGain.gain.setValueAtTime(0, now + tOffset);
+            chimeGain.gain.linearRampToValueAtTime(0.06, now + tOffset + 0.02);
+            chimeGain.gain.exponentialRampToValueAtTime(0.0001, now + tOffset + 0.65);
+            chimeOsc.connect(chimeGain);
+            chimeGain.connect(this.bgmMasterGain);
+            chimeOsc.start(now + tOffset);
+            chimeOsc.stop(now + tOffset + 0.65);
+            this.activeBgmOscillators.push(chimeOsc);
+          });
+        } else if (targetChapter === 2) {
+          // Chapter 2: Đảo Góc Kỳ Bí - Celestial Wind & Resonant Ancient Metallic Bell/Bowl
+          const bowlOsc1 = this.ctx.createOscillator();
+          const bowlOsc2 = this.ctx.createOscillator();
+          const bowlGain = this.ctx.createGain();
+          bowlOsc1.type = 'sine';
+          bowlOsc2.type = 'sine';
+          bowlOsc1.frequency.setValueAtTime(432, now + 0.4);
+          bowlOsc2.frequency.setValueAtTime(866, now + 0.4); // subtle detune
+          bowlGain.gain.setValueAtTime(0, now + 0.4);
+          bowlGain.gain.linearRampToValueAtTime(0.07, now + 0.8);
+          bowlGain.gain.exponentialRampToValueAtTime(0.0001, now + barDuration);
+          bowlOsc1.connect(bowlGain);
+          bowlOsc2.connect(bowlGain);
+          bowlGain.connect(this.bgmMasterGain);
+          bowlOsc1.start(now + 0.4);
+          bowlOsc2.start(now + 0.4);
+          bowlOsc1.stop(now + barDuration);
+          bowlOsc2.stop(now + barDuration);
+          this.activeBgmOscillators.push(bowlOsc1, bowlOsc2);
+        } else if (targetChapter === 3) {
+          // Chapter 3: Đầm Lầy Tỉ Lệ - Water Droplets, Mystical Swamp Insects & Slow Gear Ticks
+          // Water droplets (plink downwards)
+          [0.5, 1.8].forEach((dropTime) => {
+            if (!this.ctx || !this.bgmMasterGain) return;
+            const dropOsc = this.ctx.createOscillator();
+            const dropGain = this.ctx.createGain();
+            dropOsc.type = 'sine';
+            dropOsc.frequency.setValueAtTime(1750, now + dropTime);
+            dropOsc.frequency.exponentialRampToValueAtTime(780, now + dropTime + 0.08);
+            dropGain.gain.setValueAtTime(0.12, now + dropTime);
+            dropGain.gain.exponentialRampToValueAtTime(0.0001, now + dropTime + 0.08);
+            dropOsc.connect(dropGain);
+            dropGain.connect(this.bgmMasterGain);
+            dropOsc.start(now + dropTime);
+            dropOsc.stop(now + dropTime + 0.08);
+            this.activeBgmOscillators.push(dropOsc);
+          });
+          // Gear tick
+          const gearOsc = this.ctx.createOscillator();
+          const gearGain = this.ctx.createGain();
+          gearOsc.type = 'triangle';
+          gearOsc.frequency.setValueAtTime(95, now + 1.2);
+          gearOsc.frequency.exponentialRampToValueAtTime(40, now + 1.28);
+          gearGain.gain.setValueAtTime(0.08, now + 1.2);
+          gearGain.gain.exponentialRampToValueAtTime(0.0001, now + 1.28);
+          gearOsc.connect(gearGain);
+          gearGain.connect(this.bgmMasterGain);
+          gearOsc.start(now + 1.2);
+          gearOsc.stop(now + 1.28);
+          this.activeBgmOscillators.push(gearOsc);
+        } else if (targetChapter === 4) {
+          // Chapter 4: Thị Trấn Đa Thức - Ancient Library Reverb & Arcane Knowledge Resonance
+          const droneOsc = this.ctx.createOscillator();
+          const filter = this.ctx.createBiquadFilter();
+          const droneGain = this.ctx.createGain();
+          droneOsc.type = 'sawtooth';
+          droneOsc.frequency.setValueAtTime(110, now); // A2
+          filter.type = 'lowpass';
+          filter.frequency.setValueAtTime(320, now);
+          filter.frequency.linearRampToValueAtTime(540, now + barDuration * 0.5);
+          filter.frequency.linearRampToValueAtTime(320, now + barDuration);
+          droneGain.gain.setValueAtTime(0, now);
+          droneGain.gain.linearRampToValueAtTime(0.06, now + 0.5);
+          droneGain.gain.setValueAtTime(0.05, now + barDuration - 0.4);
+          droneGain.gain.linearRampToValueAtTime(0.0001, now + barDuration);
+          droneOsc.connect(filter);
+          filter.connect(droneGain);
+          droneGain.connect(this.bgmMasterGain);
+          droneOsc.start(now);
+          droneOsc.stop(now + barDuration);
+          this.activeBgmOscillators.push(droneOsc);
+        }
+      } catch {
+        // Fallback
+      }
 
       // Clean up finished oscillators periodically to avoid memory growth
       this.activeBgmOscillators = this.activeBgmOscillators.filter((o) => {

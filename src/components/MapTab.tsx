@@ -332,32 +332,54 @@ export const MapTab: React.FC<MapTabProps> = ({
       <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start my-auto">
         {/* Left Column: Interactive 10-Stage Path Grid */}
         <div className={`lg:col-span-8 ${theme.panelBg} backdrop-blur-md border ${theme.panelBorder} rounded-3xl p-6 sm:p-8 shadow-2xl transition-all duration-500`}>
-          <div className="flex items-center justify-between mb-6 pb-3 border-b border-slate-800">
-            <span className="text-xs uppercase tracking-wider font-bold text-slate-400">
+          <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-800 flex-wrap gap-2">
+            <span className="text-xs uppercase tracking-wider font-bold text-slate-400 flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
               ĐƯỜNG HÀNH TRÌNH KHÁM PHÁ (10 ẢI)
             </span>
-            <span className="text-xs text-slate-400">
-              Ải 10 là Trùm Vùng Đất
-            </span>
+            <div className="flex items-center gap-3 text-xs">
+              <span className="flex items-center gap-1 text-teal-400 font-mono text-[11px]">
+                <span className="w-2 h-2 rounded-full bg-teal-400 animate-ping inline-block" />
+                Dòng năng lượng ánh sáng đang kết nối
+              </span>
+              <span className="text-amber-400 font-bold flex items-center gap-1">
+                <Crown className="w-3.5 h-3.5" /> Ải 10 là Trùm
+              </span>
+            </div>
           </div>
 
-          {/* Grid of Stage Nodes */}
+          {/* Grid of Stage Nodes with Energy Connectors and Magic Rune for Boss */}
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 sm:gap-6 relative">
-            {stages.map((stage) => {
+            {stages.map((stage, idx) => {
               const status = getStageStatus(stage);
               const isSelected = selectedStage?.stageId === stage.stageId;
+              const isPrevCompleted = idx === 0 || getStageStatus(stages[idx - 1]) === 'completed';
+              const isFlowingToHere = isPrevCompleted && (status === 'completed' || status === 'current');
 
               return (
-                <div key={stage.stageId} className="flex flex-col items-center">
+                <div key={stage.stageId} className="flex flex-col items-center relative group">
+                  {/* Rotating Magic Rune Circle for Boss Stage */}
+                  {stage.isBoss && (
+                    <div className="absolute top-0 w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center pointer-events-none">
+                      <div className="absolute -inset-3 sm:-inset-4 rounded-full border-2 border-amber-400/50 border-dashed animate-rune-spin shadow-[0_0_20px_rgba(245,158,11,0.25)]" />
+                      <div className="absolute -inset-1 sm:-inset-2 rounded-full border border-purple-400/40 border-dotted animate-rune-spin-reverse" />
+                    </div>
+                  )}
+
+                  {/* Flowing Energy Stream Beam from previous stage */}
+                  {idx > 0 && isFlowingToHere && (
+                    <div className="hidden sm:block absolute -left-4 sm:-left-6 top-8 sm:top-10 w-4 sm:w-6 h-1 bg-gradient-to-r from-teal-400 via-amber-300 to-teal-400 animate-pulse pointer-events-none z-0 rounded-full shadow-[0_0_8px_#2dd4bf]" />
+                  )}
+
                   <button
                     onClick={() => handleSelectStage(stage)}
-                    className={`relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex flex-col items-center justify-center transition-all cursor-pointer ${
+                    className={`relative z-10 w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex flex-col items-center justify-center transition-all cursor-pointer ${
                       stage.isBoss
                         ? status === 'completed'
                           ? 'bg-gradient-to-br from-amber-600 to-yellow-500 border-2 border-amber-300 shadow-lg shadow-amber-900/40 text-white'
                           : status === 'current'
-                          ? 'bg-gradient-to-br from-purple-800 via-amber-700 to-purple-900 border-2 border-amber-400 shadow-xl shadow-amber-500/30 text-amber-200 animate-pulse scale-105'
-                          : 'bg-slate-900 border border-slate-800 text-slate-600'
+                          ? 'bg-gradient-to-br from-purple-800 via-amber-700 to-purple-900 border-2 border-amber-400 shadow-2xl shadow-amber-500/50 text-amber-200 animate-pulse scale-105'
+                          : 'bg-slate-900 border-2 border-amber-500/30 text-amber-500/60'
                         : status === 'completed'
                         ? 'bg-emerald-950/70 border-2 border-emerald-500/80 text-emerald-300 shadow-md shadow-emerald-950/40'
                         : status === 'current'
@@ -366,7 +388,7 @@ export const MapTab: React.FC<MapTabProps> = ({
                     } ${isSelected ? theme.nodeSelectedRing : ''}`}
                   >
                     {stage.isBoss ? (
-                      <Crown className={`w-7 h-7 sm:w-8 sm:h-8 ${status === 'completed' ? 'text-amber-100' : 'text-amber-400'}`} />
+                      <Crown className={`w-7 h-7 sm:w-8 sm:h-8 ${status === 'completed' ? 'text-amber-100' : 'text-amber-400 animate-bounce'}`} />
                     ) : status === 'completed' ? (
                       <Check className="w-7 h-7 text-emerald-400" />
                     ) : status === 'locked' ? (
@@ -421,16 +443,33 @@ export const MapTab: React.FC<MapTabProps> = ({
                 Chủ đề: {selectedStage.subtitle}
               </p>
 
-              <div className="p-4 rounded-xl bg-slate-950/70 border border-slate-800 text-xs text-slate-300 leading-relaxed mb-6">
+              <div className="p-4 rounded-xl bg-slate-950/70 border border-slate-800 text-xs text-slate-300 leading-relaxed mb-4">
                 {selectedStage.description}
               </div>
 
+              {/* Boss Showcase Card in details */}
               {selectedStage.isBoss && (
-                <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-200 text-xs mb-6 flex items-start gap-2.5">
-                  <Crown className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+                <div className="p-3.5 rounded-2xl bg-gradient-to-r from-amber-950/80 via-purple-950/80 to-slate-950 border-2 border-amber-400/80 shadow-xl text-amber-200 text-xs mb-5 flex items-center gap-3.5 relative overflow-hidden">
+                  <div className="w-16 h-16 rounded-xl overflow-hidden border-2 border-amber-400 shrink-0 shadow-lg relative bg-slate-900 animate-idle-breathe">
+                    {selectedStage.bossImage ? (
+                      <img
+                        src={selectedStage.bossImage}
+                        alt={selectedStage.bossName}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-amber-400">
+                        <Crown className="w-8 h-8" />
+                      </div>
+                    )}
+                  </div>
                   <div>
-                    <p className="font-bold">{selectedStage.bossName}</p>
-                    <p className="text-[11px] text-amber-300/80">{selectedStage.bossTitle} · Đánh bại Trùm để hoàn thành vùng đất!</p>
+                    <div className="flex items-center gap-1.5 text-amber-300 font-bold text-sm">
+                      <Crown className="w-4 h-4 text-amber-400" />
+                      <span>{selectedStage.bossName}</span>
+                    </div>
+                    <p className="text-[11px] text-amber-200/90 font-medium">{selectedStage.bossTitle}</p>
+                    <p className="text-[10px] text-slate-300 mt-0.5">Ải Trùm Tối Thượng · Chiến thắng để giải phóng toàn bộ vùng đất!</p>
                   </div>
                 </div>
               )}
