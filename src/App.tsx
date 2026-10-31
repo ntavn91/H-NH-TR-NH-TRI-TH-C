@@ -90,6 +90,7 @@ export default function App() {
     subtitle: string;
     paragraphs: string[];
     bgImage?: string;
+    nextChapterToUnlock?: number;
   } | null>(null);
 
   // File input ref for importing JSON save file
@@ -106,9 +107,10 @@ export default function App() {
     saveGameData(saveData);
   }, [saveData]);
 
-  // Handle ambient chapter music
+  // Handle ambient chapter music: plays during all in-chapter gameplay screens and switches immediately with activeChapterId
   useEffect(() => {
-    if (currentScreen === 'HUB') {
+    const screensWithBgm = ['HUB', 'CARD_SELECT', 'QUESTION', 'RESULT', 'STORY', 'PARALLEL'];
+    if (screensWithBgm.includes(currentScreen)) {
       sound.startChapterBGM(activeChapterId);
     } else if (currentScreen === 'WELCOME' || currentScreen === 'PROFILE' || currentScreen === 'GAME_OVER') {
       sound.stopBGM();
@@ -646,13 +648,15 @@ export default function App() {
         return;
       } else {
         // No failed questions, celebrate and unlock next chapter!
+        const nextChapterId = activeChapterId < 4 ? activeChapterId + 1 : activeChapterId;
         setStoryContent({
           title: `CHINH PHỤC TOÀN DIỆN ${currentCh?.name.toUpperCase()}!`,
-          subtitle: 'Không một tàn dư sai sót nào cản bước bạn!',
+          subtitle: activeChapterId < 4 ? `Chuẩn bị bước vào Chương ${nextChapterId}: ${CHAPTERS[nextChapterId - 1]?.shortName}!` : 'Vinh quang bất diệt!',
           paragraphs: currentCh?.storyCompletion || [
             'Bạn đã hoàn thành xuất sắc toàn bộ thử thách của vùng đất này!',
           ],
           bgImage: currentCh?.bgImage,
+          nextChapterToUnlock: activeChapterId < 4 ? nextChapterId : undefined,
         });
         setCurrentScreen('STORY');
         return;
@@ -661,6 +665,37 @@ export default function App() {
 
     // If we were in Parallel World, return to Parallel World modal
     if (isParallelActive) {
+      if (currentFailedRecord && resultType === 'parallel_correct') {
+        const sourceCh = currentFailedRecord.sourceChapterId;
+        const bossKey = `${sourceCh}-10`;
+        const bossBeaten = activeChar.journey.completedStages.includes(bossKey);
+        const remainingForCh = activeChar.journey.failedQuestions.filter(
+          (q) => q.status === 'pending' && q.sourceChapterId === sourceCh && !(q.questionId === currentFailedRecord.questionId && q.variantId === currentFailedRecord.variantId)
+        );
+        if (bossBeaten && remainingForCh.length === 0 && sourceCh < 4) {
+          const nextCh = sourceCh + 1;
+          setActiveChapterId(nextCh);
+          setSaveData((prev) => {
+            if (!prev.activeCharacterId) return prev;
+            const char = prev.characters[prev.activeCharacterId];
+            if (!char) return prev;
+            return {
+              ...prev,
+              characters: {
+                ...prev.characters,
+                [char.profile.characterId]: {
+                  ...char,
+                  journey: {
+                    ...char.journey,
+                    chapterId: nextCh,
+                  },
+                },
+              },
+            };
+          });
+          sound.startChapterBGM(nextCh, true);
+        }
+      }
       setCurrentScreen('PARALLEL');
       return;
     }
@@ -882,7 +917,28 @@ export default function App() {
               <MapTab
                 character={activeChar}
                 activeChapterId={activeChapterId}
-                onSelectChapter={setActiveChapterId}
+                onSelectChapter={(chId) => {
+                  setActiveChapterId(chId);
+                  sound.startChapterBGM(chId, true);
+                  setSaveData((prev) => {
+                    if (!prev.activeCharacterId) return prev;
+                    const char = prev.characters[prev.activeCharacterId];
+                    if (!char) return prev;
+                    return {
+                      ...prev,
+                      characters: {
+                        ...prev.characters,
+                        [char.profile.characterId]: {
+                          ...char,
+                          journey: {
+                            ...char.journey,
+                            chapterId: chId,
+                          },
+                        },
+                      },
+                    };
+                  });
+                }}
                 onEnterStage={handleEnterStage}
                 onOpenStoryIntro={(chId) => {
                   const ch = CHAPTERS.find((c) => c.chapterId === chId) || CHAPTERS[0];
@@ -991,7 +1047,30 @@ export default function App() {
           paragraphs={storyContent.paragraphs}
           bgImage={storyContent.bgImage}
           onClose={() => {
+            const nextCh = storyContent.nextChapterToUnlock;
             setStoryContent(null);
+            if (nextCh && nextCh !== activeChapterId) {
+              setActiveChapterId(nextCh);
+              setSaveData((prev) => {
+                if (!prev.activeCharacterId) return prev;
+                const char = prev.characters[prev.activeCharacterId];
+                if (!char) return prev;
+                return {
+                  ...prev,
+                  characters: {
+                    ...prev.characters,
+                    [char.profile.characterId]: {
+                      ...char,
+                      journey: {
+                        ...char.journey,
+                        chapterId: nextCh,
+                      },
+                    },
+                  },
+                };
+              });
+              sound.startChapterBGM(nextCh, true);
+            }
             setCurrentScreen('HUB');
           }}
         />

@@ -6,8 +6,9 @@
 import React, { useState } from 'react';
 import { CharacterData, StageDefinition } from '../types/game';
 import { CHAPTERS, STAGES_BY_CHAPTER } from '../data/chapters';
-import { Check, Lock, Crown, Play, BookOpen, AlertCircle, Compass, Sparkles } from 'lucide-react';
+import { Check, Lock, Crown, Play, BookOpen, AlertCircle, Compass, Sparkles, CloudRain, CloudSnow, CloudFog, Flame } from 'lucide-react';
 import { sound } from '../utils/sound';
+import { WeatherOverlay } from './WeatherOverlay';
 
 interface MapTabProps {
   character: CharacterData;
@@ -93,6 +94,35 @@ export const MapTab: React.FC<MapTabProps> = ({
     setSelectedStage(active);
   }, [selectedChapterId]);
 
+  const weatherInfo: Record<number, { title: string; desc: string; icon: React.ReactNode; color: string }> = {
+    1: {
+      title: 'Mưa Tinh Thể Số Thực',
+      desc: 'Mưa pha lê phản chiếu lấp lánh qua thung lũng hữu tỉ',
+      icon: <CloudRain className="w-3.5 h-3.5 text-blue-300" />,
+      color: 'bg-blue-950/60 border-blue-500/40 text-blue-200',
+    },
+    2: {
+      title: 'Gió Tuyết Tầng Mây',
+      desc: 'Bông tuyết và luồng gió lốc lơ lửng quanh đảo góc cẩm thạch',
+      icon: <CloudSnow className="w-3.5 h-3.5 text-sky-300" />,
+      color: 'bg-sky-950/60 border-sky-400/40 text-sky-200',
+    },
+    3: {
+      title: 'Sương Mù Phát Quang',
+      desc: 'Sương tím ma mị và bào tử ánh sáng huyền bí trôi dạt',
+      icon: <CloudFog className="w-3.5 h-3.5 text-purple-300" />,
+      color: 'bg-purple-950/60 border-purple-500/40 text-purple-200',
+    },
+    4: {
+      title: 'Tàn Tro Tri Thức Hoàng Kim',
+      desc: 'Bụi vàng và ký tự toán học bừng sáng thánh địa đại hiền triết',
+      icon: <Flame className="w-3.5 h-3.5 text-amber-300" />,
+      color: 'bg-amber-950/60 border-amber-500/40 text-amber-200',
+    },
+  };
+
+  const currentWeather = weatherInfo[selectedChapterId] || weatherInfo[1];
+
   return (
     <div className="relative w-full min-h-[calc(100vh-80px)] pb-28 md:pb-12 flex flex-col justify-between overflow-hidden">
       {/* Dynamic Background Image of current Chapter */}
@@ -101,6 +131,9 @@ export const MapTab: React.FC<MapTabProps> = ({
         style={{ backgroundImage: `url('${currentChapter.bgImage}')` }}
       />
       <div className="absolute inset-0 bg-gradient-to-b from-[#101827]/80 via-[#101827]/60 to-[#101827] pointer-events-none" />
+
+      {/* Dynamic Thematic Weather Layer */}
+      <WeatherOverlay chapterId={selectedChapterId} />
 
       {/* Chapter Selection Bar */}
       <div className="relative z-10 max-w-7xl mx-auto w-full px-4 sm:px-6 pt-6">
@@ -113,6 +146,14 @@ export const MapTab: React.FC<MapTabProps> = ({
             <p className="text-xs text-slate-300 max-w-xl mt-1">
               {currentChapter.description}
             </p>
+            {/* Thematic Atmospheric Weather Badge */}
+            <div className="mt-2.5 inline-flex items-center gap-2 px-3 py-1 rounded-xl border text-xs font-semibold backdrop-blur-md shadow-lg shadow-black/30 transition-all animate-in fade-in">
+              <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-lg border ${currentWeather.color}`}>
+                {currentWeather.icon}
+                <span>{currentWeather.title}</span>
+              </div>
+              <span className="hidden sm:inline text-[11px] text-slate-300 opacity-90">{currentWeather.desc}</span>
+            </div>
           </div>
 
           <div className="flex items-center gap-2">
